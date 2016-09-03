@@ -550,7 +550,7 @@ h5, h6          { font-weight: bolder }
         position: relative;
     }
     header .logo{
-        margin: 40px 0 0 10px;
+        margin: 10px 0 0 5px;
         float: left;
     }
     header .footer{
