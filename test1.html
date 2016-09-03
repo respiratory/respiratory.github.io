@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Magnetic - Stunning Responsive HTML5/CSS3 Photography Template</title>
+	<meta charset="utf-8">
+	<meta name="author" content="pixelhint.com">
+	<meta name="description" content="Magnetic is a stunning responsive HTML5/CSS3 photography/portfolio website  template"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
+	<link rel="stylesheet" type="text/css" href="css/reset.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+</head>
+<body>
+
+	<header>
+		<div class="logo">
+			<a href="index.html"><img src="img/logo2.png" width="200" height="125" title="Magnetic" alt="Magnetic"/></a>
+		</div><!-- end logo -->
+
+		<div id="menu_icon"></div>
+		<nav>
+			<ul>
+				<li><a href="index.html">Home</a></li>
+				<li><a href="#">About</a></li>
+				<li><a href="#">The Team</a></li>
+				<li><a href="#">Journal</a></li>
+				<li><a href="contact.html">Contact Us</a></li>
+			</ul>
+		</nav><!-- end navigation menu -->
+
+
+	</header><!-- end header -->
+
+	<section class="main clearfix">
+
+
+
+		<section class="wrapper">
+			<div class="content">
+				<img src="/img/stattlove1.png" title="stats" alt="stats">
+				<p>Nunc pellentesque mauris ut magna pulvinar, quis fermentum tellus pulvinar. Curabitur ut fermentum quam. Nam tincidunt sagittis neque in elementum. Fusce convallis cursus porta. Curabitur dapibus pretium leo, at laoreet magna ullamcorper ac. Integer quam nulla, fringilla ac imperdiet at, consequat vel leo. Quisque non semper justo, eu aliquam velit. Pellentesque rhoncus, quam ac fringilla euismod, ligula diam congue orci, id cursus dui velit quis ligula.</p>
+
+
+				<h2>Nulla nec pellentesque tempus, ipsum arcu aliquam tortor.</h2>
+
+				<p>vel tempus libero diam vel arcu. Etiam id tincidunt tortor. Nam auctor consequat quam, vel mattis dui laoreet a. Nunc condimentum iaculis tortor, id eleifend nulla mattis lobortis. Pellentesque semper blandit odio, id tempor lorem imperdiet eu. Ut sagittis sagittis consectetur ,Maecenas eget risus eros. Nunc venenatis ante a rutrum cursus.</p>
+
+				<h2>Quisque non semper justo</h2>
+
+				<p>Commodo at blandit vitae, placerat in sem. Morbi ornare nec felis in euismod. Suspendisse vulputate orci ultrices enim facilisis, vel lobortis magna rhoncus. Integer mattis at elit vitae adipiscing. Cras imperdiet cursus nunc quis ullamcorper.</p>
+
+				<p>vel tempus libero diam vel arcu. Etiam id tincidunt tortor. Nam auctor consequat quam, vel mattis dui laoreet a. Nunc condimentum iaculis tortor, id eleifend nulla mattis lobortis. Pellentesque semper blandit odio, id tempor lorem imperdiet eu. Ut sagittis sagittis consectetur ,Maecenas eget risus eros. Nunc venenatis ante a rutrum cursus.</p>
+
+				
+				<p>Commodo at blandit vitae, placerat in sem. Morbi ornare nec felis in euismod. Suspendisse vulputate orci ultrices enim facilisis, vel lobortis magna rhoncus. Integer mattis at elit vitae adipiscing. Cras imperdiet cursus nunc quis ullamcorper.</p>
+
+
+				<h1>H1 : Quisque non semper justo</h1>
+				<h2>H2 : Quisque non semper justo</h2>
+				<h3>H3 : Quisque non semper justo</h3>
+				<h4>H4 : Quisque non semper justo</h4>
+				<h5>H5 : Quisque non semper justo</h5>
+				<h6>H6 : Quisque non semper justo</h6>
+			</div><!-- end content -->
+			<!-- Styles -->
+<style>
+#chartdiv {
+	width	: 100%;
+	height	: 500px;
+}								
+</style>
+
+<!-- Resources -->
+<script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+<script src="https://www.amcharts.com/lib/3/radar.js"></script>
+<script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
+<link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
+<script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
+
+<!-- Chart code -->
+<script>
+var chart = AmCharts.makeChart( "chartdiv", {
+  "type": "radar",
+  "theme": "light",
+  "dataProvider": [ {
+    "direction": "N",
+    "value": 8
+  }, {
+    "direction": "NE",
+    "value": 9
+  }, {
+    "direction": "E",
+    "value": 4.5
+  }, {
+    "direction": "SE",
+    "value": 3.5
+  }, {
+    "direction": "S",
+    "value": 9.2
+  }, {
+    "direction": "SW",
+    "value": 8.4
+  }, {
+    "direction": "W",
+    "value": 11.1
+  }, {
+    "direction": "NW",
+    "value": 10
+  } ],
+  "valueAxes": [ {
+    "gridType": "circles",
+    "minimum": 0,
+    "autoGridCount": false,
+    "axisAlpha": 0.2,
+    "fillAlpha": 0.05,
+    "fillColor": "#FFFFFF",
+    "gridAlpha": 0.08,
+    "guides": [ {
+      "angle": 225,
+      "fillAlpha": 0.3,
+      "fillColor": "#0066CC",
+      "tickLength": 0,
+      "toAngle": 315,
+      "toValue": 14,
+      "value": 0,
+      "lineAlpha": 0,
+
+    }, {
+      "angle": 45,
+      "fillAlpha": 0.3,
+      "fillColor": "#CC3333",
+      "tickLength": 0,
+      "toAngle": 135,
+      "toValue": 14,
+      "value": 0,
+      "lineAlpha": 0,
+    } ],
+    "position": "left"
+  } ],
+  "startDuration": 1,
+  "graphs": [ {
+    "balloonText": "[[category]]: [[value]] m/s",
+    "bullet": "round",
+    "fillAlphas": 0.3,
+    "valueField": "value"
+  } ],
+  "categoryField": "direction",
+  "export": {
+    "enabled": true
+  }
+} );
+</script>
+
+<!-- HTML -->
+<div id="chartdiv"></div>
+		</section>
+	</section><!-- end main -->
+	
+</body>
+</html>
