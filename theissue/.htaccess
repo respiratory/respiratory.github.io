@@ -1,4 +1,4 @@
 AuthType Basic  
 AuthName "restricted area"  
-AuthUserFile /theissue/.htpasswd  
+AuthUserFile respiratory.github.io/theissue/.htpasswd  
 require valid-user
