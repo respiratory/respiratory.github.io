@@ -45,9 +45,9 @@
 				<h2>Nulla nec pellentesque tempus, ipsum arcu aliquam tortor.</h2>
 
 			</div><!-- end content -->
-			<!-- Styles -->
-		<script type="text/javascript" src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+<script type="text/javascript" src="https://www.amcharts.com/lib/3/amcharts.js"></script>
 		<script type="text/javascript" src="https://www.amcharts.com/lib/3/serial.js"></script>
+		<script type="text/javascript" src="https://www.amcharts.com/lib/3/themes/chalk.js"></script>
 		
 
 		<!-- amCharts javascript code -->
@@ -57,26 +57,37 @@
 					"type": "serial",
 					"categoryField": "category",
 					"startDuration": 1,
+					"theme": "chalk",
 					"categoryAxis": {
 						"gridPosition": "start"
 					},
 					"trendLines": [],
 					"graphs": [
 						{
+							"balloonColor": "#FFFF00",
 							"balloonText": "[[title]] of [[category]]:[[value]]",
 							"fillAlphas": 1,
+							"fillColors": "#0E3694",
+							"fontSize": 0,
 							"id": "AmGraph-1",
-							"title": "graph 1",
+							"negativeFillColors": "#FFFF00",
+							"title": "RT",
 							"type": "column",
 							"valueField": "column-1"
 						},
 						{
 							"balloonText": "[[title]] of [[category]]:[[value]]",
 							"fillAlphas": 1,
+							"fillColors": "#FFFF00",
 							"id": "AmGraph-2",
 							"title": "graph 2",
 							"type": "column",
 							"valueField": "column-2"
+						},
+						{
+							"id": "AmGraph-3",
+							"title": "graph 3",
+							"valueField": "column-3"
 						}
 					],
 					"guides": [],
@@ -84,44 +95,60 @@
 						{
 							"id": "ValueAxis-1",
 							"stackType": "100%",
-							"title": "Axis title"
+							"title": ""
 						}
 					],
 					"allLabels": [],
 					"balloon": {},
-					"legend": {
-						"enabled": true,
-						"useGraphSettings": true
-					},
 					"titles": [
 						{
 							"id": "Title-1",
 							"size": 15,
-							"text": "Chart Title"
+							"text": "Respiratory Therapy Stats"
 						}
 					],
 					"dataProvider": [
 						{
-							"category": "category 1",
-							"column-1": 8,
-							"column-2": 5
+							"category": "XP",
+							"column-1": "50",
+							"column-2": "50"
 						},
 						{
-							"category": "category 2",
-							"column-1": 6,
-							"column-2": 7
+							"category": "ABGs",
+							"column-1": "90",
+							"column-2": "10"
 						},
 						{
-							"category": "category 3",
-							"column-1": 2,
-							"column-2": 3
+							"category": "Nebs",
+							"column-1": "95",
+							"column-2": "5"
+						},
+						{
+							"category": "Intubation",
+							"column-1": "30",
+							"column-2": "70"
+						},
+						{
+							"category": "PFT",
+							"column-1": "10",
+							"column-2": "90"
+						},
+						{
+							"category": "Bronch",
+							"column-1": "10",
+							"column-2": "90"
+						},
+						{
+							"category": "Alines",
+							"column-1": "40",
+							"column-2": "60"
 						}
 					]
 				}
 			);
 		</script>
 
-		<div id="chartdiv" style="width: 100%; height: 400px; background-color: #FFFFFF;" ></div>
+		<div id="chartdiv" style="width: 100%; height: 400px; background-color: #282828;" ></div>
 
 		</section>
 	</section><!-- end main -->
