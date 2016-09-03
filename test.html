@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>polar | amCharts</title>
+		<meta name="description" content="chart created using amCharts live editor" />
+		
+		<!-- amCharts javascript sources -->
+		<script type="text/javascript" src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+		<script type="text/javascript" src="https:http://cdn.amcharts.com/lib/3/radar.js"></script>
+		<script type="text/javascript" src="https://www.amcharts.com/lib/3/themes/patterns.js"></script>
+		
+
+		<!-- amCharts javascript code -->
+		<script type="text/javascript">
+			AmCharts.makeChart("chartdiv",
+				{
+					"type": "radar",
+					"categoryField": "country",
+					"startDuration": 2,
+					"fontSize": 13,
+					"theme": "patterns",
+					"graphs": [
+						{
+							"balloonText": "[[value]] litres of beer per year",
+							"bullet": "round",
+							"bulletSize": 9,
+							"id": "AmGraph-1",
+							"lineAlpha": 1,
+							"lineThickness": 2,
+							"valueField": "litres"
+						}
+					],
+					"guides": [],
+					"valueAxes": [
+						{
+							"axisTitleOffset": 20,
+							"gridType": "circles",
+							"id": "ValueAxis-1",
+							"minimum": 0,
+							"axisAlpha": 0.54,
+							"dashLength": 3,
+							"gridAlpha": 0.51
+						}
+					],
+					"allLabels": [],
+					"balloon": {},
+					"titles": [],
+					"dataProvider": [
+						{
+							"country": "Czech Republic",
+							"litres": 156.9
+						},
+						{
+							"country": "Ireland",
+							"litres": 131.1
+						},
+						{
+							"country": "Germany",
+							"litres": 115.8
+						},
+						{
+							"country": "Australia",
+							"litres": 109.9
+						},
+						{
+							"country": "Austria",
+							"litres": 108.3
+						},
+						{
+							"country": "UK",
+							"litres": 99
+						}
+					]
+				}
+			);
+		</script>
+	</head>
+	<body>
+		<div id="chartdiv" style="width: 100%; height: 400px; background-color: #FFFFFF;" ></div>
+	</body>
+</html>
