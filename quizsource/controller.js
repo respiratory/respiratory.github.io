@@ -34,14 +34,14 @@ var score=0;
 
 
 function displayQuestion(){
- var rnd=Math.random()*6;
+ var rnd=Math.random()*3;
 rnd=Math.ceil(rnd);
  var q1;
  var q2;
  var q3;
- var q4;
- var q5;
- var q6;
+ //var q4;
+ //var q5;
+ //var q6;
 
 if(rnd==1){q1=questionBank[questionNumber][1];q2=questionBank[questionNumber][2];q3=questionBank[questionNumber][3];}
 if(rnd==2){q2=questionBank[questionNumber][1];q3=questionBank[questionNumber][2];q1=questionBank[questionNumber][3];}
