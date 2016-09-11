@@ -46,9 +46,9 @@ rnd=Math.ceil(rnd);
 if(rnd==1){q1=questionBank[questionNumber][1];q2=questionBank[questionNumber][2];q3=questionBank[questionNumber][3];}
 if(rnd==2){q2=questionBank[questionNumber][1];q3=questionBank[questionNumber][2];q1=questionBank[questionNumber][3];}
 if(rnd==3){q3=questionBank[questionNumber][1];q1=questionBank[questionNumber][2];q2=questionBank[questionNumber][3];}
-if(rnd==4){q4=questionBank[questionNumber][1];q6=questionBank[questionNumber][2];q5=questionBank[questionNumber][3];}
-if(rnd==5){q5=questionBank[questionNumber][1];q4=questionBank[questionNumber][2];q6=questionBank[questionNumber][3];}
-if(rnd==6){q6=questionBank[questionNumber][1];q5=questionBank[questionNumber][2];q4=questionBank[questionNumber][3];}
+//if(rnd==4){q4=questionBank[questionNumber][1];q6=questionBank[questionNumber][2];q5=questionBank[questionNumber][3];}
+//if(rnd==5){q5=questionBank[questionNumber][1];q4=questionBank[questionNumber][2];q6=questionBank[questionNumber][3];}
+//if(rnd==6){q6=questionBank[questionNumber][1];q5=questionBank[questionNumber][2];q4=questionBank[questionNumber][3];}
 
 $(stage).append('<div class="questionText">'+questionBank[questionNumber][0]+'</div><div id="1" class="option">'+q1+'</div><div id="2" class="option">'+q2+'</div><div id="3" class="option">'+q3+'</div>');
 
