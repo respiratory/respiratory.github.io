@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flappy Bird - Shock Quiz</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        #game-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background-color: #70c5ce;
+            overflow: hidden;
+        }
+        
+        #bird {
+            position: absolute;
+            width: 40px;
+            height: 30px;
+            background-color: #f9de59;
+            border-radius: 50%;
+            left: 15%;
+            transition: transform 0.1s;
+        }
+        
+        #bird::before {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 10px;
+            background-color: #ff6d00;
+            top: 10px;
+            right: -5px;
+            border-radius: 50%;
+            transform: rotate(20deg);
+        }
+        
+        #bird::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background-color: #000;
+            border-radius: 50%;
+            top: 8px;
+            left: 8px;
+        }
+        
+        .pipe {
+            position: absolute;
+            width: 80px;
+            background-color: #26a65b;
+            border: 3px solid #000;
+        }
+        
+        .pipe.top {
+            top: 0;
+            border-bottom: none;
+            border-radius: 0 0 5px 5px;
+        }
+        
+        .pipe.bottom {
+            bottom: 0;
+            border-top: none;
+            border-radius: 5px 5px 0 0;
+        }
+        
+        #ground {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 20px;
+            background-color: #dede91;
+            border-top: 3px solid #5d4037;
+        }
+        
+        #score-display {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 32px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+        }
+        
+        #game-over {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            color: white;
+            font-size: 28px;
+            display: none;
+            z-index: 20;
+            overflow-y: auto;
+            padding: 20px 0 50px 0;
+            max-height: 100%;
+        }
+        
+        /* Add some space at the top of game over screen */
+        #game-over h2 {
+            margin-top: 30px;
+            font-size: 42px;
+        }
+        
+        #restart-btn, #save-score-btn {
+            margin-top: 20px;
+            padding: 15px 30px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 24px;
+            margin-right: 15px;
+        }
+        
+        #restart-btn:hover, #save-score-btn:hover {
+            background-color: #45a049;
+        }
+        
+        .button-group {
+            display: flex;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+        
+        #leaderboard-container {
+            max-height: 50vh;
+            width: 100%;
+            overflow-y: auto;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            padding-top: 15px;
+            margin-bottom: 40px;
+        }
+        
+        #leaderboard-table {
+            width: 90%;
+            border-collapse: collapse;
+            margin: 0 auto;
+            color: white;
+            text-align: left;
+            font-size: 20px;
+        }
+        
+        #leaderboard-table th, #leaderboard-table td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        #leaderboard-table th {
+            border-bottom: 2px solid white;
+            color: #FFD700;
+        }
+        
+        #username-input {
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            border: none;
+            width: 300px;
+            text-align: center;
+            font-size: 20px;
+        }
+        
+        .highlighted-row {
+            background-color: rgba(255, 215, 0, 0.2);
+        }
+        
+        #question-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            box-sizing: border-box;
+            z-index: 15;
+        }
+        
+        #question-text {
+            font-size: 28px;
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+            max-width: 800px;
+        }
+        
+        #options-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 600px;
+            gap: 15px;
+        }
+        
+        .option-btn {
+            padding: 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 20px;
+        }
+        
+        .option-btn:hover {
+            background-color: #45a049;
+        }
+        
+        #timer-container {
+            width: 100%;
+            max-width: 600px;
+            height: 15px;
+            background-color: #ddd;
+            margin-top: 30px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        #timer-bar {
+            height: 100%;
+            width: 100%;
+            background-color: #2196F3;
+            transition: width 0.1s linear;
+        }
+        
+        #start-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 28px;
+            z-index: 25;
+        }
+        
+        #start-btn {
+            margin-top: 30px;
+            padding: 15px 30px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 24px;
+        }
+        
+        #start-btn:hover {
+            background-color: #45a049;
+        }
+        
+        #instructions {
+            font-size: 20px;
+            text-align: center;
+            margin-top: 30px;
+            max-width: 80%;
+            line-height: 1.5;
+        }
+        
+        .score-change {
+            position: absolute;
+            font-size: 28px;
+            font-weight: bold;
+            animation: fadeUp 1.5s forwards;
+            z-index: 30;
+        }
+        
+        .score-increase {
+            color: #4CAF50;
+        }
+        
+        .score-decrease {
+            color: #f44336;
+        }
+        
+        @keyframes fadeUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-40px);
+            }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            #bird {
+                width: 30px;
+                height: 22px;
+            }
+            
+            #bird::before {
+                width: 12px;
+                height: 8px;
+                top: 7px;
+                right: -3px;
+            }
+            
+            #bird::after {
+                width: 6px;
+                height: 6px;
+                top: 6px;
+                left: 6px;
+            }
+            
+            .pipe {
+                width: 60px;
+            }
+            
+            #question-text {
+                font-size: 22px;
+            }
+            
+            .option-btn {
+                font-size: 18px;
+            }
+            
+            #score-display {
+                font-size: 24px;
+            }
+            
+            #game-over h2 {
+                font-size: 32px;
+            }
+            
+            #restart-btn, #save-score-btn {
+                font-size: 20px;
+                padding: 12px 24px;
+            }
+            
+            #username-input {
+                width: 80%;
+                max-width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="score-display">Score: 0</div>
+        <div id="bird"></div>
+        <div id="ground"></div>
+        
+        <div id="question-container">
+            <div id="question-text"></div>
+            <div id="options-container"></div>
+            <div id="timer-container">
+                <div id="timer-bar"></div>
+            </div>
+        </div>
+        
+        <div id="game-over">
+            <h2>Game Over!</h2>
+            <p id="final-score">Score: 0</p>
+            <p id="game-over-reason"></p>
+            
+            <input type="text" id="username-input" placeholder="Enter your name" maxlength="15">
+            
+            <div class="button-group">
+                <button id="save-score-btn">Save Score</button>
+                <button id="restart-btn">Play Again</button>
+            </div>
+            
+            <div id="leaderboard-container">
+                <h3>Leaderboard</h3>
+                <table id="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Name</th>
+                            <th>Score</th>
+                            <th>Speed</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body">
+                        <!-- Leaderboard entries will be added here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div id="start-screen">
+            <h2>Flappy Bird - Shock Quiz</h2>
+            <p id="instructions">
+                Press SPACE or click/tap to make the bird fly.<br>
+                After every 3 obstacles, you'll be presented with a medical question about different types of shock.<br>
+                Answer correctly to earn bonus points!<br>
+                <span style="color: #f44336">Wrong answers will deduct 20 points from your score.</span><br>
+                <span style="color: #FF9800">The game gets faster after each question you answer!</span><br>
+                <span style="color: #64B5F6">Your high scores are saved locally on this device.</span>
+            </p>
+            <button id="start-btn">Start Game</button>
+            
+            <div id="view-leaderboard" style="margin-top: 20px; cursor: pointer; color: #64B5F6; text-decoration: underline; font-size: 20px;">
+                View Leaderboard
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if localStorage is available
+            const storageAvailable = function(type) {
+                try {
+                    var storage = window[type],
+                        x = '__storage_test__';
+                    storage.setItem(x, x);
+                    storage.removeItem(x);
+                    return true;
+                } catch(e) {
+                    return false;
+                }
+            };
+            
+            // Show warning if localStorage isn't available
+            if (!storageAvailable('localStorage')) {
+                alert('Local storage is not available in your browser. Leaderboard functionality will not work.');
+            }
+            
+            // Game elements
+            const gameContainer = document.getElementById('game-container');
+            const bird = document.getElementById('bird');
+            const ground = document.getElementById('ground');
+            const scoreDisplay = document.getElementById('score-display');
+            const gameOver = document.getElementById('game-over');
+            const finalScore = document.getElementById('final-score');
+            const restartBtn = document.getElementById('restart-btn');
+            const questionContainer = document.getElementById('question-container');
+            const questionText = document.getElementById('question-text');
+            const optionsContainer = document.getElementById('options-container');
+            const timerBar = document.getElementById('timer-bar');
+            const startScreen = document.getElementById('start-screen');
+            const startBtn = document.getElementById('start-btn');
+            
+            // Window dimensions
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+            
+            // Game variables
+            let birdY = windowHeight / 2;
+            let birdVelocity = 0;
+            let birdGravity = windowHeight * 0.0007; // Scale gravity based on window height
+            let isGameOver = true;
+            let score = 0;
+            let pipesPassed = 0;
+            let obstacleCount = 0;
+            let pipes = [];
+            let gameLoop;
+            let questionTimer;
+            let currentQuestionIndex = 0;
+            let timeLeft = 10;
+            let timerInterval;
+            let isPaused = false;
+            let pipeSpeed = windowWidth * 0.003; // Base pipe movement speed scaled by window width
+            let speedIncrement = windowWidth * 0.0002; // Speed increase after each question
+            
+            // Set initial bird position
+            bird.style.top = birdY + 'px';
+            
+            // Questions about various types of shock with increasing difficulty
+            const questionsData = [
+                {
+                    question: "Which type of shock results from inadequate blood volume?",
+                    answer: "Hypovolemic shock",
+                    options: ["Cardiogenic shock", "Septic shock", "Obstructive shock"],
+                    explanation: "Hypovolemic shock occurs when there's significant blood or fluid loss, reducing the heart's ability to pump enough blood through the body."
+                },
+                {
+                    question: "Which type of shock is caused by an overwhelming infection?",
+                    answer: "Septic shock",
+                    options: ["Anaphylactic shock", "Neurogenic shock", "Hypovolemic shock"],
+                    explanation: "Septic shock occurs when a widespread infection leads to a life-threatening drop in blood pressure."
+                },
+                {
+                    question: "Which of the following is a common sign of cardiogenic shock?",
+                    answer: "Low blood pressure",
+                    options: ["High blood pressure", "Fever", "Increased urination"],
+                    explanation: "Low blood pressure (hypotension) is a hallmark sign of cardiogenic shock, as the heart cannot pump blood effectively."
+                },
+                {
+                    question: "Neurogenic shock typically results from:",
+                    answer: "Spinal cord injury",
+                    options: ["Myocardial infarction", "Blood loss", "Bacterial infection"],
+                    explanation: "Neurogenic shock typically results from damage to the spinal cord, disrupting the sympathetic nervous system."
+                },
+                {
+                    question: "Which of the following is NOT a common cause of obstructive shock?",
+                    answer: "Sepsis",
+                    options: ["Pulmonary embolism", "Cardiac tamponade", "Tension pneumothorax"],
+                    explanation: "Sepsis causes septic shock, not obstructive shock. Obstructive shock results from blockages to blood flow."
+                },
+                {
+                    question: "In anaphylactic shock, which mediator is primarily responsible for vasodilation and increased vascular permeability?",
+                    answer: "Histamine",
+                    options: ["Insulin", "Cortisol", "Adrenaline"],
+                    explanation: "Histamine is released from mast cells and basophils during an allergic reaction, causing vasodilation and increased vascular permeability."
+                },
+                {
+                    question: "Which of the following compensatory mechanisms would NOT be activated in the early stages of hypovolemic shock?",
+                    answer: "Vasodilation",
+                    options: ["Increased heart rate", "Vasoconstriction", "Increased respiratory rate"],
+                    explanation: "In hypovolemic shock, vasoconstriction occurs to maintain blood pressure. Vasodilation would worsen the condition by decreasing peripheral resistance."
+                },
+                {
+                    question: "A patient with septic shock in the early stages might paradoxically present with:",
+                    answer: "Warm, flushed skin",
+                    options: ["Cold, clammy skin", "Bradycardia", "Hypertension"],
+                    explanation: "Early septic shock often presents with warm, flushed skin due to vasodilation, unlike other forms of shock that typically present with cold, clammy skin."
+                },
+                {
+                    question: "Which of the following shock types is most likely to present with a low systemic vascular resistance and high cardiac output in early stages?",
+                    answer: "Septic shock",
+                    options: ["Cardiogenic shock", "Hypovolemic shock", "Obstructive shock"],
+                    explanation: "In early septic shock, widespread vasodilation leads to low systemic vascular resistance while the heart compensates with increased output."
+                },
+                {
+                    question: "A patient presents with shock after a bee sting with urticaria, wheezing, and angioedema. Which of the following interventions should be administered first?",
+                    answer: "Epinephrine",
+                    options: ["Antihistamines", "Corticosteroids", "Intravenous fluids"],
+                    explanation: "Epinephrine is the first-line treatment for anaphylactic shock as it rapidly reverses the life-threatening vasodilation and bronchospasm."
+                }
+            ];
+            
+            // Function to shuffle array (Fisher-Yates algorithm)
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+            
+            // Process questions to randomize correct answer position
+            const questions = questionsData.map(q => {
+                // Create full options array with correct answer
+                const allOptions = [q.answer, ...q.options];
+                
+                // Shuffle the options
+                const shuffledOptions = shuffleArray([...allOptions]);
+                
+                // Find the new index of the correct answer
+                const correctIndex = shuffledOptions.indexOf(q.answer);
+                
+                return {
+                    question: q.question,
+                    options: shuffledOptions,
+                    correct: correctIndex,
+                    explanation: q.explanation
+                };
+            });
+            
+            // Function to update score display with animation
+            function updateScore(points) {
+                // Create score change indicator
+                const scoreChange = document.createElement('div');
+                scoreChange.className = 'score-change';
+                
+                if (points > 0) {
+                    scoreChange.classList.add('score-increase');
+                    scoreChange.textContent = '+' + points;
+                } else {
+                    scoreChange.classList.add('score-decrease');
+                    scoreChange.textContent = points;
+                }
+                
+                // Position near score display
+                const scoreRect = scoreDisplay.getBoundingClientRect();
+                const containerRect = gameContainer.getBoundingClientRect();
+                
+                scoreChange.style.left = (scoreRect.left - containerRect.left + scoreRect.width + 10) + 'px';
+                scoreChange.style.top = (scoreRect.top - containerRect.top) + 'px';
+                
+                // Add to DOM and remove after animation
+                gameContainer.appendChild(scoreChange);
+                setTimeout(() => {
+                    if (scoreChange.parentNode) {
+                        scoreChange.parentNode.removeChild(scoreChange);
+                    }
+                }, 1500);
+                
+                // Update score
+                score += points;
+                scoreDisplay.textContent = 'Score: ' + score;
+            }
+            
+            // Handle window resize
+            function handleResize() {
+                const newWidth = window.innerWidth;
+                const newHeight = window.innerHeight;
+                
+                // Update pipe speed based on new width
+                if (!isGameOver && !isPaused) {
+                    // We don't want to reset the speed entirely, just scale it
+                    const scaleRatio = newWidth / windowWidth;
+                    pipeSpeed = pipeSpeed * scaleRatio;
+                    speedIncrement = newWidth * 0.0002;
+                }
+                
+                // Reposition the bird proportionally
+                if (bird.offsetTop > (newHeight - 50)) {
+                    birdY = newHeight / 2;
+                    bird.style.top = birdY + 'px';
+                }
+                
+                // Scale gravity based on new height
+                birdGravity = newHeight * 0.0007;
+            }
+            
+            // Add resize event listener
+            window.addEventListener('resize', handleResize);
+            
+            // Start game
+            startBtn.addEventListener('click', function() {
+                startScreen.style.display = 'none';
+                resetGame();
+                isGameOver = false;
+                gameLoop = setInterval(update, 20);
+            });
+            
+            // Reset game
+            function resetGame() {
+                birdY = windowHeight / 2;
+                birdVelocity = 0;
+                score = 0;
+                pipesPassed = 0;
+                obstacleCount = 0;
+                currentQuestionIndex = 0;
+                pipeSpeed = windowWidth * 0.003; // Reset pipe speed to initial value based on window width
+                
+                // Clear existing pipes from DOM
+                for (let i = 0; i < pipes.length; i++) {
+                    if (pipes[i].top && pipes[i].top.parentNode) {
+                        gameContainer.removeChild(pipes[i].top);
+                    }
+                    if (pipes[i].bottom && pipes[i].bottom.parentNode) {
+                        gameContainer.removeChild(pipes[i].bottom);
+                    }
+                }
+                
+                pipes = [];
+                scoreDisplay.textContent = 'Score: 0';
+                gameOver.style.display = 'none';
+                
+                // Generate first pipe
+                generatePipe();
+            }
+            
+            // Update game state
+            function update() {
+                if (isGameOver || isPaused) return;
+                
+                // Update bird position
+                birdVelocity += birdGravity;
+                birdY += birdVelocity;
+                
+                // Get current container height
+                const containerHeight = window.innerHeight;
+                
+                // Check if bird hit the ground or ceiling
+                if (birdY >= (containerHeight - 50) || birdY <= 0) {
+                    endGame();
+                    return;
+                }
+                
+                // Update bird position
+                bird.style.top = birdY + 'px';
+                bird.style.transform = `rotate(${birdVelocity * 3}deg)`;
+                
+                // Update pipes
+                updatePipes();
+            }
+            
+            // Generate new pipe
+            function generatePipe() {
+                const containerWidth = window.innerWidth;
+                const containerHeight = window.innerHeight;
+                const pipeGap = containerHeight * 0.3; // Scale gap based on window height
+                
+                const pipeTop = document.createElement('div');
+                const pipeBottom = document.createElement('div');
+                
+                pipeTop.className = 'pipe top';
+                pipeBottom.className = 'pipe bottom';
+                
+                const pipeHeight = Math.floor(Math.random() * (containerHeight * 0.3)) + (containerHeight * 0.1);
+                
+                pipeTop.style.height = pipeHeight + 'px';
+                pipeTop.style.left = containerWidth + 'px';
+                
+                pipeBottom.style.height = (containerHeight - pipeHeight - pipeGap - 20) + 'px'; // 20px for ground
+                pipeBottom.style.left = containerWidth + 'px';
+                
+                gameContainer.appendChild(pipeTop);
+                gameContainer.appendChild(pipeBottom);
+                
+                pipes.push({
+                    x: containerWidth,
+                    top: pipeTop,
+                    bottom: pipeBottom,
+                    passed: false
+                });
+            }
+            
+            // Update pipes
+            function updatePipes() {
+                const birdPos = parseInt(bird.style.left) || bird.offsetLeft;
+                const birdWidth = bird.offsetWidth;
+                const birdHeight = bird.offsetHeight;
+                
+                for (let i = 0; i < pipes.length; i++) {
+                    const pipe = pipes[i];
+                    
+                    // Move pipe at current speed
+                    pipe.x -= pipeSpeed;
+                    pipe.top.style.left = pipe.x + 'px';
+                    pipe.bottom.style.left = pipe.x + 'px';
+                    
+                    // Check if bird passed pipe
+                    if (!pipe.passed && pipe.x < birdPos) {
+                        pipe.passed = true;
+                        updateScore(1);
+                        pipesPassed += 1;
+                        
+                        // Check if it's time to show a question
+                        if (pipesPassed % 3 === 0) {
+                            obstacleCount++;
+                            
+                            // Add a bit of delay between last pipe and question
+                            setTimeout(() => {
+                                // Pause game
+                                isPaused = true;
+                                
+                                // Clear all existing pipes to give more space when returning
+                                for (let j = 0; j < pipes.length; j++) {
+                                    gameContainer.removeChild(pipes[j].top);
+                                    gameContainer.removeChild(pipes[j].bottom);
+                                }
+                                pipes = [];
+                                
+                                // Show question after clearing the screen
+                                setTimeout(() => {
+                                    showQuestion();
+                                }, 500);
+                            }, 1000);
+                        }
+                    }
+                    
+                    // Check for collision
+                    const pipeWidth = parseInt(getComputedStyle(pipe.top).width);
+                    
+                    if (
+                        pipe.x < (birdPos + birdWidth) && 
+                        (pipe.x + pipeWidth) > birdPos && 
+                        (birdY < parseInt(pipe.top.style.height) || 
+                         birdY + birdHeight > window.innerHeight - parseInt(pipe.bottom.style.height) - 20)
+                    ) {
+                        endGame();
+                        return;
+                    }
+                    
+                    // Remove pipe if it's off screen
+                    if (pipe.x < -pipeWidth) {
+                        gameContainer.removeChild(pipe.top);
+                        gameContainer.removeChild(pipe.bottom);
+                        pipes.splice(i, 1);
+                        i--;
+                    }
+                }
+                
+                // Generate new pipe if needed
+                const containerWidth = window.innerWidth;
+                if (pipes.length === 0 || pipes[pipes.length - 1].x < (containerWidth * 0.7)) {
+                    generatePipe();
+                }
+            }
+            
+            // Show question
+            function showQuestion() {
+                if (currentQuestionIndex >= questions.length) {
+                    currentQuestionIndex = 0;
+                }
+                
+                const question = questions[currentQuestionIndex];
+                isPaused = true;
+                
+                // Clear options container
+                optionsContainer.innerHTML = '';
+                
+                // Set question text
+                questionText.textContent = question.question;
+                
+                // Create option buttons
+                question.options.forEach((option, index) => {
+                    const button = document.createElement('button');
+                    button.className = 'option-btn';
+                    button.textContent = option;
+                    button.dataset.index = index;
+                    
+                    button.addEventListener('click', function() {
+                        const selectedIndex = parseInt(this.dataset.index);
+                        
+                        clearInterval(timerInterval);
+                        checkAnswer(selectedIndex);
+                    });
+                    
+                    optionsContainer.appendChild(button);
+                });
+                
+                // Show question container
+                questionContainer.style.display = 'flex';
+                
+                // Set up timer
+                timeLeft = 10;
+                timerBar.style.width = '100%';
+                
+                timerInterval = setInterval(function() {
+                    timeLeft -= 0.1;
+                    
+                    // Update timer bar
+                    timerBar.style.width = (timeLeft / 10 * 100) + '%';
+                    
+                    // Time's up
+                    if (timeLeft <= 0) {
+                        clearInterval(timerInterval);
+                        checkAnswer(-1);
+                    }
+                }, 100);
+            }
+            
+            // Check answer
+            function checkAnswer(selectedIndex) {
+                const question = questions[currentQuestionIndex];
+                
+                if (selectedIndex === question.correct) {
+                    // Correct answer - bonus points based on time left
+                    const timeBonus = Math.round(timeLeft) * 2;
+                    const pointsEarned = 10 + timeBonus;
+                    updateScore(pointsEarned);
+                    
+                    // Show correct answer explanation
+                    questionText.textContent = "Correct! +" + pointsEarned + " points! " + question.explanation;
+                } else {
+                    // Wrong answer - deduct 20 points
+                    updateScore(-20);
+                    
+                    // Show incorrect answer explanation
+                    questionText.textContent = "Incorrect. -20 points! " + question.explanation;
+                }
+                
+                // Hide options
+                optionsContainer.innerHTML = '';
+                
+                // Hide timer
+                document.getElementById('timer-container').style.display = 'none';
+                
+                // Increase speed after answering a question
+                pipeSpeed += speedIncrement;
+                
+                // Display speed increase notification
+                const speedNotice = document.createElement('div');
+                speedNotice.className = 'score-change';
+                speedNotice.style.color = '#FF9800';
+                speedNotice.textContent = 'Speed +' + speedIncrement.toFixed(1);
+                speedNotice.style.left = '50%';
+                speedNotice.style.top = '40%';
+                speedNotice.style.transform = 'translateX(-50%)';
+                gameContainer.appendChild(speedNotice);
+                
+                // Continue game after 3 seconds
+                setTimeout(function() {
+                    questionContainer.style.display = 'none';
+                    document.getElementById('timer-container').style.display = 'block';
+                    
+                    // Remove speed notice if it still exists
+                    if (speedNotice.parentNode) {
+                        speedNotice.parentNode.removeChild(speedNotice);
+                    }
+                    
+                    currentQuestionIndex++;
+                    isPaused = false;
+                }, 3000);
+            }
+            
+            // Leaderboard functions
+            function saveScore(username) {
+                if (!username.trim()) {
+                    alert('Please enter your name');
+                    return false;
+                }
+                
+                // Get existing leaderboard or initialize empty array
+                let leaderboard = JSON.parse(localStorage.getItem('flappyShockLeaderboard') || '[]');
+                
+                // Add new score
+                leaderboard.push({
+                    username: username,
+                    score: score,
+                    speed: pipeSpeed.toFixed(1),
+                    date: new Date().toISOString().split('T')[0] // Just get the date part
+                });
+                
+                // Sort by score (highest first)
+                leaderboard.sort((a, b) => b.score - a.score);
+                
+                // Keep only top 10 scores
+                if (leaderboard.length > 10) {
+                    leaderboard = leaderboard.slice(0, 10);
+                }
+                
+                // Save back to localStorage
+                localStorage.setItem('flappyShockLeaderboard', JSON.stringify(leaderboard));
+                
+                return true;
+            }
+            
+            function displayLeaderboard() {
+                const leaderboardBody = document.getElementById('leaderboard-body');
+                leaderboardBody.innerHTML = '';
+                
+                // Get leaderboard from localStorage
+                const leaderboard = JSON.parse(localStorage.getItem('flappyShockLeaderboard') || '[]');
+                
+                if (leaderboard.length === 0) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = '<td colspan="5" style="text-align: center;">No scores yet. Be the first!</td>';
+                    leaderboardBody.appendChild(row);
+                    return;
+                }
+                
+                // Display each score
+                leaderboard.forEach((entry, index) => {
+                    const row = document.createElement('tr');
+                    
+                    // Highlight the most recently added score
+                    if (entry.isLatest) {
+                        row.classList.add('highlighted-row');
+                        
+                        // After a short delay, scroll to make this row visible if needed
+                        setTimeout(() => {
+                            row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }, 500);
+                    }
+                    
+                    row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${entry.username}</td>
+                        <td>${entry.score}</td>
+                        <td>${entry.speed}x</td>
+                        <td>${entry.date}</td>
+                    `;
+                    
+                    leaderboardBody.appendChild(row);
+                });
+            }
+            
+            // End game
+            function endGame(reason) {
+                isGameOver = true;
+                clearInterval(gameLoop);
+                clearInterval(timerInterval);
+                questionContainer.style.display = 'none';
+                
+                finalScore.textContent = 'Score: ' + score;
+                
+                // Add final speed to game over screen
+                const speedText = document.createElement('p');
+                speedText.textContent = 'Final Speed: ' + pipeSpeed.toFixed(1) + 'x';
+                speedText.style.color = '#FF9800';
+                
+                // Set game over reason if provided
+                const gameOverReason = document.getElementById('game-over-reason');
+                if (reason) {
+                    gameOverReason.textContent = reason;
+                    gameOverReason.style.display = 'block';
+                } else {
+                    gameOverReason.style.display = 'none';
+                }
+                
+                // Add speed text before the username input
+                const usernameInput = document.getElementById('username-input');
+                gameOver.insertBefore(speedText, usernameInput);
+                
+                // Display the current leaderboard
+                displayLeaderboard();
+                
+                gameOver.style.display = 'flex';
+                
+                // Scroll to the top to ensure all content is visible
+                gameOver.scrollTop = 0;
+                
+                // Add a small delay then check if scrolling is needed
+                setTimeout(() => {
+                    // If the game over content is taller than the container, show a hint
+                    if (gameOver.scrollHeight > gameOver.clientHeight) {
+                        const scrollHint = document.createElement('div');
+                        scrollHint.textContent = "Scroll down to see the full leaderboard";
+                        scrollHint.style.position = "absolute";
+                        scrollHint.style.bottom = "10px";
+                        scrollHint.style.color = "#64B5F6";
+                        scrollHint.style.fontSize = "16px";
+                        gameOver.appendChild(scrollHint);
+                        
+                        // Fade out after 5 seconds
+                        setTimeout(() => {
+                            scrollHint.style.transition = "opacity 1s";
+                            scrollHint.style.opacity = "0";
+                        }, 5000);
+                    }
+                }, 100);
+            }
+            
+            // Jump
+            document.addEventListener('keydown', function(e) {
+                if (e.code === 'Space' && !isGameOver && !isPaused) {
+                    jump();
+                }
+            });
+            
+            gameContainer.addEventListener('click', function() {
+                if (!isGameOver && !isPaused) {
+                    jump();
+                }
+            });
+            
+            // Also add touch support for mobile
+            gameContainer.addEventListener('touchstart', function(e) {
+                if (!isGameOver && !isPaused) {
+                    e.preventDefault(); // Prevent scrolling
+                    jump();
+                }
+            });
+            
+            function jump() {
+                // Scale jump velocity based on window height
+                birdVelocity = -windowHeight * 0.015;
+            }
+            
+            // Save score button
+            const saveScoreBtn = document.getElementById('save-score-btn');
+            saveScoreBtn.addEventListener('click', function() {
+                const username = document.getElementById('username-input').value;
+                if (saveScore(username)) {
+                    // Mark the current score as latest for highlighting
+                    let leaderboard = JSON.parse(localStorage.getItem('flappyShockLeaderboard') || '[]');
+                    leaderboard.forEach(entry => entry.isLatest = false);
+                    leaderboard[0].isLatest = true; // First entry after sorting is the latest highest score
+                    localStorage.setItem('flappyShockLeaderboard', JSON.stringify(leaderboard));
+                    
+                    // Refresh the leaderboard display
+                    displayLeaderboard();
+                    
+                    // Disable the save button after successful save
+                    saveScoreBtn.disabled = true;
+                    saveScoreBtn.textContent = 'Saved!';
+                }
+            });
+            
+            // Restart game
+            restartBtn.addEventListener('click', function() {
+                resetGame();
+                isGameOver = false;
+                gameLoop = setInterval(update, 20);
+                
+                // Reset save button
+                saveScoreBtn.disabled = false;
+                saveScoreBtn.textContent = 'Save Score';
+            });
+            
+            // View leaderboard from start screen
+            document.getElementById('view-leaderboard').addEventListener('click', function() {
+                // Copy of the displayLeaderboard function for the start screen
+                const leaderboard = JSON.parse(localStorage.getItem('flappyShockLeaderboard') || '[]');
+                
+                if (leaderboard.length === 0) {
+                    alert('No scores yet. Play the game to set some records!');
+                    return;
+                }
+                
+                // Format leaderboard data for display in an alert
+                let leaderboardText = 'LEADERBOARD:\n\n';
+                leaderboard.forEach((entry, index) => {
+                    leaderboardText += `${index + 1}. ${entry.username}: ${entry.score} points (Speed: ${entry.speed}x)\n`;
+                });
+                
+                alert(leaderboardText);
+            });
+        });
+    </script>
+</body>
+</html>

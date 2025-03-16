@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nursing Program - Welcome</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet" />
+  <style>
+    /* Reset & Global Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Roboto', sans-serif;
+    }
+    
+    /* Background Animation with Royal Blue Gradient */
+    body {
+      background: linear-gradient(135deg, #000033, #4169e1, #000033);
+      background-size: 400% 400%;
+      animation: bgMove 15s ease-in-out infinite alternate;
+    }
+    
+    @keyframes bgMove {
+      from {
+        background-position: 0% 0%;
+      }
+      to {
+        background-position: 100% 100%;
+      }
+    }
+    
+    /* Container */
+    .container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      color: #ffffff; /* White text instead of hot pink */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 1;
+      background: rgba(0, 0, 0, 0.25);
+    }
+    
+    /* Title */
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 4rem;
+      margin-bottom: 0.5em;
+      animation: fadeInDown 1.5s ease forwards;
+      text-shadow: 0 0 10px rgba(65, 105, 225, 0.7);
+    }
+    
+    /* Subtitle */
+    p.subtitle {
+      font-size: 1.5rem;
+      margin-bottom: 2em;
+      animation: fadeInUp 1.5s ease forwards;
+    }
+    
+    /* Navigation Links */
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5em;
+      animation: fadeIn 2s ease forwards;
+    }
+    
+    .nav-links a {
+      text-decoration: none;
+      font-size: 1.2rem;
+      padding: 0.7em 1.5em;
+      border: 2px solid #4169e1; /* Royal blue border */
+      border-radius: 50px;
+      color: #ffffff;
+      transition: background 0.4s ease, transform 0.4s ease;
+    }
+    
+    .nav-links a:hover {
+      background: rgba(65, 105, 225, 0.3); /* Royal blue highlight */
+      transform: scale(1.1);
+    }
+    
+    /* Animations */
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 3rem;
+      }
+      p.subtitle {
+        font-size: 1.2rem;
+      }
+      .nav-links a {
+        font-size: 1rem;
+        padding: 0.5em 1em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Nursing Program</h1>
+    <p class="subtitle">Saving Victor time</p>
+    <div class="nav-links">
+      <a href="https://tlove747.github.io/AIP.html">AIP</a>
+      <a href="https://tlove747.github.io/ATF.html">ATF</a>
+      <a href="https://www.google.com">Vacation Days Used by Victor</a>
+      <a href="https://www.google.com">coming</a>
+      <a href="https://www.google.com">coming</a>
+    </div>
+  </div>
+  
+  <script>
+    // Dynamic interaction: change background on container click
+    document.querySelector('.container').addEventListener('click', function() {
+      document.body.style.background = 'linear-gradient(135deg, #000033, #001489, #000033)';
+      setTimeout(() => {
+        document.body.style.background = 'linear-gradient(135deg, #000033, #4169e1, #000033)';
+      }, 1500);
+    });
+  </script>
+</body>
+</html>
