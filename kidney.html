@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kidney and Urinary Disorders Study Guide</title>
+    <style>
+        :root {
+            --primary: #4169E1;
+            --secondary: #6A5ACD;
+            --accent: #00CED1;
+            --light: #F0F8FF;
+            --dark: #191970;
+            --success: #32CD32;
+            --warning: #FFA500;
+            --danger: #DC143C;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        nav {
+            background-color: var(--dark);
+            display: flex;
+            justify-content: center;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav button {
+            background-color: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 0 1rem;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+        }
+        
+        nav button:hover, nav button.active {
+            background-color: var(--accent);
+            color: var(--dark);
+        }
+        
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        
+        .section {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            padding: 2rem;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent);
+        }
+        
+        ul, ol {
+            padding-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+        }
+        
+        strong {
+            color: var(--secondary);
+        }
+        
+        .quiz-container {
+            margin-top: 2rem;
+        }
+        
+        .quiz-question {
+            background-color: rgba(106, 90, 205, 0.1);
+            border-left: 4px solid var(--secondary);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .quiz-answer {
+            background-color: rgba(0, 206, 209, 0.1);
+            border-left: 4px solid var(--accent);
+            padding: 1rem;
+            margin-top: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0 8px 8px 0;
+            display: none;
+        }
+        
+        .quiz-toggle {
+            background-color: var(--primary);
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            margin-top: 0.5rem;
+            transition: background-color 0.3s ease;
+        }
+        
+        .quiz-toggle:hover {
+            background-color: var(--secondary);
+        }
+        
+        .glossary-item {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px dashed var(--accent);
+        }
+        
+        .glossary-term {
+            color: var(--primary);
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        
+        .search-container {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        
+        #glossary-search {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--primary);
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .highlighted {
+            background-color: yellow;
+            font-weight: bold;
+        }
+        
+        .key-concept {
+            background-color: rgba(65, 105, 225, 0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .key-concept:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .concept-title {
+            color: var(--primary);
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            nav {
+                flex-wrap: wrap;
+            }
+            
+            nav button {
+                margin: 0.25rem;
+            }
+            
+            .section {
+                padding: 1rem;
+            }
+        }
+        
+        .flashcard-container {
+            perspective: 1000px;
+            width: 100%;
+            max-width: 500px;
+            height: 300px;
+            margin: 2rem auto;
+        }
+        
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            cursor: pointer;
+        }
+        
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .flashcard-front {
+            background-color: var(--primary);
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .flashcard-back {
+            background-color: white;
+            color: var(--dark);
+            transform: rotateY(180deg);
+            font-size: 1.2rem;
+        }
+        
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+        
+        .flashcard-controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+        
+        .flashcard-button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            margin: 0 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .flashcard-button:hover {
+            background-color: var(--secondary);
+        }
+        
+        #progress-tracker {
+            width: 100%;
+            background-color: #ddd;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+        
+        #progress-bar {
+            height: 20px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        #progress-text {
+            text-align: center;
+            margin-top: 0.5rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Kidney and Urinary Disorders</h1>
+        <p>Interactive Study Guide for Nursing Education</p>
+    </header>
+    
+    <nav>
+        <button id="key-concepts-btn">Key Concepts</button>
+        <button id="urinary-disorders-btn">Urinary Disorders</button>
+        <button id="quiz-btn">Quiz</button>
+        <button id="flashcards-btn">Flashcards</button>
+        <button id="glossary-btn">Glossary</button>
+    </nav>
+    
+    <main>
+        <div id="key-concepts" class="section active">
+            <h2>Key Concepts</h2>
+            
+            <div class="key-concept">
+                <div class="concept-title">Kidney/Urinary Assessment</div>
+                <p>Focus on urine output, edema, weight changes, pain, vital signs, and lab values.</p>
+            </div>
+            
+            <div class="key-concept">
+                <div class="concept-title">AKI Lab Values</div>
+                <p>Monitor <strong>serum creatinine, BUN, potassium, sodium, calcium, phosphate, GFR, and blood gases</strong>.</p>
+            </div>
+            
+            <div class="key-concept">
+                <div class="concept-title">AKI Risk Factors</div>
+                <p>Includes <strong>hypovolemia, sepsis, nephrotoxic drugs, heart failure, and hypotension</strong>.</p>
+            </div>
+            
+            <div class="key-concept">
+                <div class="concept-title">AKI Prevention</div>
+                <p><strong>Hydration, avoiding nephrotoxins, monitoring BP and urine output</strong>.</p>
+            </div>
+            
+            <div class="key-concept">
+                <div class="concept-title">AKI Priorities of Care</div>
+                <p><strong>Fluid management, electrolyte balance, hemodynamic stability, and dialysis preparation if needed</strong>.</p>
+            </div>
+            
+            <div class="key-concept">
+                <div class="concept-title">Fluid Balance Indicator</div>
+                <p><strong>Daily weight is the most accurate indicator</strong>.</p>
+            </div>
+            
+            <div id="progress-tracker">
+                <div id="progress-bar"></div>
+                <div id="progress-text">0% Complete</div>
+            </div>
+        </div>
+        
+        <div id="urinary-disorders" class="section">
+            <h2>Urinary Tract Disorders</h2>
+            
+            <div class="key-concept">
+                <div class="concept-title">UTI Contributing Factors</div>
+                <p><strong>Poor hygiene, urinary retention, catheter use, diabetes, dehydration</strong>.</p>
+            </div>
+            
+            <div class="key-concept">
+                <div class="concept-title">UTI Prevention</div>
+                <p><strong>Proper perineal care, adequate fluid intake, early catheter removal, avoiding bladder irritants</strong>.</p>
+            </div>
+            
+            <div class="key-concept">
+                <div class="concept-title">Nursing Process for Lower UTI</div>
+                <p><strong>Assessment, antibiotics, symptom relief, education</strong>.</p>
+            </div>
+            
+            <div class="key-concept">
+                <div class="concept-title">Urinary Obstruction</div>
+                <p>Causes include <strong>kidney stones, strictures, tumors, BPH</strong>; treatment varies from <strong>medications to surgery</strong>.</p>
+            </div>
+            
+            <div class="key-concept">
+                <div class="concept-title">Nursing Process for Renal Calculi</div>
+                <p><strong>Pain control, hydration, urine straining, dietary changes</strong>.</p>
+            </div>
+            
+            <div class="key-concept">
+                <div class="concept-title">Urinary Diversion</div>
+                <p><strong>Monitor stoma, prevent infection, educate on appliance care</strong>.</p>
+            </div>
+        </div>
+        
+        <div id="quiz" class="section">
+            <h2>Quiz</h2>
+            <p>Answer the following questions in 2-3 sentences each.</p>
+            
+            <div class="quiz-container">
+                <div class="quiz-question">
+                    <p>1. A patient with AKI has a serum potassium level of 6.2 mEq/L. Explain why this is a concern and what immediate assessment should the nurse prioritize.</p>
+                    <button class="quiz-toggle">Show Answer</button>
+                    <div class="quiz-answer">
+                        <p>A serum potassium level of 6.2 mEq/L is dangerously high (hyperkalemia) and can lead to cardiac dysrhythmias. The nurse should immediately assess the patient's cardiac status, including heart rate and rhythm, and prepare for interventions to lower potassium levels.</p>
+                    </div>
+                </div>
+                
+                <div class="quiz-question">
+                    <p>2. Describe the difference between prerenal and intrarenal acute kidney injury, including a potential cause for each.</p>
+                    <button class="quiz-toggle">Show Answer</button>
+                    <div class="quiz-answer">
+                        <p>Prerenal AKI is caused by reduced blood flow to the kidneys, such as from hypovolemia or hypotension. Intrarenal AKI involves direct damage to the kidney tissue itself, which can be caused by nephrotoxic medications or glomerulonephritis.</p>
+                    </div>
+                </div>
+                
+                <div class="quiz-question">
+                    <p>3. What are the primary goals of hemodialysis in a patient with acute kidney injury or end-stage kidney disease? Briefly explain the principles of diffusion and ultrafiltration in this context.</p>
+                    <button class="quiz-toggle">Show Answer</button>
+                    <div class="quiz-answer">
+                        <p>The primary goals of hemodialysis are to remove waste products (such as urea and creatinine) and excess fluid from the blood. Diffusion is the movement of solutes from an area of high concentration to low concentration, while ultrafiltration is the removal of fluid due to a pressure gradient.</p>
+                    </div>
+                </div>
+                
+                <div class="quiz-question">
+                    <p>4. A postoperative kidney transplant patient has a sudden decrease in urine output. What are the immediate nursing actions and potential complications the nurse should suspect?</p>
+                    <button class="quiz-toggle">Show Answer</button>
+                    <div class="quiz-answer">
+                        <p>A sudden decrease in urine output in a postoperative kidney transplant patient is concerning for potential complications such as dehydration, rejection, a kinked or obstructed urinary catheter, or vascular issues with the new kidney. The nurse should immediately assess the catheter patency, vital signs, and notify the physician.</p>
+                    </div>
+                </div>
+                
+                <div class="quiz-question">
+                    <p>5. List three common signs and symptoms a patient with a lower urinary tract infection might report during an assessment.</p>
+                    <button class="quiz-toggle">Show Answer</button>
+                    <div class="quiz-answer">
+                        <p>Common signs and symptoms of a lower urinary tract infection include dysuria (painful urination), urinary frequency, urgency, and potentially hematuria (blood in the urine).</p>
+                    </div>
+                </div>
+                
+                <div class="quiz-question">
+                    <p>6. Explain why increased fluid intake is often recommended for patients with urinary tract infections and renal calculi, unless contraindicated.</p>
+                    <button class="quiz-toggle">Show Answer</button>
+                    <div class="quiz-answer">
+                        <p>Increased fluid intake helps to dilute the urine, making it less irritating to the bladder and urethra in UTIs, and aids in flushing out bacteria and small stones in cases of renal calculi. This reduces the risk of infection and stone progression.</p>
+                    </div>
+                </div>
+                
+                <div class="quiz-question">
+                    <p>7. What are some atypical symptoms of a urinary tract infection that might be observed in an elderly patient? Why is it important to recognize these?</p>
+                    <button class="quiz-toggle">Show Answer</button>
+                    <div class="quiz-answer">
+                        <p>Atypical symptoms of a UTI in elderly patients can include confusion, weakness or fatigue, and anorexia. Recognizing these is important because elderly individuals may not present with the classic urinary symptoms, delaying diagnosis and treatment.</p>
+                    </div>
+                </div>
+                
+                <div class="quiz-question">
+                    <p>8. A urinalysis report shows the presence of leukocyte esterase and nitrites. What do these findings suggest, and what is the next likely diagnostic step?</p>
+                    <button class="quiz-toggle">Show Answer</button>
+                    <div class="quiz-answer">
+                        <p>The presence of leukocyte esterase (indicating white blood cells) and nitrites (suggesting the presence of certain bacteria like E. coli) in a urinalysis strongly suggests a urinary tract infection. The next likely diagnostic step is a urine culture and sensitivity to identify the specific organism and determine the appropriate antibiotic.</p>
+                    </div>
+                </div>
+                
+                <div class="quiz-question">
+                    <p>9. Describe the typical pain associated with renal calculi and its common location. What is an important nursing intervention related to pain management and stone analysis?</p>
+                    <button class="quiz-toggle">Show Answer</button>
+                    <div class="quiz-answer">
+                        <p>The pain associated with renal calculi is typically described as severe, colicky flank pain that may radiate to the groin or abdomen. An important nursing intervention includes administering analgesics for pain relief and straining all urine to collect any passed stones for analysis to help determine the cause.</p>
+                    </div>
+                </div>
+                
+                <div class="quiz-question">
+                    <p>10. What key patient education points should be included for a patient being discharged home after treatment for a urinary tract infection to prevent recurrence?</p>
+                    <button class="quiz-toggle">Show Answer</button>
+                    <div class="quiz-answer">
+                        <p>Patient education for preventing recurrent UTIs includes encouraging adequate fluid intake, proper hygiene practices (wiping front to back), avoiding bladder irritants, completing the full course of antibiotics, and understanding the signs and symptoms of a UTI that warrant seeking medical attention.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="flashcards" class="section">
+            <h2>Flashcards</h2>
+            <p>Click on the card to flip it and test your knowledge!</p>
+            
+            <div class="flashcard-container">
+                <div class="flashcard">
+                    <div class="flashcard-front">
+                        <p>What is the most accurate indicator of fluid balance?</p>
+                    </div>
+                    <div class="flashcard-back">
+                        <p>Daily weight is the most accurate indicator of fluid balance.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flashcard-controls">
+                <button class="flashcard-button" id="prev-card">Previous</button>
+                <button class="flashcard-button" id="next-card">Next</button>
+                <span id="card-counter">Card 1 of 10</span>
+            </div>
+        </div>
+        
+        <div id="glossary" class="section">
+            <h2>Glossary of Key Terms</h2>
+            
+            <div class="search-container">
+                <input type="text" id="glossary-search" placeholder="Search for terms...">
+            </div>
+            
+            <div id="glossary-items">
+                <div class="glossary-item">
+                    <span class="glossary-term">AKI (Acute Kidney Injury):</span>
+                    <span class="glossary-definition">Sudden kidney function decline.</span>
+                </div>
+                
+                <div class="glossary-item">
+                    <span class="glossary-term">Anuria/Oliguria:</span>
+                    <span class="glossary-definition">No or reduced urine output.</span>
+                </div>
+                
+                <div class="glossary-item">
+                    <span class="glossary-term">AV Fistula/Graft:</span>
+                    <span class="glossary-definition">Dialysis access points.</span>
+                </div>
+                
+                <div class="glossary-item">
+                    <span class="glossary-term">Azotemia:</span>
+                    <span class="glossary-definition">Excess nitrogenous waste.</span>
+                </div>
+                
+                <div class="glossary-item">
+                    <span class="glossary-term">CKD (Chronic Kidney Disease):</span>
+                    <span class="glossary-definition">Progressive kidney damage.</span>
+                </div>
+                
+                <div class="glossary-item">
+                    <span class="glossary-term">Creatinine:</span>
+                    <span class="glossary-definition">Kidney function marker.</span>
+                </div>
+                
+                <div class="glossary-item">
+                    <span class="glossary-term">Dysuria:</span>
+                    <span class="glossary-definition">Painful urination.</span>
+                </div>
+                
+                <div class="glossary-item">
+                    <span class="glossary-term">GFR (Glomerular Filtration Rate):</span>
+                    <span class="glossary-definition">Kidney function test.</span>
+                </div>
+                
+                <div class="glossary-item">
+                    <span class="glossary-term">Hematuria:</span>
+                    <span class="glossary-definition">Blood in urine.</span>
+                </div>
+                
+                <div class="glossary-item">
+                    <span class="glossary-term">Hemodialysis:</span>
+                    <span class="glossary-definition">Blood filtration treatment.</span>
+                </div>
+                
+                <div class="glossary-item">
+                    <span class="glossary-term">Hydronephrosis:</span>
+                    <span class="glossary-definition">Kidney swelling due to urine blockage.</span>
+                </div>
+                
+                <div class="glossary-item">
+                    <span class="glossary-term">Hyperkalemia/Hypokalemia:</span>
+                    <span class="glossary-definition">High/low potassium levels.</span>
+                </div>
+                
+                <div class="glossary-item">
+                    <span class="glossary-term">Metabolic Acidosis:</span>
+                    <span class="glossary-definition">Acid buildup in kidney failure.</span>
+                </div>
+                
+                <div class="glossary-item">
+                    <span class="glossary-term">Nephrolithiasis/Urolithiasis:</span>
+                    <span class="glossary-definition">Kidney/urinary tract stones.</span>
+                </div>
+                
+                <div class="glossary-item">
+                    <span class="glossary-term">Nocturia:</span>
+                    <span class="glossary-definition">Frequent nighttime urination.</span>
+                </div>
+                
+                <div class="glossary-item">
+                    <span class="glossary-term">Peritoneal Dialysis:</span>
+                    <span class="glossary-definition">Dialysis using abdominal lining.</span>
+                </div>
+                
+                <div class="glossary-item">
+                    <span class="glossary-term">Prerenal/Postrenal AKI:</span>
+                    <span class="glossary-definition">Due to low perfusion/obstruction.</span>
+                </div>
+                
+                <div class="glossary-item">
+                    <span class="glossary-term">Pyelonephritis:</span>
+                    <span class="glossary-definition">Kidney infection.</span>
+                </div>
+                
+                <div class="glossary-item">
+                    <span class="glossary-term">Renal Replacement Therapy (RRT):</span>
+                    <span class="glossary-definition">Dialysis or transplant.</span>
+                </div>
+                
+                <div class="glossary-item">
+                    <span class="glossary-term">Urinary Diversion:</span>
+                    <span class="glossary-definition">Rerouting urine due to bladder issues.</span>
+                </div>
+                
+                <div class="glossary-item">
+                    <span class="glossary-term">UTI (Urinary Tract Infection):</span>
+                    <span class="glossary-definition">Infection in the urinary system.</span>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <p>Interactive Kidney and Urinary Disorders Study Guide | Created for Nursing Education</p>
+    </footer>
+    
+    <script>
+        // Navigation
+        const sections = {
+            'key-concepts-btn': 'key-concepts',
+            'urinary-disorders-btn': 'urinary-disorders',
+            'quiz-btn': 'quiz',
+            'flashcards-btn': 'flashcards',
+            'glossary-btn': 'glossary'
+        };
+        
+        // Set active section
+        Object.keys(sections).forEach(btn => {
+            document.getElementById(btn).addEventListener('click', function() {
+                // Remove active class from all sections
+                document.querySelectorAll('.section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // Remove active class from all buttons
+                document.querySelectorAll('nav button').forEach(button => {
+                    button.classList.remove('active');
+                });
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Show corresponding section
+                document.getElementById(sections[btn]).classList.add('active');
+                
+                // Update progress if going to key concepts
+                if (btn === 'key-concepts-btn') {
+                    updateProgress();
+                }
+            });
+        });
+        
+        // Activate first button by default
+        document.getElementById('key-concepts-btn').classList.add('active');
+        
+        // Quiz functionality
+        document.querySelectorAll('.quiz-toggle').forEach(button => {
+            button.addEventListener('click', function() {
+                const answer = this.nextElementSibling;
+                if (answer.style.display === 'block') {
+                    answer.style.display = 'none';
+                    this.textContent = 'Show Answer';
+                } else {
+                    answer.style.display = 'block';
+                    this.textContent = 'Hide Answer';
+                }
+            });
+        });
+        
+        // Flashcard functionality
+        const flashcards = [
+            { front: "What is the most accurate indicator of fluid balance?", back: "Daily weight is the most accurate indicator of fluid balance." },
+            { front: "What are the primary monitoring parameters for AKI?", back: "Serum creatinine, BUN, potassium, sodium, calcium, phosphate, GFR, and blood gases." },
+            { front: "List two major risk factors for AKI.", back: "Hypovolemia, sepsis, nephrotoxic drugs, heart failure, and hypotension." },
+            { front: "What are the priorities of care for a patient with AKI?", back: "Fluid management, electrolyte balance, hemodynamic stability, and dialysis preparation if needed." },
+            { front: "What findings on urinalysis suggest a UTI?", back: "Presence of leukocyte esterase, nitrites, and potentially white blood cells or bacteria." },
+            { front: "What is the difference between prerenal and intrarenal AKI?", back: "Prerenal AKI is caused by reduced blood flow to kidneys, while intrarenal AKI involves direct kidney tissue damage." },
+            { front: "What is hyperkalemia and why is it dangerous?", back: "Hyperkalemia is high potassium levels in the blood, which can lead to cardiac dysrhythmias and arrest." },
+            { front: "What are the common symptoms of a lower UTI?", back: "Dysuria (painful urination), frequency, urgency, and potentially hematuria (blood in urine)." },
+            { front: "What is the principle of diffusion in hemodialysis?", back: "Movement of solutes from an area of high concentration to low concentration across a semipermeable membrane." },
+            { front: "Why might elderly patients present differently with UTIs?", back: "Elderly patients may show atypical symptoms like confusion, weakness, or anorexia instead of classic urinary symptoms." }
+        ];
+        
+        let currentCard = 0;
+        const flashcard = document.querySelector('.flashcard');
+        const cardFront = document.querySelector('.flashcard-front p');
+        const cardBack = document.querySelector('.flashcard-back p');
+        const cardCounter = document.getElementById('card-counter');
+        
+        // Initialize first card
+        cardFront.textContent = flashcards[0].front;
+        cardBack.textContent = flashcards[0].back;
+        cardCounter.textContent = `Card 1 of ${flashcards.length}`;
+        
+        // Flip card on click
+        flashcard.addEventListener('click', function() {
+            this.classList.toggle('flipped');
+        });
+        
+        // Navigate cards
+        document.getElementById('prev-card').addEventListener('click', function() {
+            if (currentCard > 0) {
+                currentCard--;
+                updateCard();
+            }
+        });
+        
+        document.getElementById('next-card').addEventListener('click', function() {
+            if (currentCard < flashcards.length - 1) {
+                currentCard++;
+                updateCard();
+            }
+        });
+        
+        function updateCard() {
+            flashcard.classList.remove('flipped');
+            cardFront.textContent = flashcards[currentCard].front;
+            cardBack.textContent = flashcards[currentCard].back;
+            cardCounter.textContent = `Card ${currentCard + 1} of ${flashcards.length}`;
+        }
+        
+        // Glossary search functionality
+        const glossarySearch = document.getElementById('glossary-search');
+        const glossaryItems = document.querySelectorAll('.glossary-item');
+        
+        glossarySearch.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            
+            glossaryItems.forEach(item => {
+                const term = item.querySelector('.glossary-term').textContent.toLowerCase();
+                const definition = item.querySelector('.glossary-definition').textContent.toLowerCase();
+                
+                if (term.includes(searchTerm) || definition.includes(searchTerm)) {
+                    item.style.display = 'block';
+                    
+                    // Highlight matching text
+                    if (searchTerm.length > 0) {
+                        highlightText(item, searchTerm);
+                    } else {
+                        // Remove highlights if search is cleared
+                        item.innerHTML = item.innerHTML.replace(/<span class="highlighted">(.+?)<\/span>/g, '$1');
+                    }
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+        
+        function highlightText(element, searchTerm) {
+            // Remove existing highlights
+            element.innerHTML = element.innerHTML.replace(/<span class="highlighted">(.+?)<\/span>/g, '$1');
+            
+            const termElement = element.querySelector('.glossary-term');
+            const defElement = element.querySelector('.glossary-definition');
+            
+            // Function to highlight text in an element
+            function highlight(el) {
+                if (!el) return;
+                
+                const text = el.textContent;
+                const regex = new RegExp(searchTerm, 'gi');
+                el.innerHTML = text.replace(regex, match => `<span class="highlighted">${match}</span>`);
+            }
+            
+            highlight(termElement);
+            highlight(defElement);
+        }
+        
+        // Progress tracking
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+        const keyConcepts = document.querySelectorAll('#key-concepts .key-concept');
+        let conceptsViewed = new Set();
+        
+        keyConcepts.forEach(concept => {
+            concept.addEventListener('click', function() {
+                conceptsViewed.add(this.querySelector('.concept-title').textContent);
+                updateProgress();
+                
+                // Visual feedback on click
+                this.style.backgroundColor = 'rgba(65, 105, 225, 0.2)';
+                setTimeout(() => {
+                    this.style.backgroundColor = 'rgba(65, 105, 225, 0.1)';
+                }, 300);
+            });
+        });
+        
+        function updateProgress() {
+            const totalConcepts = keyConcepts.length;
+            const viewedCount = conceptsViewed.size;
+            const percentage = Math.round((viewedCount / totalConcepts) * 100);
+            
+            progressBar.style.width = `${percentage}%`;
+            progressText.textContent = `${percentage}% Complete (${viewedCount}/${totalConcepts} concepts)`;
+        }
+        
+        // Easter egg: Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (document.getElementById('flashcards').classList.contains('active')) {
+                if (e.key === 'ArrowLeft') {
+                    document.getElementById('prev-card').click();
+                } else if (e.key === 'ArrowRight') {
+                    document.getElementById('next-card').click();
+                } else if (e.key === ' ' || e.key === 'Enter') {
+                    flashcard.click();
+                }
+            } else if (document.getElementById('quiz').classList.contains('active')) {
+                if (e.key === '1' || e.key === '2' || e.key === '3' || e.key === '4' || e.key === '5' || 
+                    e.key === '6' || e.key === '7' || e.key === '8' || e.key === '9') {
+                    const idx = parseInt(e.key) - 1;
+                    const buttons = document.querySelectorAll('.quiz-toggle');
+                    if (idx < buttons.length) {
+                        buttons[idx].click();
+                    }
+                }
+            }
+        });
+        
+        // Make navigation buttons sticky on scroll
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 100) {
+                nav.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+            } else {
+                nav.style.boxShadow = 'none';
+            }
+        });
+        
+        // Initialize active button
+        document.getElementById('key-concepts-btn').classList.add('active');
+    </script>
+</body>
+</html>
