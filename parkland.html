@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parkland Formula Challenge</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --correct: #2ecc71;
+            --wrong: #e74c3c;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--primary);
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--primary);
+            border-bottom: 3px solid var(--secondary);
+            padding-bottom: 10px;
+        }
+        
+        .info-panel {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-left: 5px solid var(--secondary);
+        }
+        
+        .game-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .problem {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: rgba(52, 152, 219, 0.1);
+            border-radius: 5px;
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .highlight {
+            font-weight: bold;
+            color: var(--accent);
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .option {
+            padding: 15px;
+            background-color: var(--light);
+            border: 2px solid var(--secondary);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .option:hover {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .selected {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .correct {
+            background-color: var(--correct);
+            color: white;
+            border-color: var(--correct);
+        }
+        
+        .incorrect {
+            background-color: var(--wrong);
+            color: white;
+            border-color: var(--wrong);
+        }
+        
+        .feedback {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .feedback.correct {
+            display: block;
+            background-color: rgba(46, 204, 113, 0.2);
+            border-left: 4px solid var(--correct);
+            color: var(--primary);
+        }
+        
+        .feedback.incorrect {
+            display: block;
+            background-color: rgba(231, 76, 60, 0.2);
+            border-left: 4px solid var(--wrong);
+            color: var(--primary);
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            display: block;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+        
+        .statistics {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding: 10px 0;
+            border-top: 1px solid #ddd;
+        }
+        
+        .statistic {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .statistic-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--secondary);
+        }
+        
+        .progress-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin: 10px 0;
+            height: 10px;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background-color: var(--secondary);
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        @media (max-width: 600px) {
+            .options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Parkland Formula Challenge</h1>
+    
+    <div class="info-panel">
+        <h2>Parkland Formula</h2>
+        <p>The Parkland formula calculates the fluid requirements for burn patients in the first 24 hours:</p>
+        <p><strong>4 mL × kg body weight × % TBSA burn = Total fluid (mL) for first 24 hours</strong></p>
+        <p>Half of this amount is given in the first 8 hours post-burn, and the remaining half is given over the next 16 hours.</p>
+    </div>
+    
+    <div class="game-container">
+        <div id="problem-container" class="problem"></div>
+        
+        <div id="options-container" class="options"></div>
+        
+        <div id="feedback" class="feedback"></div>
+        
+        <button id="submit-btn" class="btn" disabled>Submit Answer</button>
+        <button id="next-btn" class="btn" style="display: none;">Next Problem</button>
+    </div>
+    
+    <div class="statistics">
+        <div class="statistic">
+            <div>Correct</div>
+            <div id="correct-count" class="statistic-value">0</div>
+        </div>
+        <div class="statistic">
+            <div>Attempts</div>
+            <div id="attempts-count" class="statistic-value">0</div>
+        </div>
+        <div class="statistic">
+            <div>Accuracy</div>
+            <div id="accuracy" class="statistic-value">0%</div>
+        </div>
+    </div>
+    
+    <div class="progress-container">
+        <div id="progress-bar" class="progress-bar"></div>
+    </div>
+    
+    <script>
+        // Game variables
+        let currentProblem;
+        let selectedOption = null;
+        let stats = {
+            correct: 0,
+            attempts: 0
+        };
+        
+        // DOM elements
+        const problemContainer = document.getElementById('problem-container');
+        const optionsContainer = document.getElementById('options-container');
+        const feedbackContainer = document.getElementById('feedback');
+        const submitBtn = document.getElementById('submit-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const correctCount = document.getElementById('correct-count');
+        const attemptsCount = document.getElementById('attempts-count');
+        const accuracyElement = document.getElementById('accuracy');
+        const progressBar = document.getElementById('progress-bar');
+        
+        // Problem types
+        const problemTypes = [
+            'totalFluid',
+            'first8Hours',
+            'next16Hours',
+            'flowRate8Hours',
+            'flowRate16Hours'
+        ];
+        
+        // Generate random patient data within realistic ranges
+        function generatePatientData() {
+            // Weight between 50-120 kg
+            const weight = Math.floor(Math.random() * 71) + 50;
+            
+            // TBSA between 15-60%
+            const tbsa = Math.floor(Math.random() * 46) + 15;
+            
+            // Time since burn between 0-8 hours for some problems
+            const hoursSinceBurn = Math.floor(Math.random() * 7) + 1;
+            
+            // Calculate total fluid requirement
+            const totalFluid = 4 * weight * tbsa;
+            
+            // Calculate first 8 hours and next 16 hours
+            const first8Hours = totalFluid / 2;
+            const next16Hours = totalFluid / 2;
+            
+            // Calculate flow rates
+            const flowRate8Hours = Math.round(first8Hours / 8);
+            const flowRate16Hours = Math.round(next16Hours / 16);
+            
+            // Remaining fluid for first 8 hours if time has passed
+            const remainingFirst8Hours = first8Hours * (8 - hoursSinceBurn) / 8;
+            const remainingFlowRate8Hours = Math.round(remainingFirst8Hours / (8 - hoursSinceBurn));
+            
+            return {
+                weight,
+                tbsa,
+                totalFluid,
+                first8Hours,
+                next16Hours,
+                flowRate8Hours,
+                flowRate16Hours,
+                hoursSinceBurn,
+                remainingFirst8Hours,
+                remainingFlowRate8Hours
+            };
+        }
+        
+        // Generate a problem based on patient data
+        function generateProblem() {
+            const patientData = generatePatientData();
+            const problemType = problemTypes[Math.floor(Math.random() * problemTypes.length)];
+            
+            let problem = {
+                type: problemType,
+                patientData: patientData,
+                question: '',
+                correctAnswer: 0,
+                options: [],
+                rationale: ''
+            };
+            
+            switch (problemType) {
+                case 'totalFluid':
+                    problem.question = `A ${patientData.weight} kg patient has ${patientData.tbsa}% TBSA burns. According to the Parkland formula, what is the total fluid requirement for the first 24 hours?`;
+                    problem.correctAnswer = patientData.totalFluid;
+                    problem.rationale = `Using the Parkland formula: 4 mL × ${patientData.weight} kg × ${patientData.tbsa}% TBSA = ${patientData.totalFluid} mL for 24 hours.`;
+                    break;
+                    
+                case 'first8Hours':
+                    problem.question = `A ${patientData.weight} kg patient has ${patientData.tbsa}% TBSA burns. How much fluid should be given in the first 8 hours post-burn according to the Parkland formula?`;
+                    problem.correctAnswer = patientData.first8Hours;
+                    problem.rationale = `Total fluid for 24 hours = 4 mL × ${patientData.weight} kg × ${patientData.tbsa}% TBSA = ${patientData.totalFluid} mL. Half of this (${patientData.first8Hours} mL) should be given in the first 8 hours.`;
+                    break;
+                    
+                case 'next16Hours':
+                    problem.question = `A ${patientData.weight} kg patient with ${patientData.tbsa}% TBSA burns has received the first 8 hours of fluid resuscitation. How much fluid should be given over the next 16 hours?`;
+                    problem.correctAnswer = patientData.next16Hours;
+                    problem.rationale = `Total fluid for 24 hours = 4 mL × ${patientData.weight} kg × ${patientData.tbsa}% TBSA = ${patientData.totalFluid} mL. Half of this (${patientData.next16Hours} mL) should be given in the subsequent 16 hours.`;
+                    break;
+                    
+                case 'flowRate8Hours':
+                    problem.question = `A ${patientData.weight} kg patient has ${patientData.tbsa}% TBSA burns. At what rate (mL/hr) should the IV fluid be set for the first 8 hours?`;
+                    problem.correctAnswer = patientData.flowRate8Hours;
+                    problem.rationale = `Total fluid for first 8 hours = ${patientData.first8Hours} mL. Flow rate = ${patientData.first8Hours} mL ÷ 8 hours = ${patientData.flowRate8Hours} mL/hr.`;
+                    break;
+                    
+                case 'flowRate16Hours':
+                    problem.question = `A ${patientData.weight} kg patient with ${patientData.tbsa}% TBSA burns is entering the second phase of fluid resuscitation (9-24 hours post-burn). At what rate (mL/hr) should the IV fluid be set?`;
+                    problem.correctAnswer = patientData.flowRate16Hours;
+                    problem.rationale = `Total fluid for next 16 hours = ${patientData.next16Hours} mL. Flow rate = ${patientData.next16Hours} mL ÷ 16 hours = ${patientData.flowRate16Hours} mL/hr.`;
+                    break;
+            }
+            
+            // Generate options (one correct, three incorrect)
+            const correctAnswer = problem.correctAnswer;
+            const options = [correctAnswer];
+            
+            // Generate plausible but incorrect options
+            while (options.length < 4) {
+                // Variance is between 70% and 130% of correct answer
+                const variance = 0.7 + Math.random() * 0.6;
+                const option = Math.round(correctAnswer * variance);
+                
+                // Ensure no duplicates
+                if (!options.includes(option) && option > 0) {
+                    options.push(option);
+                }
+            }
+            
+            // Shuffle options
+            problem.options = options.sort(() => Math.random() - 0.5);
+            
+            return problem;
+        }
+        
+        // Display the problem and options
+        function displayProblem(problem) {
+            // Display question
+            problemContainer.innerHTML = problem.question;
+            
+            // Clear options
+            optionsContainer.innerHTML = '';
+            
+            // Display options
+            problem.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.classList.add('option');
+                optionElement.textContent = `${option} mL`;
+                optionElement.dataset.value = option;
+                
+                optionElement.addEventListener('click', () => {
+                    // Clear previous selection
+                    document.querySelectorAll('.option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
+                    // Mark as selected
+                    optionElement.classList.add('selected');
+                    selectedOption = option;
+                    
+                    // Enable submit button
+                    submitBtn.disabled = false;
+                });
+                
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Reset feedback and buttons
+            feedbackContainer.className = 'feedback';
+            feedbackContainer.innerHTML = '';
+            submitBtn.style.display = 'block';
+            submitBtn.disabled = true;
+            nextBtn.style.display = 'none';
+            
+            // Reset selection
+            selectedOption = null;
+        }
+        
+        // Check answer and provide feedback
+        function checkAnswer() {
+            stats.attempts++;
+            attemptsCount.textContent = stats.attempts;
+            
+            const isCorrect = Number(selectedOption) === currentProblem.correctAnswer;
+            
+            if (isCorrect) {
+                stats.correct++;
+                correctCount.textContent = stats.correct;
+                feedbackContainer.className = 'feedback correct';
+                feedbackContainer.innerHTML = `<p><strong>Correct!</strong> ${currentProblem.rationale}</p>`;
+                
+                // Highlight correct option
+                document.querySelectorAll('.option').forEach(opt => {
+                    if (Number(opt.dataset.value) === currentProblem.correctAnswer) {
+                        opt.classList.add('correct');
+                    }
+                });
+            } else {
+                feedbackContainer.className = 'feedback incorrect';
+                feedbackContainer.innerHTML = `<p><strong>Incorrect.</strong> The correct answer is ${currentProblem.correctAnswer} mL. ${currentProblem.rationale}</p>`;
+                
+                // Highlight correct and incorrect options
+                document.querySelectorAll('.option').forEach(opt => {
+                    if (Number(opt.dataset.value) === currentProblem.correctAnswer) {
+                        opt.classList.add('correct');
+                    } else if (Number(opt.dataset.value) === Number(selectedOption)) {
+                        opt.classList.add('incorrect');
+                    }
+                });
+            }
+            
+            // Update accuracy
+            const accuracy = Math.round((stats.correct / stats.attempts) * 100);
+            accuracyElement.textContent = `${accuracy}%`;
+            
+            // Update progress bar
+            progressBar.style.width = `${accuracy}%`;
+            
+            // Show next button, hide submit button
+            submitBtn.style.display = 'none';
+            nextBtn.style.display = 'block';
+        }
+        
+        // Event listeners
+        submitBtn.addEventListener('click', checkAnswer);
+        
+        nextBtn.addEventListener('click', () => {
+            currentProblem = generateProblem();
+            displayProblem(currentProblem);
+        });
+        
+        // Initialize game
+        currentProblem = generateProblem();
+        displayProblem(currentProblem);
+    </script>
+</body>
+</html>
