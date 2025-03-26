@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Nursing Math Practice</title>
+  <style>
+    /* Basic Reset */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    /* Body & Container */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #e0f7fa;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      background: #ffffff;
+      max-width: 600px;
+      width: 100%;
+      padding: 25px 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #00796b;
+    }
+    .score {
+      text-align: right;
+      font-size: 1.1em;
+      margin-bottom: 20px;
+      color: #004d40;
+    }
+    .question {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+      color: #333333;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 12px;
+      font-size: 1em;
+      border: 1px solid #cccccc;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      background: #00796b;
+      color: #ffffff;
+      cursor: pointer;
+      margin-bottom: 15px;
+    }
+    button:hover {
+      background: #00695c;
+    }
+    .feedback {
+      font-size: 1em;
+      margin-top: 15px;
+      color: #424242;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Nursing Math Practice</h1>
+    <div class="score">Score: <span id="score">0</span></div>
+    <div class="question" id="questionText"></div>
+    <input type="number" id="answerInput" placeholder="Enter your answer" step="any">
+    <button id="submitBtn">Submit Answer</button>
+    <div class="feedback" id="feedback"></div>
+    <button id="nextBtn" style="display: none;">Next Question</button>
+  </div>
+
+  <script>
+    let score = 0;
+    let currentAnswer = 0;
+    let currentRationale = "";
+
+    // Generate a gtt/min (drops per minute) question
+    function generateGttQuestion() {
+      const volume = Math.floor(Math.random() * 451) + 50; // 50 to 500 mL
+      const time = Math.floor(Math.random() * 91) + 30;      // 30 to 120 minutes
+      const dripOptions = [10, 15, 20];
+      const drip = dripOptions[Math.floor(Math.random() * dripOptions.length)];
+      // Formula: (Volume x Drip Factor) / Time
+      const rawAnswer = (volume * drip) / time;
+      const answer = Math.round(rawAnswer);
+      const questionText = `Calculate the drops per minute (gtt/min) for an infusion of ${volume} mL over ${time} minutes using a drip factor of ${drip} gtt/mL. (Round to the nearest whole number)`;
+      const rationale = `Using the formula (Volume × Drip Factor) ÷ Time, we have (${volume} × ${drip}) ÷ ${time} ≈ ${rawAnswer.toFixed(2)}, which rounds to ${answer} gtt/min.`;
+      return { questionText, answer, rationale };
+    }
+
+    // Generate an ml/hr question
+    function generateMlHrQuestion() {
+      // Ensure a whole number answer by making volume a multiple of time.
+      const time = Math.floor(Math.random() * 8) + 1; // 1 to 8 hours
+      const factor = Math.floor(Math.random() * 101) + 50; // 50 to 150 mL per hour
+      const volume = time * factor;
+      const answer = factor; // Since volume/time = factor
+      const questionText = `Calculate the infusion rate in mL/hr if ${volume} mL is to be infused over ${time} hour(s).`;
+      const rationale = `The rate is calculated by dividing the total volume by the time: ${volume} ÷ ${time} = ${answer} mL/hr.`;
+      return { questionText, answer, rationale };
+    }
+
+    // Generate a dose calculation question (either mg/mL or tablet based)
+    function generateDoseQuestion() {
+      // Randomly choose between mg/mL and tablet version.
+      if (Math.random() < 0.5) {
+        // mg/mL dose question
+        let weight, dosage, product, concentration;
+        while (true) {
+          weight = [50, 60, 70, 80, 90, 100][Math.floor(Math.random() * 6)];
+          dosage = Math.floor(Math.random() * 5) + 1; // 1 to 5 mg/kg
+          product = weight * dosage;
+          // Choose a concentration that divides the total dose evenly.
+          const possibleConcentrations = [1, 2, 5, 10, 20].filter(c => product % c === 0);
+          if (possibleConcentrations.length > 0) {
+            concentration = possibleConcentrations[Math.floor(Math.random() * possibleConcentrations.length)];
+            break;
+          }
+        }
+        const answer = product / concentration;
+        const questionText = `A patient weighing ${weight} kg is to receive ${dosage} mg/kg of medication. The medication is available as ${concentration} mg/mL. What volume (in mL) should be administered?`;
+        const rationale = `Total dose = ${weight} kg × ${dosage} mg/kg = ${product} mg. Dividing by the concentration (${concentration} mg/mL) gives ${product} ÷ ${concentration} = ${answer} mL.`;
+        return { questionText, answer, rationale };
+      } else {
+        // Tablet dose question
+        let weight, dosage, product, tabletStrength;
+        while (true) {
+          weight = [50, 60, 70, 80, 90, 100][Math.floor(Math.random() * 6)];
+          dosage = Math.floor(Math.random() * 5) + 1; // 1 to 5 mg/kg
+          product = weight * dosage;
+          // Choose a tablet strength that divides the total dose evenly.
+          const possibleStrengths = [25, 50, 100].filter(s => product % s === 0);
+          if (possibleStrengths.length > 0) {
+            tabletStrength = possibleStrengths[Math.floor(Math.random() * possibleStrengths.length)];
+            break;
+          }
+        }
+        const answer = product / tabletStrength;
+        const questionText = `A patient weighing ${weight} kg is to receive ${dosage} mg/kg of medication. The medication is available in tablets of ${tabletStrength} mg. How many tablets should be administered?`;
+        const rationale = `Total required dose = ${weight} kg × ${dosage} mg/kg = ${product} mg. Dividing by tablet strength (${tabletStrength} mg) gives ${product} ÷ ${tabletStrength} = ${answer} tablet(s).`;
+        return { questionText, answer, rationale };
+      }
+    }
+
+    // Function to randomly generate one of the three question types
+    function generateQuestion() {
+      const questionType = Math.floor(Math.random() * 3);
+      let q;
+      if (questionType === 0) {
+        q = generateGttQuestion();
+      } else if (questionType === 1) {
+        q = generateMlHrQuestion();
+      } else {
+        q = generateDoseQuestion();
+      }
+      document.getElementById("questionText").innerText = q.questionText;
+      currentAnswer = q.answer;
+      currentRationale = q.rationale;
+      document.getElementById("feedback").innerText = "";
+      document.getElementById("answerInput").value = "";
+      document.getElementById("nextBtn").style.display = "none";
+      document.getElementById("submitBtn").style.display = "block";
+    }
+
+    // Event listener for answer submission
+    document.getElementById("submitBtn").addEventListener("click", function () {
+      const userAnswer = parseFloat(document.getElementById("answerInput").value);
+      if (isNaN(userAnswer)) {
+        alert("Please enter a valid number.");
+        return;
+      }
+      // Allow a small tolerance for floating point comparisons.
+      if (Math.abs(userAnswer - currentAnswer) < 0.001) {
+        score++;
+        document.getElementById("feedback").innerText = "Correct! " + currentRationale;
+      } else {
+        document.getElementById("feedback").innerText = "Incorrect. " + currentRationale + " The correct answer was: " + currentAnswer;
+      }
+      document.getElementById("score").innerText = score;
+      document.getElementById("submitBtn").style.display = "none";
+      document.getElementById("nextBtn").style.display = "block";
+    });
+
+    // Event listener for loading the next question
+    document.getElementById("nextBtn").addEventListener("click", generateQuestion);
+
+    // Generate the first question when the page loads
+    generateQuestion();
+  </script>
+</body>
+</html>
