@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hematological and Neurological Disorders Study Guide</title>
+  <style>
+    /* Global Styles */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background: #f0f4f8;
+      color: #333;
+      line-height: 1.6;
+    }
+    header {
+      background: #2a9d8f;
+      color: #fff;
+      text-align: center;
+      padding: 20px 10px;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2em;
+    }
+    nav {
+      background: #264653;
+      padding: 10px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      text-align: center;
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: #e9c46a;
+    }
+    section {
+      background: #fff;
+      margin: 20px auto;
+      padding: 20px;
+      max-width: 900px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    section h2 {
+      border-bottom: 2px solid #e9c46a;
+      padding-bottom: 8px;
+      margin-bottom: 15px;
+      color: #264653;
+    }
+    /* Quiz Styles */
+    .quiz-question {
+      margin-bottom: 20px;
+    }
+    .quiz-question p {
+      font-weight: bold;
+    }
+    .quiz-options label {
+      display: block;
+      padding: 5px;
+      margin: 3px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .quiz-options input[type="radio"] {
+      margin-right: 10px;
+    }
+    .quiz-options label:hover {
+      background: #f4a261;
+      color: #fff;
+    }
+    #quiz-result {
+      font-size: 1.2em;
+      font-weight: bold;
+      margin-top: 15px;
+      text-align: center;
+    }
+    /* Essay Answers */
+    .essay-item {
+      margin-bottom: 25px;
+    }
+    .essay-item p {
+      margin: 5px 0;
+    }
+    .essay-answer {
+      background: #f9f9f9;
+      border-left: 4px solid #2a9d8f;
+      padding: 10px;
+      border-radius: 4px;
+    }
+    /* Glossary */
+    .glossary-item {
+      padding: 8px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    .search-box {
+      margin-bottom: 15px;
+    }
+    .search-box input[type="text"] {
+      padding: 8px;
+      width: 100%;
+      max-width: 300px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    /* Responsive */
+    @media (max-width: 600px) {
+      nav a {
+        display: block;
+        margin: 5px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Hematological and Neurological Disorders Study Guide</h1>
+  </header>
+  <nav>
+    <a href="#quiz">Quiz</a>
+    <a href="#essay-questions">Essay Questions</a>
+    <a href="#glossary">Glossary</a>
+  </nav>
+
+  <!-- Multiple Choice Quiz Section -->
+  <section id="quiz">
+    <h2>Multiple Choice Quiz</h2>
+    <form id="quiz-form">
+      <!-- Question 1 -->
+      <div class="quiz-question">
+        <p>1. What are the primary functions of neutrophils and eosinophils?</p>
+        <div class="quiz-options">
+          <label><input type="radio" name="q1" value="A"> Neutrophils fight viral infections; eosinophils cause autoimmune disorders.</label>
+          <label><input type="radio" name="q1" value="B"> Neutrophils fight bacterial infections; eosinophils respond to allergens and parasitic infections.</label>
+          <label><input type="radio" name="q1" value="C"> Both cell types produce antibodies.</label>
+          <label><input type="radio" name="q1" value="D"> Neutrophils and eosinophils are primarily involved in clotting.</label>
+        </div>
+      </div>
+
+      <!-- Question 2 -->
+      <div class="quiz-question">
+        <p>2. Which statement best differentiates humoral and cell-mediated immunity?</p>
+        <div class="quiz-options">
+          <label><input type="radio" name="q2" value="A"> Humoral immunity involves T lymphocytes; cell-mediated immunity involves B lymphocytes.</label>
+          <label><input type="radio" name="q2" value="B"> Humoral immunity involves B lymphocytes and antibodies; cell-mediated immunity involves T lymphocytes attacking infected cells.</label>
+          <label><input type="radio" name="q2" value="C"> Both rely solely on B lymphocytes.</label>
+          <label><input type="radio" name="q2" value="D"> Humoral immunity is part of the innate immune system.</label>
+        </div>
+      </div>
+
+      <!-- Question 3 -->
+      <div class="quiz-question">
+        <p>3. What does a "left shift" in a white blood cell count indicate?</p>
+        <div class="quiz-options">
+          <label><input type="radio" name="q3" value="A"> An increase in mature neutrophils only.</label>
+          <label><input type="radio" name="q3" value="B"> A decrease in overall white blood cells.</label>
+          <label><input type="radio" name="q3" value="C"> An increase in immature neutrophils (bands) typically seen in acute bacterial infections.</label>
+          <label><input type="radio" name="q3" value="D"> An allergic reaction causing eosinophilia.</label>
+        </div>
+      </div>
+
+      <!-- Question 4 -->
+      <div class="quiz-question">
+        <p>4. Which of the following best describes anemia?</p>
+        <div class="quiz-options">
+          <label><input type="radio" name="q4" value="A"> An increase in red blood cells due to iron overload.</label>
+          <label><input type="radio" name="q4" value="B"> A reduction in circulating red blood cells or hemoglobin caused by blood loss, decreased production, or increased destruction.</label>
+          <label><input type="radio" name="q4" value="C"> An autoimmune reaction against platelets.</label>
+          <label><input type="radio" name="q4" value="D"> Excessive clot formation in the bloodstream.</label>
+        </div>
+      </div>
+
+      <!-- Question 5 -->
+      <div class="quiz-question">
+        <p>5. What are two key nursing management interventions for an immunocompromised patient?</p>
+        <div class="quiz-options">
+          <label><input type="radio" name="q5" value="A"> Strict hand hygiene and aseptic technique during procedures.</label>
+          <label><input type="radio" name="q5" value="B"> High doses of antibiotics regardless of infection.</label>
+          <label><input type="radio" name="q5" value="C"> Frequent blood transfusions.</label>
+          <label><input type="radio" name="q5" value="D"> Limiting patient mobility.</label>
+        </div>
+      </div>
+
+      <!-- Question 6 -->
+      <div class="quiz-question">
+        <p>6. Neutropenia is characterized by which of the following?</p>
+        <div class="quiz-options">
+          <label><input type="radio" name="q6" value="A"> An abnormally low number of neutrophils, often caused by overwhelming infections, radiation therapy, or exposure to certain chemicals.</label>
+          <label><input type="radio" name="q6" value="B"> An abnormally high neutrophil count due to allergies.</label>
+          <label><input type="radio" name="q6" value="C"> A low red blood cell count.</label>
+          <label><input type="radio" name="q6" value="D"> Increased platelet production.</label>
+        </div>
+      </div>
+
+      <!-- Question 7 -->
+      <div class="quiz-question">
+        <p>7. Which three abnormalities in the clotting process can lead to bleeding disorders?</p>
+        <div class="quiz-options">
+          <label><input type="radio" name="q7" value="A"> Abnormalities in vasoconstriction, platelet plug formation, and fibrin clot development.</label>
+          <label><input type="radio" name="q7" value="B"> Abnormalities in nerve conduction, muscle contraction, and hormone secretion.</label>
+          <label><input type="radio" name="q7" value="C"> Abnormalities in lung, kidney, and liver functions.</label>
+          <label><input type="radio" name="q7" value="D"> Issues with vitamin absorption and metabolism.</label>
+        </div>
+      </div>
+
+      <!-- Question 8 -->
+      <div class="quiz-question">
+        <p>8. What initiates Disseminated Intravascular Coagulation (DIC) and what cascade does it trigger?</p>
+        <div class="quiz-options">
+          <label><input type="radio" name="q8" value="A"> The introduction of procoagulants (from infection or trauma) triggering a clotting cascade that consumes clotting factors and platelets.</label>
+          <label><input type="radio" name="q8" value="B"> A viral infection exclusively causing widespread bleeding.</label>
+          <label><input type="radio" name="q8" value="C"> A failure of the coagulation system to form any clots.</label>
+          <label><input type="radio" name="q8" value="D"> An autoimmune reaction against red blood cells.</label>
+        </div>
+      </div>
+
+      <!-- Question 9 -->
+      <div class="quiz-question">
+        <p>9. What is the formula for Cerebral Perfusion Pressure (CPP) and why is it important?</p>
+        <div class="quiz-options">
+          <label><input type="radio" name="q9" value="A"> CPP = MAP + ICP; it increases blood pressure in the brain.</label>
+          <label><input type="radio" name="q9" value="B"> CPP = MAP – ICP; it ensures adequate blood flow to meet the brain’s metabolic needs.</label>
+          <label><input type="radio" name="q9" value="C"> CPP = ICP – MAP; it reduces brain swelling.</label>
+          <label><input type="radio" name="q9" value="D"> CPP = MAP * ICP; it determines oxygen saturation.</label>
+        </div>
+      </div>
+
+      <!-- Question 10 -->
+      <div class="quiz-question">
+        <p>10. Which of the following best lists potential causes of increased Intracranial Pressure (ICP)?</p>
+        <div class="quiz-options">
+          <label><input type="radio" name="q10" value="A"> Increased brain tissue volume (tumors/edema), increased cerebrospinal fluid volume (hydrocephalus), and increased blood volume (hemorrhage).</label>
+          <label><input type="radio" name="q10" value="B"> Decreased brain tissue volume, low blood pressure, and dehydration.</label>
+          <label><input type="radio" name="q10" value="C"> High heart rate, lung infections, and low platelet count.</label>
+          <label><input type="radio" name="q10" value="D"> None of the above.</label>
+        </div>
+      </div>
+
+      <div style="text-align:center;">
+        <button type="button" onclick="checkQuiz()">Submit Quiz</button>
+      </div>
+      <div id="quiz-result"></div>
+    </form>
+  </section>
+
+  <!-- Essay Questions with Answers -->
+  <section id="essay-questions">
+    <h2>Essay Questions &amp; Answers</h2>
+    
+    <div class="essay-item">
+      <p><strong>1. Compare and contrast the different types of anemia discussed in the text, focusing on their underlying causes and key diagnostic indicators. How do these differences guide treatment strategies?</strong></p>
+      <div class="essay-answer">
+        <p>Anemia can be classified into several types. For example, iron-deficiency anemia results from inadequate iron leading to reduced hemoglobin production, whereas hemolytic anemia is caused by premature destruction of red blood cells. Anemia due to bone marrow failure shows decreased red blood cell production. Diagnostic indicators such as a complete blood count (CBC), mean corpuscular volume (MCV), and iron studies help differentiate these types. Treatment is guided by the cause—iron supplementation for iron deficiency, addressing hemolysis in hemolytic anemia, or using supportive therapies in marrow failure.</p>
+      </div>
+    </div>
+
+    <div class="essay-item">
+      <p><strong>2. Discuss the pathophysiology and clinical manifestations of Disseminated Intravascular Coagulation (DIC). How does the body's attempt to maintain hemostasis paradoxically lead to both clotting and bleeding in this complex disorder?</strong></p>
+      <div class="essay-answer">
+        <p>DIC is initiated when procoagulants enter the circulation—often due to infection or trauma—triggering widespread activation of the clotting cascade. This results in the formation of microthrombi throughout the vasculature while simultaneously consuming clotting factors and platelets. Consequently, the body experiences both thrombotic events and bleeding, as the depleted clotting components cannot maintain normal hemostasis. Clinical manifestations include organ dysfunction from clots and hemorrhagic symptoms such as petechiae and ecchymoses.</p>
+      </div>
+    </div>
+
+    <div class="essay-item">
+      <p><strong>3. Explain the concept of immunocompromise, including potential causes and the unique challenges in assessing and managing infections in these patients. What are the critical nursing considerations for preventing infection in immunocompromised individuals?</strong></p>
+      <div class="essay-answer">
+        <p>Immunocompromise refers to a weakened immune system that can result from chronic diseases, chemotherapy, radiation, or congenital factors. These patients are more vulnerable to infections and may not exhibit typical signs, complicating diagnosis and treatment. Critical nursing considerations include stringent infection control practices (e.g., strict hand hygiene, aseptic technique), close monitoring for early signs of infection, and minimizing exposure to pathogens to protect these high-risk individuals.</p>
+      </div>
+    </div>
+
+    <div class="essay-item">
+      <p><strong>4. Describe the relationship between Intracranial Pressure (ICP) and Cerebral Perfusion Pressure (CPP). Discuss the compensatory mechanisms the body employs to maintain adequate CPP in the face of rising ICP and the potential consequences when these mechanisms fail.</strong></p>
+      <div class="essay-answer">
+        <p>Cerebral Perfusion Pressure (CPP) is calculated by subtracting Intracranial Pressure (ICP) from Mean Arterial Pressure (MAP): CPP = MAP – ICP. As ICP rises, CPP falls, potentially compromising brain oxygenation. The body compensates by increasing MAP (via sympathetic activation), altering cerebral vessel tone, and modulating cerebrospinal fluid dynamics. Failure of these mechanisms can lead to cerebral ischemia, neuronal injury, or even brain herniation.</p>
+      </div>
+    </div>
+
+    <div class="essay-item">
+      <p><strong>5. Analyze the immediate and potential long-term physiological changes that occur during status epilepticus. What are the priority assessments and management strategies for a patient experiencing this neurological emergency?</strong></p>
+      <div class="essay-answer">
+        <p>Status epilepticus is characterized by prolonged or repeated seizures without full recovery, leading to sustained neuronal excitation and metabolic stress. Immediately, patients risk hypoxia, acidosis, and cardiovascular instability. Long-term, neuronal damage, cognitive impairment, and increased seizure recurrence can occur. Priority assessments include airway, breathing, circulation (the ABCs), and monitoring blood glucose and electrolytes. Prompt administration of benzodiazepines followed by second-line antiepileptic drugs is critical to halt seizure activity and minimize brain injury.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Glossary Section with Search Feature -->
+  <section id="glossary">
+    <h2>Glossary of Key Terms</h2>
+    <div class="search-box">
+      <input type="text" id="glossary-search" placeholder="Search glossary terms...">
+    </div>
+    <div id="glossary-list">
+      <div class="glossary-item"><strong>Agranulocytes:</strong> Leukocytes lacking prominent granules; includes monocytes and lymphocytes.</div>
+      <div class="glossary-item"><strong>Anemia:</strong> A deficiency of red blood cells or hemoglobin, leading to pallor and fatigue.</div>
+      <div class="glossary-item"><strong>Antibody (Immunoglobulin):</strong> A protein produced by B lymphocytes that binds to specific antigens.</div>
+      <div class="glossary-item"><strong>Antigen:</strong> A substance that triggers an immune response, often by inducing antibody production.</div>
+      <div class="glossary-item"><strong>Autoimmune:</strong> A condition in which the immune system attacks the body’s own tissues.</div>
+      <div class="glossary-item"><strong>B Lymphocytes:</strong> White blood cells involved in humoral immunity by producing antibodies.</div>
+      <div class="glossary-item"><strong>Basophils:</strong> Granular leukocytes that participate in allergic reactions by releasing histamine.</div>
+      <div class="glossary-item"><strong>Cell-Mediated Immunity:</strong> An immune response led by T lymphocytes rather than antibodies.</div>
+      <div class="glossary-item"><strong>Cerebral Perfusion Pressure (CPP):</strong> The pressure gradient (MAP – ICP) that drives oxygen delivery to the brain.</div>
+      <div class="glossary-item"><strong>Cytokines:</strong> Signaling proteins that mediate and regulate immunity and inflammation.</div>
+      <div class="glossary-item"><strong>Disseminated Intravascular Coagulation (DIC):</strong> A disorder where widespread clotting depletes clotting factors, leading to both thrombosis and bleeding.</div>
+      <div class="glossary-item"><strong>Eosinophils:</strong> Granular leukocytes that combat allergens and parasitic infections.</div>
+      <div class="glossary-item"><strong>Granulocytes:</strong> White blood cells with prominent granules; includes neutrophils, eosinophils, and basophils.</div>
+      <div class="glossary-item"><strong>Hematopoiesis:</strong> The process of producing blood cells and platelets in the bone marrow.</div>
+      <div class="glossary-item"><strong>Hemostasis:</strong> The process by which bleeding is stopped via clot formation.</div>
+      <div class="glossary-item"><strong>Humoral Immunity:</strong> An immune response involving B lymphocytes and antibody production.</div>
+      <div class="glossary-item"><strong>Immunocompromised:</strong> Having a weakened immune system, which increases susceptibility to infections.</div>
+      <div class="glossary-item"><strong>Inflammation:</strong> The body’s localized response to injury or infection, marked by redness, swelling, and pain.</div>
+      <div class="glossary-item"><strong>Intracranial Pressure (ICP):</strong> The pressure within the skull.</div>
+      <div class="glossary-item"><strong>Leukemia:</strong> A malignancy characterized by the abnormal proliferation of white blood cells.</div>
+      <div class="glossary-item"><strong>Leukocytes:</strong> White blood cells that defend the body against infections.</div>
+      <div class="glossary-item"><strong>Lymphocytes:</strong> White blood cells (B and T cells) crucial for adaptive immunity.</div>
+      <div class="glossary-item"><strong>Monocytes:</strong> Leukocytes that mature into macrophages, aiding in immune defense and tissue repair.</div>
+      <div class="glossary-item"><strong>Neutropenia:</strong> An abnormally low number of neutrophils in the blood.</div>
+      <div class="glossary-item"><strong>Neutrophils:</strong> Granular leukocytes essential for combating bacterial infections.</div>
+      <div class="glossary-item"><strong>Platelets (Thrombocytes):</strong> Cell fragments that help initiate blood clotting.</div>
+      <div class="glossary-item"><strong>Red Blood Cells (Erythrocytes):</strong> Cells that transport oxygen via hemoglobin.</div>
+      <div class="glossary-item"><strong>Seizure:</strong> A sudden, uncontrolled electrical disturbance in the brain.</div>
+      <div class="glossary-item"><strong>Shift to the Left:</strong> An increase in immature neutrophils, indicating an acute infection.</div>
+      <div class="glossary-item"><strong>Status Epilepticus:</strong> Prolonged or consecutive seizures without full recovery between them.</div>
+      <div class="glossary-item"><strong>Stroke:</strong> Sudden brain cell death from interrupted blood flow.</div>
+      <div class="glossary-item"><strong>T Lymphocytes:</strong> White blood cells involved in cell-mediated immunity.</div>
+      <div class="glossary-item"><strong>Thrombocytopenia:</strong> An abnormally low platelet count.</div>
+    </div>
+  </section>
+
+  <script>
+    // Function to check quiz answers and display score
+    function checkQuiz() {
+      var score = 0;
+      var totalQuestions = 10;
+      // Correct answers mapping:
+      var answers = {
+        q1: "B",
+        q2: "B",
+        q3: "C",
+        q4: "B",
+        q5: "A",
+        q6: "A",
+        q7: "A",
+        q8: "A",
+        q9: "B",
+        q10: "A"
+      };
+      
+      for (var i = 1; i <= totalQuestions; i++) {
+        var radios = document.getElementsByName("q" + i);
+        for (var j = 0; j < radios.length; j++) {
+          if (radios[j].checked) {
+            if (radios[j].value === answers["q" + i]) {
+              score++;
+            }
+          }
+        }
+      }
+      var resultDiv = document.getElementById("quiz-result");
+      resultDiv.innerHTML = "You scored " + score + " out of " + totalQuestions + " (" + Math.round((score/totalQuestions)*100) + "%)";
+    }
+
+    // Glossary Search Functionality
+    document.getElementById("glossary-search").addEventListener("input", function() {
+      var filter = this.value.toLowerCase();
+      var items = document.getElementsByClassName("glossary-item");
+      for (var i = 0; i < items.length; i++) {
+        var text = items[i].textContent.toLowerCase();
+        items[i].style.display = text.indexOf(filter) > -1 ? "" : "none";
+      }
+    });
+  </script>
+</body>
+</html>
