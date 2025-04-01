@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cerebrovascular & Spinal Cord Disorders Study Guide</title>
+    <style>
+        /* Basic Reset & Font */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden; /* Contain child elements */
+        }
+
+        header {
+            background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+            color: #fff;
+            padding: 25px 30px;
+            text-align: center;
+            border-bottom: 5px solid #1e3a5f;
+        }
+
+        header h1 {
+            font-size: 2.2em;
+            margin-bottom: 5px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        /* Tab Navigation */
+        .tabs {
+            display: flex;
+            background-color: #eef2f7;
+            border-bottom: 1px solid #d1d9e6;
+        }
+
+        .tab-button {
+            flex-grow: 1;
+            padding: 15px 10px;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #555;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            text-align: center;
+            border-bottom: 3px solid transparent; /* For active indicator */
+        }
+
+        .tab-button:hover {
+            background-color: #dce4f0;
+            color: #333;
+        }
+
+        .tab-button.active {
+            color: #182848;
+            border-bottom: 3px solid #4b6cb7;
+            background-color: #fff; /* Match content background */
+        }
+
+        /* Tab Content Area */
+        .tab-content {
+            padding: 30px;
+            display: none; /* Hide all content initially */
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block; /* Show active content */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Quiz Section Styling */
+        #quiz-section h2, #essay-section h2, #glossary-section h2 {
+            color: #182848;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #4b6cb7;
+            padding-bottom: 5px;
+        }
+
+        .quiz-container {
+            background-color: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid #e0e6ed;
+            margin-bottom: 20px;
+            min-height: 150px; /* Ensure consistent height */
+            position: relative;
+        }
+
+        #quiz-progress {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 0.9em;
+            color: #667;
+            background-color: #e9ecef;
+            padding: 3px 8px;
+            border-radius: 12px;
+        }
+
+        #quiz-question {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        #quiz-answer {
+            background-color: #e9f5f9;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 4px;
+            font-size: 1em;
+            color: #0c5460;
+            display: none; /* Initially hidden */
+            animation: slideDown 0.4s ease-out;
+        }
+
+        #quiz-answer ul {
+            padding-left: 20px; /* Indent list items */
+            margin-top: 5px;
+        }
+         #quiz-answer ul li {
+            margin-bottom: 5px;
+         }
+
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .quiz-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .quiz-btn {
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            color: #fff;
+        }
+
+        #reveal-answer-btn {
+            background-color: #28a745; /* Green */
+        }
+        #reveal-answer-btn:hover {
+            background-color: #218838;
+            transform: scale(1.03);
+        }
+
+        #next-question-btn {
+            background-color: #007bff; /* Blue */
+        }
+        #next-question-btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.03);
+        }
+         #next-question-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+         }
+
+
+        /* Essay Section Styling */
+        .essay-question {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e0e6ed;
+            margin-bottom: 20px;
+        }
+
+        .essay-question h3 {
+            font-size: 1.1em;
+            color: #343a40;
+            margin-bottom: 10px;
+        }
+        .essay-question p { /* The question itself */
+            margin-bottom: 15px;
+        }
+
+        /* Styling for the collapsible answer points */
+        .essay-question details {
+            margin-top: 10px;
+            background-color: #e9ecef; /* Slightly different background */
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            padding: 10px;
+        }
+        .essay-question summary {
+            font-weight: bold;
+            cursor: pointer;
+            color: #4b6cb7; /* Match theme color */
+            outline: none; /* Remove default focus outline */
+        }
+        .essay-question summary:hover {
+            text-decoration: underline;
+        }
+        .essay-question details div { /* Content inside details */
+             padding-top: 10px;
+             padding-left: 15px; /* Indent points */
+             color: #495057;
+        }
+        .essay-question details ul {
+            list-style-type: disc;
+            margin-left: 20px; /* Further indent list */
+            margin-top: 5px;
+        }
+         .essay-question details li {
+            margin-bottom: 8px;
+         }
+
+
+        /* Glossary Section Styling */
+        #glossary-search {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 25px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        #glossary-search:focus {
+            border-color: #4b6cb7;
+            box-shadow: 0 0 0 3px rgba(75, 108, 183, 0.2);
+            outline: none;
+        }
+
+        #glossary-list dl {
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            border: 1px solid #e9ecef;
+            transition: background-color 0.2s ease;
+        }
+         #glossary-list dl:hover {
+             background-color: #eef2f7;
+         }
+
+
+        #glossary-list dt {
+            font-weight: 700;
+            color: #182848;
+            margin-bottom: 5px;
+            font-size: 1.1em;
+        }
+
+        #glossary-list dd {
+            margin-left: 0; /* Reset default margin */
+            color: #495057;
+        }
+
+        /* Utility class for hiding glossary items during search */
+        .hidden {
+            display: none;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 15px;
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                margin: 10px auto;
+            }
+            header h1 {
+                font-size: 1.8em;
+            }
+            .tabs {
+                flex-direction: column; /* Stack tabs on small screens */
+            }
+             .tab-button {
+                 border-bottom: 1px solid #d1d9e6; /* Simple separator */
+                 border-left: 3px solid transparent; /* New active indicator */
+             }
+            .tab-button.active {
+                border-bottom: 1px solid #d1d9e6; /* Remove bottom border */
+                border-left: 3px solid #4b6cb7; /* Use left border */
+                background-color: #fff;
+            }
+
+            .tab-content {
+                padding: 20px;
+            }
+            .quiz-buttons {
+                flex-direction: column;
+            }
+            .quiz-btn {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            .quiz-btn:last-child {
+                 margin-bottom: 0;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Cerebrovascular & Spinal Cord Disorders</h1>
+            <p>Interactive Study Guide</p>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab-button active" onclick="showTab('quiz')">Quiz</button>
+            <button class="tab-button" onclick="showTab('essay')">Essay Questions</button>
+            <button class="tab-button" onclick="showTab('glossary')">Glossary</button>
+        </nav>
+
+        <main>
+            <!-- Quiz Section -->
+            <section id="quiz-section" class="tab-content active">
+                <h2>Knowledge Check Quiz</h2>
+                <div class="quiz-container">
+                    <div id="quiz-progress">Question 1 of 10</div>
+                    <p id="quiz-question">Loading question...</p>
+                    <div id="quiz-answer">
+                        <strong>Answer:</strong>
+                        <div id="quiz-answer-text"></div>
+                    </div>
+                </div>
+                <div class="quiz-buttons">
+                    <button id="reveal-answer-btn" class="quiz-btn" onclick="revealAnswer()">Reveal Answer</button>
+                    <button id="next-question-btn" class="quiz-btn" onclick="nextQuestion()">Next Question</button>
+                </div>
+            </section>
+
+            <!-- Essay Questions Section -->
+            <section id="essay-section" class="tab-content">
+                <h2>Essay Format Questions</h2>
+
+                <div class="essay-question">
+                    <h3>Question 1</h3>
+                    <p>Discuss the modifiable and non-modifiable risk factors for cerebrovascular disorders, emphasizing the importance of preventative measures in reducing the incidence and impact of stroke.</p>
+                    <details>
+                        <summary>Potential Answer Points</summary>
+                        <div>
+                            <strong>Non-Modifiable Risk Factors:</strong>
+                            <ul>
+                                <li>Age (Risk increases significantly with age)</li>
+                                <li>Gender (Men > Women at younger ages, Women > Men at older ages; Women have higher mortality)</li>
+                                <li>Race/Ethnicity (Higher incidence/mortality in African Americans, Hispanic Americans)</li>
+                                <li>Family History/Genetics (e.g., history of stroke, genetic disorders affecting blood vessels)</li>
+                            </ul>
+                            <strong>Modifiable Risk Factors:</strong>
+                            <ul>
+                                <li><strong>Hypertension (Most important and treatable)</strong></li>
+                                <li>Smoking (Damages blood vessels, increases clot formation)</li>
+                                <li>Diabetes Mellitus (Accelerates atherosclerosis)</li>
+                                <li>Dyslipidemia (High LDL, low HDL, high triglycerides)</li>
+                                <li>Atrial Fibrillation (Increases risk of cardiogenic embolic stroke)</li>
+                                <li>Other Cardiac Conditions (e.g., heart failure, valve disease)</li>
+                                <li>Carotid Artery Stenosis / Atherosclerosis</li>
+                                <li>Obesity / Unhealthy Diet (High sodium, saturated fat)</li>
+                                <li>Physical Inactivity</li>
+                                <li>Excessive Alcohol Consumption</li>
+                                <li>Illicit Drug Use (e.g., cocaine, amphetamines)</li>
+                                <li>Sleep Apnea</li>
+                            </ul>
+                            <strong>Importance of Prevention:</strong>
+                            <ul>
+                                <li>Majority of strokes are linked to modifiable risk factors.</li>
+                                <li>Focus on lifestyle changes: Healthy diet (DASH), regular exercise, smoking cessation, moderate alcohol use.</li>
+                                <li>Effective medical management of chronic conditions: Controlling BP, blood glucose, lipids; anticoagulation for AFib.</li>
+                                <li>Patient education and awareness are crucial for adherence and early recognition of warning signs (TIA).</li>
+                                <li>Reduces not only stroke incidence but also long-term disability and healthcare costs.</li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+
+                 <div class="essay-question">
+                    <h3>Question 2</h3>
+                    <p>Compare and contrast the clinical manifestations and acute medical management strategies for ischemic and hemorrhagic strokes, highlighting the critical differences in their initial treatment approaches.</p>
+                     <details>
+                        <summary>Potential Answer Points</summary>
+                        <div>
+                            <strong>Clinical Manifestations (Often Overlap):</strong>
+                            <ul>
+                                <li>Sudden onset of neurological deficits.</li>
+                                <li>Common: Unilateral weakness/numbness (face, arm, leg), confusion, trouble speaking (dysarthria) or understanding (aphasia), visual disturbances (hemianopsia, diplopia), dizziness, loss of balance/coordination (ataxia).</li>
+                                <li>Hemorrhagic strokes *may* present more often with severe headache ("worst headache of my life" - esp. SAH), nausea/vomiting, decreased level of consciousness, and seizures early on, but these can occur in ischemic too.</li>
+                                <li>Specific deficits depend on the brain region affected and stroke size/type.</li>
+                            </ul>
+                            <strong>Acute Medical Management Comparison:</strong>
+                            <ul>
+                                <li><strong>Initial Steps (Both):</strong> ABCs (Airway, Breathing, Circulation), rapid transport to stroke center, immediate non-contrast CT scan, establish time of symptom onset, baseline labs (glucose, coagulation), neurological assessment (NIHSS).</li>
+                                <li><strong>Ischemic Stroke Management:</strong>
+                                    <ul>
+                                        <li>Goal: Restore blood flow (reperfusion).</li>
+                                        <li><strong>Non-Contrast CT:</strong> Rules OUT hemorrhage.</li>
+                                        <li><strong>IV Thrombolysis (t-PA):</strong> If within time window (e.g., 3-4.5 hours) and no contraindications. CRITICAL DIFFERENCE.</li>
+                                        <li><strong>Mechanical Thrombectomy:</strong> For large vessel occlusion, often used in conjunction with or after IV t-PA, wider time window possible.</li>
+                                        <li><strong>Blood Pressure Management:</strong> Permissive hypertension often allowed initially (e.g., <220/120) unless t-PA given (then target <185/110 before and <180/105 after).</li>
+                                        <li><strong>Antiplatelet Therapy:</strong> Aspirin usually started within 24-48 hours (after 24h post-t-PA).</li>
+                                        <li>Supportive care: Glucose control, DVT prophylaxis, swallow evaluation, statin therapy.</li>
+                                    </ul>
+                                <li><strong>Hemorrhagic Stroke Management:</strong>
+                                    <ul>
+                                        <li>Goal: Stop bleeding, control BP, manage intracranial pressure (ICP).</li>
+                                        <li><strong>Non-Contrast CT:</strong> Confirms hemorrhage, shows location/size (Intracerebral - ICH vs. Subarachnoid - SAH). CT Angiography may follow to identify source (e.g., aneurysm, AVM).</li>
+                                        <li><strong>IV Thrombolysis (t-PA):</strong> ABSOLUTELY CONTRAINDICATED. CRITICAL DIFFERENCE.</li>
+                                        <li><strong>Blood Pressure Management:</strong> Aggressive BP reduction typically needed (e.g., SBP target <140 or <160 depending on specific situation).</li>
+                                        <li><strong>Reversal of Anticoagulation:</strong> If patient was on anticoagulants (e.g., warfarin, DOACs).</li>
+                                        <li><strong>ICP Management:</strong> Head elevation, osmotic therapy (mannitol, hypertonic saline), potential external ventricular drain (EVD).</li>
+                                        <li><strong>Surgical Intervention:</strong> Possible hematoma evacuation (ICH), aneurysm clipping/coiling (SAH).</li>
+                                        <li>Seizure prophylaxis may be considered.</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                             <strong>Key Differences Summary:</strong> Use of t-PA/thrombectomy (Ischemic only), BP management goals (Permissive HTN vs. Aggressive reduction), anticoagulation reversal (Hemorrhagic), surgical options (different targets/goals).
+                        </div>
+                    </details>
+                </div>
+
+                 <div class="essay-question">
+                    <h3>Question 3</h3>
+                    <p>Describe the nursing process as it applies to the care of a patient in the acute phase of an ischemic stroke, including assessment findings, potential nursing diagnoses, planned interventions, and expected outcomes.</p>
+                     <details>
+                        <summary>Potential Answer Points</summary>
+                        <div>
+                            <strong>Assessment (Acute Phase):</strong>
+                            <ul>
+                                <li><strong>Neurological:</strong> NIHSS baseline and frequent reassessments, Level of Consciousness (GCS), pupillary response, motor function (strength, drift), sensory perception, speech/language (aphasia, dysarthria), vision (hemianopsia, neglect), swallowing (dysphagia screen), cranial nerves. Monitor for changes indicating improvement, deterioration, or complications (e.g., hemorrhagic conversion, cerebral edema).</li>
+                                <li><strong>Vital Signs:</strong> Frequent monitoring of BP (permissive HTN vs. post-t-PA goals), HR, RR, O2 saturation, temperature (hyperthermia worsens outcomes).</li>
+                                <li><strong>Respiratory:</strong> Airway patency, breathing pattern, lung sounds (risk of aspiration).</li>
+                                <li><strong>Cardiovascular:</strong> Heart rhythm (monitor for AFib), peripheral circulation.</li>
+                                <li><strong>Other:</strong> Blood glucose levels (hyper/hypoglycemia), intake/output, skin integrity (risk from immobility), bowel/bladder function.</li>
+                            </ul>
+                            <strong>Potential Nursing Diagnoses:</strong>
+                            <ul>
+                                <li>Ineffective Cerebral Tissue Perfusion r/t interruption of blood flow.</li>
+                                <li>Risk for Aspiration r/t impaired swallowing (dysphagia).</li>
+                                <li>Impaired Physical Mobility r/t hemiparesis/hemiplegia.</li>
+                                <li>Impaired Verbal Communication r/t aphasia or dysarthria.</li>
+                                <li>Unilateral Neglect r/t sensory-perceptual alterations.</li>
+                                <li>Risk for Impaired Skin Integrity r/t immobility and sensory loss.</li>
+                                <li>Self-Care Deficit (feeding, bathing, dressing, toileting) r/t neurological impairment.</li>
+                                <li>Risk for Injury r/t impaired mobility, sensory deficits, confusion.</li>
+                                <li>Anxiety/Fear r/t sudden illness and uncertain prognosis.</li>
+                            </ul>
+                            <strong>Planned Interventions:</strong>
+                            <ul>
+                                <li>Administer t-PA if ordered, monitor for bleeding.</li>
+                                <li>Maintain HOB elevation per protocol (e.g., 30 degrees unless contraindicated).</li>
+                                <li>Implement aspiration precautions (NPO until swallow eval, proper positioning for feeding).</li>
+                                <li>Perform frequent neuro checks and vital sign monitoring.</li>
+                                <li>Assist with repositioning (q2h), ROM exercises (passive/active-assistive).</li>
+                                <li>Use communication aids (picture boards, simple commands) for aphasia.</li>
+                                <li>Approach patient from unaffected side, place items in visual field for hemianopsia/neglect.</li>
+                                <li>Implement safety measures (bed low, side rails up per policy, call bell accessible).</li>
+                                <li>Provide skin care, use pressure-relieving surfaces.</li>
+                                <li>Assist with ADLs, encourage independence where possible.</li>
+                                <li>Provide emotional support, clear explanations to patient/family.</li>
+                                <li>Administer scheduled meds (antiplatelets, statins, antihypertensives, etc.).</li>
+                                <li>Monitor blood glucose, administer insulin as needed.</li>
+                                <li>Implement DVT prophylaxis (SCDs, anticoagulants if ordered).</li>
+                            </ul>
+                            <strong>Expected Outcomes:</strong>
+                            <ul>
+                                <li>Neurological status stabilizes or improves.</li>
+                                <li>Adequate airway, oxygenation, and cerebral perfusion maintained.</li>
+                                <li>Aspiration is prevented.</li>
+                                <li>Complications (hemorrhage, edema, DVT, PE, skin breakdown, contractures) are prevented or managed promptly.</li>
+                                <li>Patient maintains maximum possible mobility and self-care function.</li>
+                                <li>Communication methods are established.</li>
+                                <li>Patient/family verbalize understanding of condition and treatment plan.</li>
+                                <li>Safety is maintained.</li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+
+                 <div class="essay-question">
+                    <h3>Question 4</h3>
+                    <p>Explain the pathophysiology, clinical manifestations, and critical nursing interventions required for the management of a patient experiencing autonomic dysreflexia.</p>
+                     <details>
+                        <summary>Potential Answer Points</summary>
+                        <div>
+                            <strong>Pathophysiology:</strong>
+                            <ul>
+                                <li>Occurs in patients with Spinal Cord Injury (SCI) at level T6 or above, after spinal shock resolves.</li>
+                                <li>Triggered by a noxious (irritating) stimulus *below* the level of injury (e.g., full bladder, impacted bowel, pressure injury, tight clothing).</li>
+                                <li>Afferent sensory impulses from the stimulus travel up the spinal cord but are blocked at the injury level.</li>
+                                <li>This initiates a massive, unchecked sympathetic reflex response *below* the level of injury, causing widespread vasoconstriction.</li>
+                                <li>Vasoconstriction leads to severe, acute hypertension.</li>
+                                <li>Baroreceptors in the aortic arch and carotid sinus detect the dangerous hypertension and signal the brainstem.</li>
+                                <li>The brainstem attempts compensatory measures via the vagus nerve (parasympathetic) *above* the level of injury: bradycardia, vasodilation (causing flushing, sweating, headache).</li>
+                                <li>However, descending inhibitory signals from the brain cannot pass the SCI lesion to counteract the sympathetic surge *below* the level of injury.</li>
+                                <li>Result: Continued hypertension below injury, bradycardia and vasodilation above injury. It's a medical emergency.</li>
+                            </ul>
+                            <strong>Clinical Manifestations:</strong>
+                            <ul>
+                                <li><strong>Sudden, severe, pounding headache.</strong></li>
+                                <li><strong>Marked, rapid increase in blood pressure (Systolic often >20-40 mmHg above baseline; can exceed 200-300 mmHg).</strong></li>
+                                <li><strong>Bradycardia</strong> (most common, due to vagal response), but sometimes tachycardia.</li>
+                                <li><strong>Profuse sweating and flushing/blotching of the skin *above* the level of injury.</strong></li>
+                                <li>Pale, cool skin with piloerection (goosebumps) *below* the level of injury.</li>
+                                <li>Nasal congestion.</li>
+                                <li>Blurred vision or spots in the visual field.</li>
+                                <li>Anxiety, apprehension, feeling of doom.</li>
+                            </ul>
+                            <strong>Critical Nursing Interventions:</strong>
+                            <ul>
+                                <li><strong>Recognize AD immediately - it's an emergency!</strong></li>
+                                <li><strong>1. Elevate the Head of Bed (HOB) to 90 degrees (High Fowler's position) and lower the legs.</strong> (Uses orthostatic hypotension to help lower BP).</li>
+                                <li><strong>2. Loosen any tight clothing, binders, or constrictive devices.</strong></li>
+                                <li><strong>3. Assess for and *remove* the triggering stimulus ASAP:</strong>
+                                    <ul>
+                                        <li><strong>Bladder (Most common cause):</strong> Check for kinked catheter tubing, empty leg bag, assess for bladder distention. If catheterized, irrigate gently with small amount of sterile saline; if not patent, recatheterize immediately (use lidocaine jelly). If not catheterized, check for distention and catheterize.</li>
+                                        <li><strong>Bowel (Second most common):</strong> Check for fecal impaction. Use anesthetic lubricant before digital check/removal, *but only after BP starts to lower* or if BP is stabilized with medication (digital stimulation can initially worsen AD).</li>
+                                        <li><strong>Skin:</strong> Check for pressure areas, ingrown toenails, burns, tight shoes/clothing, skin breakdown.</li>
+                                    </ul>
+                                </li>
+                                <li><strong>4. Monitor BP and HR frequently (every 2-5 minutes)</strong> until stable.</li>
+                                <li><strong>5. Administer prescribed rapid-acting antihypertensive medications</strong> (e.g., nifedipine, nitrates, hydralazine) if symptoms persist despite removing stimulus or if stimulus cannot be immediately identified/removed. Follow institutional protocol.</li>
+                                <li><strong>6. Document</strong> the event, triggers, interventions, and patient response.</li>
+                                <li><strong>7. Educate</strong> the patient and caregivers about causes, symptoms, prevention (regular bowel/bladder care, skin checks), and emergency management of AD.</li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+
+                 <div class="essay-question">
+                    <h3>Question 5</h3>
+                    <p>Discuss the long-term rehabilitation goals and essential components of nursing interventions for a patient with a spinal cord injury at the level of paraplegia, addressing physical, psychosocial, and educational needs for successful community reintegration.</p>
+                     <details>
+                        <summary>Potential Answer Points</summary>
+                        <div>
+                            <strong>Overall Long-Term Rehabilitation Goals (Paraplegia):</strong>
+                            <ul>
+                                <li>Maximize functional independence in mobility and self-care.</li>
+                                <li>Prevent secondary complications (e.g., pressure injuries, UTIs, contractures, DVT/PE, chronic pain, depression).</li>
+                                <li>Achieve effective bowel and bladder management.</li>
+                                <li>Promote positive psychosocial adjustment and coping.</li>
+                                <li>Facilitate successful reintegration into the home, community, work/school environments.</li>
+                                <li>Optimize overall quality of life.</li>
+                            </ul>
+                            <strong>Essential Components & Nursing Interventions:</strong>
+                            <ul>
+                                <li><strong>Physical Needs:</strong>
+                                    <ul>
+                                        <li><em>Mobility:</em> Bed mobility, transfer training (bed, chair, car, toilet, tub), advanced wheelchair skills, potential for ambulation with bracing (depends on level/completeness). Interventions: Physical therapy collaboration, strengthening exercises (upper body crucial), balance training, practice, adaptive equipment assessment/training.</li>
+                                        <li><em>Self-Care (ADLs):</em> Dressing, bathing, grooming, feeding. Interventions: Occupational therapy collaboration, teaching adaptive techniques, use of assistive devices.</li>
+                                        <li><em>Bowel Management:</em> Establish consistent bowel program (timing, diet, stool softeners, digital stimulation/suppositories). Interventions: Education, assess effectiveness, troubleshoot problems (constipation/diarrhea), ensure privacy/routine.</li>
+                                        <li><em>Bladder Management:</em> Typically involves intermittent catheterization (CIC) schedule or potentially indwelling/suprapubic catheter care. Interventions: Teach sterile/clean CIC technique, fluid management education, monitor for UTI signs/symptoms, assess residual volumes.</li>
+                                        <li><em>Skin Integrity:</em> Prevent pressure injuries. Interventions: Teach regular pressure reliefs (weight shifts), skin inspection techniques (using mirrors), proper cushion/mattress use, nutrition/hydration education.</li>
+                                        <li><em>Preventing Complications:</em> ROM exercises (prevent contractures), monitoring for DVT/PE (leg swelling, redness; prevention with medication/compression), managing spasticity (meds, stretching), managing neuropathic pain.</li>
+                                    </ul>
+                                <li><strong>Psychosocial Needs:</strong>
+                                    <ul>
+                                        <li><em>Adjustment & Coping:</em> Dealing with grief, loss, changes in body image, role changes. Interventions: Active listening, therapeutic communication, encourage expression of feelings, connect with peer support/counseling, involve psychology/social work, promote realistic hope.</li>
+                                        <li><em>Sexuality:</em> Address concerns about sexual function and intimacy. Interventions: Provide information/resources, refer to specialists, create open/non-judgmental environment.</li>
+                                        <li><em>Social Interaction/Reintegration:</em> Combat isolation, encourage participation in activities. Interventions: Explore accessible community resources, adaptive sports, support groups, assist with problem-solving barriers (transportation, accessibility).</li>
+                                        <li><em>Family Support:</em> Educate family, address caregiver needs/stress. Interventions: Include family in teaching, provide resources, facilitate communication.</li>
+                                    </ul>
+                                <li><strong>Educational Needs:</strong>
+                                    <ul>
+                                        <li><em>Condition Understanding:</em> Anatomy/physiology of SCI, level of injury implications.</li>
+                                        <li><em>Self-Management Skills:</em> Detailed teaching on bowel, bladder, skin care routines.</li>
+                                        <li><em>Complication Recognition/Management:</em> Signs/symptoms of UTI, pressure injury, AD, DVT, and appropriate actions.</li>
+                                        <li><em>Medication Management:</em> Purpose, dosage, side effects.</li>
+                                        <li><em>Health Promotion:</em> Nutrition, hydration, exercise, importance of routine check-ups.</li>
+                                        <li><em>Resources:</em> Information on equipment vendors, support organizations, financial aid, vocational rehab, legal rights (ADA).</li>
+                                        <li><em>Self-Advocacy:</em> Empowering patient to manage their care and navigate healthcare/community systems.</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <strong>Community Reintegration Focus:</strong> Interventions involve discharge planning, home accessibility assessment, coordination with community services, vocational counseling, driving assessment/adaptation exploration, ensuring follow-up care.
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <!-- Glossary Section -->
+            <section id="glossary-section" class="tab-content">
+                <h2>Glossary of Key Terms</h2>
+                <input type="text" id="glossary-search" placeholder="Search terms...">
+                <div id="glossary-list">
+                    <!-- Glossary terms will be loaded here by JavaScript -->
+                </div>
+            </section>
+        </main>
+
+    </div>
+
+    <footer>
+        Study guide content adapted from provided text. Use answer points as a guide for study.
+    </footer>
+
+    <script>
+        // --- Data ---
+        const quizData = [
+            {
+                question: "Describe the two main categories of stroke and provide the approximate percentage of occurrence for each.",
+                answer: "The two main categories are <strong>ischemic stroke</strong> (blockage of blood flow) and <strong>hemorrhagic stroke</strong> (bleeding into brain tissue/spaces). Ischemic strokes account for ~87%, while hemorrhagic strokes make up ~13%."
+            },
+            {
+                question: "Explain the ischemic cascade that occurs when cerebral blood flow is reduced, highlighting the key cellular events.",
+                answer: "When cerebral blood flow decreases, the ischemic cascade begins. Cells switch to anaerobic respiration, releasing lactic acid. This results in insufficient ATP, causing failure of ion pumps (Na+/K+ ATPase), leading to depolarization, influx of Ca++, release of glutamate (excitotoxicity), activation of destructive enzymes, inflammation, and ultimately cell death (apoptosis/necrosis)." // Enhanced answer
+            },
+            {
+                question: "List three common clinical manifestations a nurse might observe in a patient who has experienced a stroke and explain the implication of each observation for nursing care.",
+                answer: `Common manifestations & implications:
+                        <ul>
+                            <li><strong>Hemianopsia:</strong> Loss of half visual field. Implication: Approach from intact side, place items in visible field, teach scanning techniques.</li>
+                            <li><strong>Hemiparesis/Hemiplegia:</strong> Weakness/paralysis on one side. Implication: Place objects on unaffected side, support affected limbs, perform ROM on affected side, implement fall precautions.</li>
+                            <li><strong>Dysphagia:</strong> Difficulty swallowing. Implication: Maintain NPO until swallow eval, assist with feeding using prescribed consistency/technique, position upright (90 degrees) with chin tuck, monitor for aspiration signs.</li>
+                        </ul>` // Enhanced answer
+            },
+            {
+                question: "What is the critical time window for administering tissue plasminogen activator (t-PA) to a patient experiencing an ischemic stroke, and what is the rationale behind this strict timeframe?",
+                answer: "t-PA should ideally be administered within <strong>3 hours</strong> of clearly defined symptom onset (can be extended to <strong>4.5 hours</strong> for select patients based on specific criteria). The target door-to-needle time in the ED is <strong>≤ 60 minutes</strong>. Rationale: t-PA dissolves the fibrin clot causing the ischemia; its effectiveness decreases significantly as time passes because the ischemic penumbra (salvageable tissue) diminishes and neuronal death becomes irreversible. The risk of hemorrhagic conversion (bleeding into the infarcted area) also increases substantially with delayed administration." // Enhanced answer
+            },
+            {
+                question: "Differentiate between spinal shock and neurogenic shock, including their underlying causes and key clinical manifestations.",
+                answer: "<strong>Spinal Shock:</strong> A temporary physiological state following acute SCI characterized by loss of all neurologic function (motor, sensory, reflexes) below the level of injury. Cause: Acute spinal cord trauma causing neuronal depression ('cord concussion'). Manifestations: Flaccid paralysis, areflexia (loss of reflexes), loss of sensation, bowel/bladder dysfunction. Duration varies (days to weeks). <br><strong>Neurogenic Shock:</strong> A hemodynamic phenomenon (type of distributive shock) resulting from loss of sympathetic nervous system tone below the level of injury (typically T6 or higher). Cause: Disruption of descending sympathetic pathways. Manifestations: <strong>Hypotension, bradycardia,</strong> and peripheral vasodilation (can cause temperature dysregulation - poikilothermia; skin may be warm/dry initially then cool). Spinal shock and neurogenic shock can coexist." // Enhanced answer
+            },
+            {
+                question: "Explain the pathophysiology of autonomic dysreflexia, identifying the level of spinal cord injury at which it typically occurs and providing two common triggering stimuli.",
+                answer: "Pathophysiology: Occurs in injuries <strong>at or above T6</strong> after spinal shock resolves. A noxious stimulus below the injury level triggers afferent impulses -> Massive sympathetic reflex discharge below injury -> Vasoconstriction & severe hypertension -> Baroreceptors detect HTN -> Parasympathetic response (vagal) above injury causes bradycardia & vasodilation (flushing/sweating above lesion) -> Inhibitory signals cannot pass SCI -> Sympathetic surge below injury continues unchecked. Common Triggers: <strong>1. Distended bladder</strong> (e.g., blocked catheter, full bladder needing cath). <strong>2. Bowel impaction</strong> or distention." // Rephrased for clarity
+            },
+            {
+                question: "Describe at least three essential components of the nursing assessment for a patient with a spinal cord injury.",
+                answer: `Essential assessment components:
+                        <ul>
+                            <li><strong>Respiratory Assessment:</strong> Monitor rate, depth, effort, SpO2, cough strength/effectiveness, breath sounds (risk varies by injury level, C3-C5 innervates diaphragm). Assess need for suctioning/ventilatory support.</li>
+                            <li><strong>Neurological Assessment:</strong> Use standardized scale (e.g., ASIA). Assess motor function (specific muscle groups), sensory level (pinprick, light touch) bilaterally, check reflexes (monitor for return post-spinal shock). Monitor for any change (ascending injury, improvement).</li>
+                            <li><strong>Hemodynamic Monitoring (especially acute/high injury):</strong> Assess BP and HR frequently. Watch for hypotension/bradycardia (neurogenic shock) or severe hypertension/bradycardia (autonomic dysreflexia).</li>
+                            <li>(Also vital: Skin integrity checks, bowel/bladder function assessment, temperature regulation, psychosocial assessment)</li>
+                        </ul>` // Enhanced answer
+            },
+            {
+                question: "Identify three major potential causes of death for individuals living with a spinal cord injury.",
+                answer: "Major long-term causes of death often relate to secondary complications: <strong>1. Respiratory diseases</strong> (e.g., pneumonia, atelectasis due to impaired function/secretion clearance). <strong>2. Cardiovascular diseases</strong> (including ischemic heart disease and complications like DVT/PE related to immobility and autonomic dysfunction). <strong>3. Sepsis</strong> (often originating from urinary tract infections or severe pressure injuries)."
+            },
+            {
+                question: "Outline two key nursing interventions aimed at preventing complications related to immobility in a patient with tetraplegia or paraplegia.",
+                answer: `Key interventions for immobility complications:
+                        <ul>
+                            <li><strong>Pressure Injury Prevention:</strong> Implement a regular repositioning schedule (e.g., q 1-2 hours in bed, q 15-30 min weight shifts in chair), use appropriate pressure-reducing surfaces (mattress, cushion), meticulous skin care and inspection, optimize nutrition/hydration.</li>
+                            <li><strong>Venous Thromboembolism (VTE) Prophylaxis:</strong> Apply sequential compression devices (SCDs) or compression stockings as ordered, administer prophylactic anticoagulants (e.g., heparin, LMWH) as prescribed, encourage/perform range of motion exercises to promote venous return.</li>
+                        </ul> (Also important: ROM for contracture prevention, respiratory hygiene for pneumonia prevention)` // Enhanced answer
+            },
+            {
+                question: "Explain why a non-contrast CT scan is typically the initial diagnostic test performed when a stroke is suspected.",
+                answer: "A non-contrast head CT scan is the crucial initial test because it is rapid, widely available, and highly effective at its primary goal in the acute setting: <strong>reliably distinguishing between ischemic stroke (clot) and hemorrhagic stroke (bleed)</strong>. This distinction is paramount because treatments are diametrically opposed: thrombolytics (like t-PA) are potentially life-saving for ischemic stroke but are absolutely contraindicated and potentially fatal in hemorrhagic stroke. Identifying hemorrhage immediately prevents inappropriate and dangerous treatment." // Enhanced answer
+            }
+        ];
+
+        const glossaryData = [
+             { term: "Aphasia", definition: "A language disorder caused by damage in a specific area of the brain (usually left hemisphere) that controls language expression (Broca's aphasia) and/or comprehension (Wernicke's aphasia)." }, // Enhanced def
+            { term: "Ataxia", definition: "Impaired balance or coordination, often resulting in an unsteady gait, slurred speech, and difficulties with fine motor tasks. Often associated with cerebellar damage." }, // Enhanced def
+            { term: "Autonomic Dysreflexia", definition: "A potentially life-threatening syndrome in individuals with spinal cord injuries at or above T6. Characterized by an exaggerated sympathetic nervous system response to noxious stimuli below the injury level, causing sudden severe hypertension, headache, bradycardia, and sweating/flushing above the lesion." }, // Enhanced def
+            { term: "Cardiogenic Embolic Stroke", definition: "A type of ischemic stroke where a thrombus (blood clot) or other debris (e.g., valve vegetation) forms in the heart (often due to atrial fibrillation, valvular disease, or recent MI) and travels (embolizes) through the bloodstream to occlude a cerebral artery." }, // Enhanced def
+            { term: "Carotid Endarterectomy", definition: "A surgical procedure to remove atherosclerotic plaque buildup from the inner lining of the carotid artery in the neck, aiming to restore normal blood flow and reduce the risk of embolic stroke." },
+            { term: "Cerebral Blood Flow (CBF)", definition: "The volume of blood flowing through the brain tissue per unit time, normally tightly regulated to meet the brain's high metabolic demands for oxygen and glucose." }, // Enhanced def
+            { term: "Cryptogenic Stroke", definition: "An ischemic stroke for which a specific cause cannot be determined despite a thorough diagnostic evaluation (usually implies exclusion of large artery atherosclerosis, cardioembolism, and small vessel disease)." },
+            { term: "Dysarthria", definition: "Difficulty articulating speech clearly due to weakness, slowness, or incoordination of the muscles used for speech (lips, tongue, vocal cords, diaphragm). The content of language is unaffected." }, // Enhanced def
+            { term: "Dyslipidemia", definition: "An abnormal concentration of lipids (fats) in the blood, such as high levels of LDL ('bad') cholesterol, low levels of HDL ('good') cholesterol, or high triglycerides. A major risk factor for atherosclerosis." },
+            { term: "Dysphagia", definition: "Difficulty swallowing foods, liquids, or saliva. Increases the risk of aspiration pneumonia and malnutrition." },
+            { term: "Hemianopsia", definition: "Blindness or loss of vision in half of the visual field (e.g., right or left half) in one or both eyes. Caused by damage along the visual pathways in the brain." },
+            { term: "Hemiparesis", definition: "Weakness or partial loss of voluntary movement on one side of the body (face, arm, and leg)." },
+            { term: "Hemiplegia", definition: "Paralysis or complete loss of voluntary movement on one side of the body (face, arm, and leg)." },
+            { term: "Hemorrhagic Stroke", definition: "A type of stroke caused by the rupture of a blood vessel within the brain (intracerebral hemorrhage) or in the space surrounding the brain (subarachnoid hemorrhage), leading to bleeding and damage to brain tissue." },
+            { term: "Ischemic Cascade", definition: "A complex series of biochemical reactions triggered by cerebral ischemia (lack of blood flow). Includes energy failure (ATP depletion), ion pump failure, excessive glutamate release (excitotoxicity), calcium influx, free radical production, inflammation, and ultimately leading to neuronal cell death." }, // Enhanced def
+            { term: "Ischemic Stroke", definition: "A type of stroke caused by an obstruction (usually a thrombus or embolus) within a blood vessel supplying blood to the brain, leading to tissue infarction (death) due to lack of oxygen and nutrients." },
+            { term: "Neurogenic Shock", definition: "A type of distributive shock resulting from the loss or disruption of sympathetic nervous system tone, typically due to spinal cord injury (above T6), spinal anesthesia, or severe brain injury. Characterized by hypotension, bradycardia, and peripheral vasodilation." }, // Enhanced def
+            { term: "Spinal Shock", definition: "A temporary state following acute spinal cord injury characterized by the complete loss of all motor function, sensory perception, and reflex activity below the level of the injury. It is not a circulatory shock." }, // Enhanced def
+            { term: "Thrombolytics", definition: "A class of drugs ('clot busters'), such as tissue plasminogen activator (t-PA, alteplase), that work by dissolving blood clots (thrombi) to restore blood flow, primarily used in acute ischemic stroke and myocardial infarction." },
+            { term: "Transient Ischemic Attack (TIA)", definition: "A temporary episode of neurological dysfunction caused by focal brain, spinal cord, or retinal ischemia, without acute infarction (tissue death) on imaging. Symptoms typically resolve within minutes to an hour. Often called a 'warning stroke'." } // Enhanced def
+        ];
+
+
+        // --- Global Variables ---
+        let currentQuestionIndex = 0;
+        const totalQuestions = quizData.length;
+
+        // --- DOM Elements ---
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const quizQuestionEl = document.getElementById('quiz-question');
+        const quizAnswerEl = document.getElementById('quiz-answer');
+        const quizAnswerTextEl = document.getElementById('quiz-answer-text');
+        const quizProgressEl = document.getElementById('quiz-progress');
+        const revealBtn = document.getElementById('reveal-answer-btn');
+        const nextBtn = document.getElementById('next-question-btn');
+        const glossaryListEl = document.getElementById('glossary-list');
+        const glossarySearchEl = document.getElementById('glossary-search');
+
+        // --- Functions ---
+
+        // Tab Switching Logic
+        function showTab(tabId) {
+            // Hide all content sections
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+            // Deactivate all buttons
+            tabButtons.forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // Show the selected content section
+            document.getElementById(tabId + '-section').classList.add('active');
+            // Activate the clicked button
+            document.querySelector(`.tab-button[onclick="showTab('${tabId}')"]`).classList.add('active');
+        }
+
+        // Quiz Logic
+        function displayQuestion() {
+            if (currentQuestionIndex < totalQuestions) {
+                const currentQuizItem = quizData[currentQuestionIndex];
+                quizQuestionEl.innerHTML = `<strong>Q${currentQuestionIndex + 1}:</strong> ${currentQuizItem.question}`;
+                quizAnswerTextEl.innerHTML = currentQuizItem.answer;
+                quizAnswerEl.style.display = 'none'; // Hide answer initially
+                quizProgressEl.textContent = `Question ${currentQuestionIndex + 1} of ${totalQuestions}`;
+                revealBtn.disabled = false; // Enable reveal button
+                nextBtn.disabled = true; // Disable next button until answer is revealed
+                nextBtn.textContent = "Next Question"; // Ensure text is correct
+            } else {
+                // Quiz finished
+                quizQuestionEl.textContent = "Quiz Complete! Select another tab or refresh to restart.";
+                quizAnswerEl.style.display = 'none';
+                quizProgressEl.textContent = `Complete`;
+                revealBtn.disabled = true;
+                nextBtn.textContent = "Finished";
+                nextBtn.disabled = true;
+            }
+        }
+
+        function revealAnswer() {
+            quizAnswerEl.style.display = 'block';
+            revealBtn.disabled = true; // Prevent multiple reveals
+            nextBtn.disabled = false; // Enable next button
+             if (currentQuestionIndex >= totalQuestions - 1) {
+                 nextBtn.textContent = "Finish Quiz"; // Change button text on last question
+             }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            displayQuestion(); // This function now handles the "finished" state internally
+        }
+
+        // Glossary Logic
+        function populateGlossary() {
+            glossaryListEl.innerHTML = ''; // Clear existing list
+            glossaryData.sort((a, b) => a.term.localeCompare(b.term)); // Sort alphabetically
+            glossaryData.forEach(item => {
+                const dl = document.createElement('dl');
+                const dt = document.createElement('dt');
+                const dd = document.createElement('dd');
+                dt.textContent = item.term;
+                dd.innerHTML = item.definition; // Use innerHTML to render bold tags etc. if needed in future
+                dl.appendChild(dt);
+                dl.appendChild(dd);
+                glossaryListEl.appendChild(dl);
+            });
+        }
+
+        function filterGlossary() {
+            const searchTerm = glossarySearchEl.value.toLowerCase().trim();
+            const items = glossaryListEl.getElementsByTagName('dl');
+
+            for (let i = 0; i < items.length; i++) {
+                const termElement = items[i].getElementsByTagName('dt')[0];
+                const defElement = items[i].getElementsByTagName('dd')[0];
+                const termText = (termElement.textContent || termElement.innerText).toLowerCase();
+                const defText = (defElement.textContent || defElement.innerText).toLowerCase();
+
+                // Show if search term is in term OR definition
+                if (termText.includes(searchTerm) || defText.includes(searchTerm)) {
+                    items[i].classList.remove('hidden');
+                } else {
+                    items[i].classList.add('hidden');
+                }
+            }
+        }
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initial Tab Setup
+            showTab('quiz'); // Show quiz tab by default
+
+            // Quiz Setup
+            displayQuestion(); // Load the first question
+
+            // Glossary Setup
+            populateGlossary();
+            glossarySearchEl.addEventListener('input', filterGlossary); // Add search listener
+        });
+
+    </script>
+
+</body>
+</html>
