@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AKI Interactive Study Guide & Quiz</title>
+    <style>
+        /* Basic Reset & Setup */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth; /* Smooth scrolling for nav links */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f7f6;
+            padding-top: 70px; /* Space for fixed nav */
+        }
+
+        /* Navigation Bar */
+        nav {
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            color: #fff;
+            position: fixed; /* Sticks to the top */
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            padding: 0 20px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 60px;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        nav ul li a:hover,
+        nav ul li a:focus {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #e0f7fa;
+            outline: none;
+        }
+
+        /* Main Content Area */
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 25px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Section Styling */
+        section {
+            margin-bottom: 40px;
+            padding-top: 20px; /* Offset for fixed nav anchor links */
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        section:last-of-type {
+             border-bottom: none;
+        }
+
+        h1, h2, h3 {
+            color: #0077cc;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #005a9c;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        h2 {
+            border-bottom: 2px solid #4facfe;
+            padding-bottom: 5px;
+            font-size: 1.8em;
+        }
+
+        h3 {
+             color: #0097a7;
+             font-size: 1.4em;
+        }
+
+        ul, ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        strong, b {
+            color: #d84315; /* Highlight key terms */
+        }
+
+        /* Quiz Specific Styling */
+        #quiz-container {
+            margin-top: 30px;
+        }
+
+        .quiz-question {
+            background-color: #e3f2fd;
+            border-left: 5px solid #4facfe;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 5px;
+        }
+
+        .quiz-question p {
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #01579b;
+        }
+
+        .quiz-options label {
+            display: block;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .quiz-options label:hover {
+            background-color: #f0f8ff;
+            border-color: #4facfe;
+        }
+
+        .quiz-options input[type="radio"] {
+            margin-right: 10px;
+            accent-color: #0077cc; /* Modern way to color radios */
+        }
+
+        .submit-button {
+            display: block;
+            width: 150px;
+            padding: 12px 20px;
+            margin: 30px auto 20px auto; /* Center button */
+            background: linear-gradient(90deg, #66bb6a 0%, #43a047 100%);
+            color: white;
+            border: none;
+            border-radius: 25px; /* Rounded pill shape */
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .submit-button:hover {
+            background: linear-gradient(90deg, #4caf50 0%, #388e3c 100%);
+            transform: translateY(-2px); /* Slight lift on hover */
+        }
+        .submit-button:active {
+             transform: translateY(0px); /* Button press effect */
+             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+
+        #results {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+        /* Glossary Styling */
+        #glossary dt {
+            font-weight: bold;
+            color: #00796b;
+            margin-top: 10px;
+        }
+
+        #glossary dd {
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #e0e0e0;
+            color: #555;
+            font-size: 0.9em;
+        }
+
+        /* Simple Responsiveness */
+        @media (max-width: 768px) {
+            nav ul {
+                justify-content: space-around;
+                height: auto;
+                padding: 10px 0;
+            }
+            nav ul li {
+                 margin: 5px 5px;
+            }
+             h1 { font-size: 2em; }
+             h2 { font-size: 1.5em; }
+             .container { padding: 15px; margin: 15px; }
+        }
+         @media (max-width: 480px) {
+             body { padding-top: 100px; } /* More space if nav wraps heavily */
+             nav ul li a { font-size: 0.9em; padding: 3px 6px; }
+             .submit-button { width: 120px; font-size: 1em; padding: 10px 15px;}
+         }
+
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><a href="#review">Kidney Function Review</a></li>
+            <li><a href="#definition">AKI Definition</a></li>
+            <li><a href="#types">Types of AKI</a></li>
+            <li><a href="#phases">Phases of AKI</a></li>
+            <li><a href="#populations">Populations</a></li>
+            <li><a href="#manifestations">Manifestations</a></li>
+            <li><a href="#rrt">RRT</a></li>
+            <li><a href="#quiz">Quiz</a></li>
+            <li><a href="#glossary">Glossary</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>Acute Kidney Injury (AKI) Interactive Study Guide</h1>
+
+        <section id="review">
+            <h2>Review of Kidney Function</h2>
+            <h3>Key Concepts:</h3>
+            <ul>
+                <li><b>Primary regulatory functions:</b> Fluid balance, electrolyte balance, acid-base balance, waste removal, blood pressure regulation, hormone production (erythropoietin, renin), Vitamin D activation.</li>
+                <li><b>Filtration and Reabsorption:</b> Blood enters the glomerulus under pressure, filtering water and small solutes into Bowman's capsule. The filtrate travels through tubules where essential substances are reabsorbed, and waste is secreted. Typical GFR is ~125 mL/min.</li>
+                <li><b>Key hormones:</b>
+                    <ul>
+                        <li><b>Renin:</b> Initiates RAAS to increase blood pressure.</li>
+                        <li><b>Erythropoietin:</b> Stimulates red blood cell production.</li>
+                        <li><b>Calcitriol (Active Vitamin D):</b> Promotes calcium absorption.</li>
+                        <li><b>Aldosterone (Regulated via RAAS):</b> Promotes sodium and water reabsorption, potassium excretion.</li>
+                        <li><b>Antidiuretic Hormone (ADH):</b> Promotes water reabsorption.</li>
+                    </ul>
+                </li>
+                <li><b>System Roles:</b> RAAS maintains BP/volume. Erythropoietin prevents anemia. Vitamin D maintains calcium/phosphate balance.</li>
+            </ul>
+        </section>
+
+        <section id="definition">
+            <h2>AKI: Definition and Classification</h2>
+            <h3>Key Concepts:</h3>
+            <ul>
+                <li><b>KDIGO Definition:</b> AKI is defined by criteria including an abrupt (within 48 hours) reduction in kidney function, specifically:
+                    <ul>
+                        <li>Increase in serum creatinine (SCr) by ≥0.3 mg/dL (≥26.5 μmol/L) within 48 hours; OR</li>
+                        <li>Increase in SCr to ≥1.5 times baseline, which is known or presumed to have occurred within the prior 7 days; OR</li>
+                        <li>Urine volume < 0.5 mL/kg/h for 6 hours.</li>
+                    </ul>
+                </li>
+                <li><b>Azotemia & Oliguria:</b> Azotemia (increased BUN and serum creatinine) indicates waste product accumulation. Oliguria (decreased urine output) signifies reduced filtration or obstruction. Both are key signs but not always present simultaneously.</li>
+                <li><b>Categories:</b>
+                    <ul>
+                        <li><b>Prerenal:</b> Reduced blood flow TO the kidneys.</li>
+                        <li><b>Intrarenal (Intrinsic):</b> Direct damage WITHIN the kidneys.</li>
+                        <li><b>Postrenal:</b> Obstruction of urine flow FROM the kidneys.</li>
+                    </ul>
+                </li>
+                <li><b>KDIGO Staging:</b> Based on the severity of SCr increase or urine output decrease (Stages 1, 2, 3). Higher stage indicates more severe AKI.</li>
+            </ul>
+        </section>
+
+        <section id="types">
+            <h2>Types of AKI</h2>
+
+            <h3>Prerenal AKI:</h3>
+            <ul>
+                <li><b>Definition & Cause:</b> Reduced renal perfusion without intrinsic kidney damage. Primary cause is decreased blood flow/pressure to kidneys.</li>
+                <li><b>Pathophysiology:</b> Decreased GFR triggers compensatory mechanisms (RAAS activation, ADH release) to conserve sodium/water and maintain BP. If perfusion isn't restored, ischemia can lead to intrarenal damage (ATN).</li>
+                <li><b>Common Causes:</b> Volume depletion (hemorrhage, dehydration, burns), vasodilation (sepsis, anaphylaxis), decreased cardiac output (heart failure, MI), medications (NSAIDs, ACE inhibitors in certain conditions).</li>
+                <li><b>Management:</b> Restore renal perfusion (e.g., IV fluids, blood products, vasopressors, treat underlying cause). Delayed treatment can cause permanent damage.</li>
+            </ul>
+
+            <h3>Intrarenal AKI:</h3>
+            <ul>
+                <li><b>Definition & Cause:</b> Direct damage to kidney structures (glomeruli, tubules, interstitium, vessels).</li>
+                <li><b>Acute Tubular Necrosis (ATN):</b> Most common cause. Results from prolonged ischemia (unresolved prerenal state) or nephrotoxins (drugs like aminoglycosides, contrast dye, heavy metals).</li>
+                <li><b>Mechanisms:</b> Ischemia causes tubular cell injury/death. Nephrotoxins directly damage cells. Leads to inflammation, tubular obstruction, back-leak of filtrate, decreased GFR.</li>
+                <li><b>Other Causes:</b> Glomerulonephritis, vasculitis, interstitial nephritis (allergic reaction), rhabdomyolysis.</li>
+                <li><b>Pathophysiology:</b> Cell damage impairs reabsorption/secretion, leading to electrolyte imbalances, fluid retention, and waste buildup.</li>
+            </ul>
+
+            <h3>Postrenal AKI:</h3>
+            <ul>
+                <li><b>Definition & Cause:</b> Obstruction of urine outflow anywhere from tubules to urethra.</li>
+                <li><b>Pathophysiology:</b> Obstruction increases pressure within tubules and Bowman's capsule, opposing glomerular filtration and decreasing GFR.</li>
+                <li><b>Diagnosis:</b> Often diagnosed via renal ultrasound showing hydronephrosis (dilation of renal pelvis/calyces). Bladder scan may show retention.</li>
+                <li><b>Common Causes:</b> Benign prostatic hypertrophy (BPH), kidney/ureteral stones, bladder/prostate/cervical tumors, neurogenic bladder, blocked urinary catheter, certain medications (anticholinergics).</li>
+                <li><b>Management:</b> Relieve the obstruction (e.g., catheter insertion, stone removal, stent placement). Prompt treatment usually leads to recovery of kidney function.</li>
+            </ul>
+        </section>
+
+        <section id="phases">
+            <h2>Phases of AKI</h2>
+            <h3>Key Concepts:</h3>
+            <ul>
+                <li><b>Initiation Phase:</b> Begins with the initial insult and ends when signs/symptoms become apparent. Kidney injury is evolving. Duration: hours to days. Early intervention can prevent progression.</li>
+                <li><b>Maintenance Phase:</b> Intrinsic renal damage is established. GFR is significantly reduced and stabilizes at its lowest point. Urine output is often lowest (oliguria common, but non-oliguric AKI exists). Duration: days to weeks. Complications (fluid overload, electrolyte imbalances, uremia) are highest risk.</li>
+                <li><b>Recovery Phase:</b> Renal function gradually improves. GFR increases, BUN/creatinine levels decrease. Urine output may increase significantly (diuretic phase) before tubular function fully recovers, leading to risk of dehydration/electrolyte loss. Duration: weeks to months, potentially up to a year. Some patients may not fully recover and develop chronic kidney disease (CKD).</li>
+                <li><b>Influencing Factors:</b> Severity of initial insult, presence of comorbidities, promptness of treatment, patient's overall health.</li>
+            </ul>
+        </section>
+
+        <section id="populations">
+            <h2>Population Considerations</h2>
+
+            <h3>Older Adults:</h3>
+            <ul>
+                <li><b>Physiological Changes:</b> Decreased number of nephrons, lower baseline GFR, reduced blood flow, atherosclerosis, hypertension, decreased ability to concentrate/dilute urine.</li>
+                <li><b>Functional Impairments:</b> Increased risk of dehydration (decreased thirst sensation), polypharmacy (more potential nephrotoxins), higher prevalence of comorbidities (HF, diabetes).</li>
+                <li><b>Assessment Challenges:</b> Baseline creatinine may be lower due to reduced muscle mass, potentially masking significant GFR decline. Atypical presentation of illness.</li>
+            </ul>
+
+            <h3>Morbidly Obese Patients:</h3>
+            <ul>
+                <li><b>Definition & Changes:</b> BMI ≥ 40 kg/m². Associated with structural changes like glomerular hypertrophy and focal segmental glomerulosclerosis (FSGS). Adipose tissue can produce inflammatory cytokines.</li>
+                <li><b>Comorbidities & Risk:</b> Higher rates of hypertension, diabetes, sleep apnea, heart failure – all increase AKI risk.</li>
+                <li><b>Challenges:</b> Standard creatinine-based GFR estimates (e.g., Cockcroft-Gault using total body weight) are often inaccurate. Dosing nephrotoxic drugs is complex; using adjusted body weight (ABW) is often recommended. Difficulty with imaging (ultrasound).</li>
+            </ul>
+
+            <h3>Pregnant Women:</h3>
+            <ul>
+                <li><b>Incidence & Risk Factors:</b> AKI can occur, often related to pregnancy complications like preeclampsia, HELLP syndrome, obstetric hemorrhage, septic abortion.</li>
+                <li><b>Physiological Changes:</b> GFR normally increases by ~50% during pregnancy. Renal blood flow increases. This means a "normal" non-pregnant creatinine level can actually represent significant kidney dysfunction in a pregnant woman.</li>
+                <li><b>Associated Conditions:</b> Preeclampsia, HELLP, acute fatty liver of pregnancy, postpartum hemorrhage.</li>
+                <li><b>Diagnostic Challenges:</b> Increased baseline GFR alters interpretation of SCr. Must use pregnancy-specific reference ranges or monitor trends closely.</li>
+            </ul>
+
+            <h3>Contrast-Induced AKI (CI-AKI):</h3>
+            <ul>
+                <li><b>Risk:</b> Intravenous iodinated contrast media used for imaging can be nephrotoxic, especially in patients with pre-existing CKD, diabetes, dehydration, or concurrent nephrotoxic drug use.</li>
+                <li><b>Prevention Study Findings:</b> Hydration (typically with isotonic saline) before and after contrast administration is the cornerstone of prevention. The role of N-acetylcysteine (NAC) is controversial, with many studies showing limited benefit.</li>
+                <li><b>Nursing Implications:</b> CRITICAL to identify at-risk patients, ensure adequate hydration is ordered and administered, monitor renal function post-procedure, question potentially unnecessary contrast studies in high-risk individuals.</li>
+            </ul>
+        </section>
+
+        <section id="manifestations">
+            <h2>Manifestations and Nursing Implications</h2>
+
+            <h3>Manifestations of AKI (by System):</h3>
+            <ul>
+                <li><b>Cardiovascular:</b> Hypertension (fluid overload), hypotension (if volume depleted/septic), dysrhythmias (hyperkalemia, electrolyte imbalance), heart failure, pericarditis (uremia).</li>
+                <li><b>Hematological:</b> Anemia (decreased erythropoietin production, shortened RBC lifespan, bleeding), platelet dysfunction (uremia), increased infection risk (immune suppression).</li>
+                <li><b>Metabolic:</b> Metabolic acidosis (impaired acid excretion/bicarbonate regeneration), hyperkalemia, hyponatremia (dilutional), hyperphosphatemia, hypocalcemia. Azotemia (↑ BUN, ↑ Creatinine).</li>
+                <li><b>Respiratory:</b> Pulmonary edema (fluid overload), Kussmaul respirations (compensatory hyperventilation for metabolic acidosis), pleural effusion (uremia, fluid overload).</li>
+                <li><b>Gastrointestinal:</b> Nausea, vomiting, anorexia, metallic taste (uremia), GI bleeding (stress ulcers, platelet dysfunction).</li>
+                <li><b>Neuromuscular:</b> Fatigue, lethargy, confusion, asterixis (flapping tremor), seizures, coma (severe uremia/encephalopathy). Muscle weakness (electrolyte imbalance).</li>
+                <li><b>Psychosocial:</b> Anxiety, depression, altered body image.</li>
+                <li><b>Endocrine:</b> Impaired glucose metabolism (insulin resistance), potential thyroid abnormalities.</li>
+            </ul>
+
+            <h3>Nursing Interventions:</h3>
+            <ul>
+                <li><b>Accurate I&O & Daily Weights:</b> Essential for assessing fluid balance. 1 kg weight gain ≈ 1 L fluid retention.</li>
+                <li><b>Fluid Management:</b> May involve restriction (if overloaded) or careful replacement (if depleted). Monitor hemodynamic status closely.</li>
+                <li><b>Infection Prevention:</b> Strict asepsis (especially with lines/catheters), monitor for signs of infection (fever, WBC), good hygiene. AKI patients are immunocompromised.</li>
+                <li><b>Signs of Fluid Overload:</b> Monitor for hypertension, tachycardia, tachypnea, dyspnea, crackles in lungs, jugular vein distension (JVD), peripheral edema, rapid weight gain. Report immediately.</li>
+            </ul>
+
+            <h3>Dietary Management:</h3>
+            <ul>
+                <li><b>Goals:</b> Provide adequate nutrition to prevent catabolism while minimizing metabolic complications (azotemia, electrolyte imbalances, fluid overload).</li>
+                <li><b>Recommendations:</b>
+                    <ul>
+                        <li><b>Calories:</b> Adequate energy (25-35 kcal/kg/day) to prevent protein breakdown.</li>
+                        <li><b>Protein:</b> Controversial; may be restricted in non-dialyzed patients (0.6-0.8 g/kg/day) or increased in dialyzed/catabolic patients (1.2-1.5+ g/kg/day).</li>
+                        <li><b>Sodium:</b> Restricted (e.g., 2g/day) to manage fluid retention/hypertension.</li>
+                        <li><b>Potassium:</b> Restricted (e.g., 20-50 mEq/day or ~2g/day) based on serum levels to prevent hyperkalemia.</li>
+                        <li><b>Calcium/Phosphorus:</b> Phosphorus often restricted; calcium may be supplemented.</li>
+                        <li><b>Fluids:</b> Often restricted based on previous day's output + insensible losses (~500-600 mL).</li>
+                    </ul>
+                </li>
+                <li><b>Supportive Nutrition:</b> Enteral or parenteral nutrition may be needed if oral intake is insufficient.</li>
+            </ul>
+        </section>
+
+        <section id="rrt">
+            <h2>Renal Replacement Therapy (RRT)</h2>
+            <h3>Key Concepts:</h3>
+            <ul>
+                <li><b>Definition:</b> Primary treatment for severe AKI when kidneys fail to maintain homeostasis. Replaces filtering function.</li>
+                <li><b>Types:</b> Intermittent Hemodialysis (IHD), Continuous Renal Replacement Therapy (CRRT), Peritoneal Dialysis (PD), Sustained Low-Efficiency Dialysis (SLED).</li>
+                <li><b>Mechanism:</b>
+                    <ul>
+                        <li><b>Diffusion:</b> Movement of solutes (waste products) from an area of high concentration (blood) to low concentration (dialysate) across a semipermeable membrane.</li>
+                        <li><b>Ultrafiltration:</b> Movement of fluid across a membrane due to a pressure gradient (removes excess fluid).</li>
+                    </ul>
+                </li>
+                <li><b>Indications for Dialysis (AEIOU):</b>
+                    <ul>
+                        <li><b>A</b>cidosis (severe metabolic acidosis)</li>
+                        <li><b>E</b>lectrolyte imbalances (especially severe hyperkalemia)</li>
+                        <li><b>I</b>ntoxications (certain drug overdoses/poisons)</li>
+                        <li><b>O</b>verload (fluid overload unresponsive to diuretics)</li>
+                        <li><b>U</b>remia (symptomatic uremia, e.g., pericarditis, encephalopathy)</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h3>Vascular Access for RRT:</h3>
+            <ul>
+                <li><b>Percutaneous Venous Catheters:</b> Temporary access, usually placed in internal jugular, subclavian, or femoral veins. Higher infection/thrombosis risk. Used for acute settings (IHD/CRRT).</li>
+                <li><b>Arteriovenous Fistulas (AVF):</b> Surgically created connection between an artery and vein. Preferred long-term access for IHD (lower infection/thrombosis rates). Requires weeks-months to mature. Less common in pure AKI unless CKD develops.</li>
+                <li><b>Arteriovenous Grafts (AVG):</b> Synthetic tube connecting an artery and vein. Used if veins unsuitable for AVF. Shorter maturation time than AVF, higher complication rate.</li>
+                <li><b>Nursing Care:</b> Assess site for patency (bruit/thrill for AVF/AVG), signs of infection/bleeding. Protect access limb (no BP, IVs, blood draws). Monitor catheter exit sites. Maintain sterile technique during connections.</li>
+            </ul>
+
+            <h3>Continuous Renal Replacement Therapy (CRRT):</h3>
+            <ul>
+                <li><b>Definition & Advantage:</b> Slow, continuous dialysis over 24 hours. Primary advantage is better hemodynamic stability in critically ill, unstable patients compared to rapid fluid/solute shifts of IHD.</li>
+                <li><b>Types:</b>
+                    <ul>
+                        <li><b>SCUF (Slow Continuous Ultrafiltration):</b> Primarily fluid removal.</li>
+                        <li><b>CVVH (Continuous Veno-Venous Hemofiltration):</b> Fluid and solute removal via convection.</li>
+                        <li><b>CVVHD (Continuous Veno-Venous Hemodialysis):</b> Fluid and solute removal primarily via diffusion.</li>
+                        <li><b>CVVHDF (Continuous Veno-Venous Hemodiafiltration):</b> Combines diffusion and convection for maximal fluid/solute removal.</li>
+                    </ul>
+                </li>
+                <li><b>Nursing Role:</b> Intensive monitoring of vital signs, fluid balance, electrolytes, anticoagulation, access site. Manage complex CRRT machine. Titrate fluid removal/replacement. Prevent complications (clotting, infection, hypotension).</li>
+            </ul>
+
+            <h3>Peritoneal Dialysis (PD):</h3>
+            <ul>
+                <li><b>Definition & Indications:</b> Uses the patient's peritoneal membrane as the dialyzer. Dialysate is instilled into the peritoneal cavity, dwells, and is then drained. Can be used in AKI, especially if hemodialysis is contraindicated or unavailable, or in less critically ill patients.</li>
+                <li><b>Complications:</b> Peritonitis (infection), exit site infection, catheter malfunction, hyperglycemia (due to dextrose in dialysate), respiratory distress (fluid pressure on diaphragm), hernia.</li>
+                <li><b>Nursing Care:</b> Strict aseptic technique during exchanges. Monitor vital signs, weight, fluid balance (inflow vs. outflow). Assess effluent for clarity (cloudy = infection). Monitor for complications. Patient education if transitioning to home PD.</li>
+            </ul>
+        </section>
+
+        <section id="quiz">
+            <h2>AKI Interactive Quiz</h2>
+            <p>Test your knowledge! Choose the best answer for each question.</p>
+            <form id="quiz-form">
+                <div id="quiz-container">
+                    <!-- Quiz questions will be loaded here by JavaScript -->
+                </div>
+                <button type="submit" class="submit-button">Submit Quiz</button>
+            </form>
+            <div id="results">
+                <!-- Quiz score will be displayed here -->
+            </div>
+        </section>
+
+        <section id="glossary">
+            <h2>Glossary of Key Terms</h2>
+            <dl>
+                <dt>Acute Kidney Injury (AKI)</dt>
+                <dd>A sudden decline in kidney function over hours to days, resulting in the retention of waste products and disruption of fluid, electrolyte, and acid-base balance.</dd>
+                <dt>Azotemia</dt>
+                <dd>An accumulation of nitrogenous waste products (such as urea and creatinine) in the blood.</dd>
+                <dt>Oliguria</dt>
+                <dd>A decrease in urine output, typically defined as less than 0.5 mL/kg of body weight per hour.</dd>
+                <dt>Glomerular Filtration Rate (GFR)</dt>
+                <dd>The rate at which blood is filtered by the glomeruli of the kidneys, a key measure of kidney function.</dd>
+                <dt>Prerenal AKI</dt>
+                <dd>Acute kidney injury caused by factors that reduce blood flow to the kidneys, leading to decreased glomerular perfusion.</dd>
+                <dt>Intrarenal AKI</dt>
+                <dd>Acute kidney injury caused by direct damage to the kidney tissue itself, affecting the glomeruli, tubules, or interstitium.</dd>
+                <dt>Postrenal AKI</dt>
+                <dd>Acute kidney injury caused by an obstruction in the urinary tract that prevents the outflow of urine from the kidneys.</dd>
+                <dt>Acute Tubular Necrosis (ATN)</dt>
+                <dd>Damage to the renal tubules, often caused by ischemia or nephrotoxins, and the most common cause of intrarenal AKI.</dd>
+                <dt>Hydronephrosis</dt>
+                <dd>Swelling of the kidney due to a buildup of urine, often caused by an obstruction in the urinary tract.</dd>
+                <dt>Renin-Angiotensin-Aldosterone System (RAAS)</dt>
+                <dd>A hormonal system that regulates blood pressure and fluid balance.</dd>
+                <dt>Erythropoietin</dt>
+                <dd>A hormone produced by the kidneys that stimulates red blood cell production in the bone marrow.</dd>
+                <dt>Aldosterone</dt>
+                <dd>A hormone produced by the adrenal glands that promotes sodium reabsorption and potassium excretion in the kidneys.</dd>
+                <dt>Antidiuretic Hormone (ADH)</dt>
+                <dd>A hormone produced by the hypothalamus and released by the posterior pituitary that promotes water reabsorption in the kidneys.</dd>
+                <dt>Uremia</dt>
+                <dd>A syndrome characterized by the buildup of toxic waste products in the blood due to kidney failure, affecting multiple body systems.</dd>
+                <dt>Dialysis</dt>
+                <dd>A medical procedure used to remove waste products and excess fluid from the blood when the kidneys are unable to do so.</dd>
+                <dt>Hemodialysis</dt>
+                <dd>A type of dialysis that involves filtering the blood through an artificial kidney (dialyzer).</dd>
+                <dt>Peritoneal Dialysis</dt>
+                <dd>A type of dialysis that uses the peritoneal membrane in the abdomen as a natural filter.</dd>
+                <dt>Continuous Renal Replacement Therapy (CRRT)</dt>
+                <dd>A type of dialysis that provides continuous blood purification for critically ill patients with AKI.</dd>
+                <dt>Nephrotoxin</dt>
+                <dd>A substance that is toxic to the kidneys.</dd>
+                <dt>Rhabdomyolysis</dt>
+                <dd>The breakdown of muscle tissue that releases harmful proteins into the bloodstream, which can damage the kidneys.</dd>
+                <dt>Contrast-Induced AKI (CI-AKI)</dt>
+                <dd>Acute kidney injury that occurs after the administration of intravenous radiocontrast media.</dd>
+             </dl>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>AKI Study Guide - Interactive Version | Content adapted from provided study material.</p>
+    </footer>
+
+    <script>
+        const quizData = [
+            {
+                question: "1. According to KDIGO guidelines, AKI involves a sudden decline in kidney function. What are two primary laboratory findings often characterizing AKI?",
+                options: {
+                    a: "Decreased BUN and serum creatinine, polyuria",
+                    b: "Increased BUN and serum creatinine (azotemia), often oliguria",
+                    c: "Increased GFR and decreased urine specific gravity",
+                    d: "Metabolic alkalosis and hypernatremia"
+                },
+                correctAnswer: "b"
+            },
+            {
+                question: "2. What is the key difference between prerenal and intrarenal AKI?",
+                options: {
+                    a: "Prerenal involves obstruction after the kidney; Intrarenal involves infection within the kidney.",
+                    b: "Prerenal is caused by direct kidney tissue damage; Intrarenal is caused by decreased blood flow.",
+                    c: "Prerenal results from reduced renal perfusion; Intrarenal results from direct damage to kidney structures (e.g., tubules).",
+                    d: "Prerenal affects only the glomerulus; Intrarenal affects only the tubules."
+                },
+                correctAnswer: "c"
+            },
+            {
+                question: "3. What is the primary pathophysiology of postrenal AKI, and what is a common diagnostic finding?",
+                options: {
+                    a: "Decreased blood flow causing ischemia; Diagnosed by low urine sodium.",
+                    b: "Direct tubular damage from toxins; Diagnosed by muddy brown casts in urine.",
+                    c: "Immune complex deposition in glomeruli; Diagnosed by proteinuria.",
+                    d: "Obstruction of urine flow increasing intratubular pressure; Diagnosed by hydronephrosis on ultrasound."
+                },
+                correctAnswer: "d"
+            },
+            {
+                question: "4. What are the three phases of AKI? What is a key characteristic of the maintenance phase?",
+                options: {
+                    a: "Onset, Progression, Resolution; Maintenance involves rapid GFR improvement.",
+                    b: "Initiation, Maintenance, Recovery; Maintenance involves established renal damage and stabilized low GFR.",
+                    c: "Prerenal, Intrarenal, Postrenal; Maintenance involves resolving the underlying cause.",
+                    d: "Oliguric, Diuretic, Convalescent; Maintenance involves high urine output."
+                },
+                correctAnswer: "b"
+            },
+             {
+                 question: "5. Identify two physiological changes common in older adults that increase their susceptibility to AKI.",
+                 options: {
+                     a: "Increased GFR and enhanced ability to concentrate urine.",
+                     b: "Decreased baseline GFR and impaired urine concentrating/diluting ability.",
+                     c: "Lower incidence of hypertension and atherosclerosis.",
+                     d: "Increased muscle mass leading to higher baseline creatinine and better thirst sensation."
+                 },
+                 correctAnswer: "b"
+             },
+             {
+                 question: "6. Why might standard weight-based creatinine clearance formulas be inaccurate in morbidly obese patients, and what dosing adjustment is often recommended for nephrotoxins?",
+                 options: {
+                     a: "They overestimate GFR; Ideal body weight (IBW) should be used.",
+                     b: "They are inaccurate due to altered body composition; Adjusted body weight (ABW) is often recommended.",
+                     c: "They underestimate GFR; Total body weight (TBW) is always preferred.",
+                     d: "Obesity doesn't affect formula accuracy; No dosing adjustment is needed."
+                 },
+                 correctAnswer: "b"
+             },
+             {
+                 question: "7. What physiological change during pregnancy significantly impacts the interpretation of laboratory diagnostics (like serum creatinine) for AKI?",
+                 options: {
+                     a: "A decrease in GFR by about 50%.",
+                     b: "A significant increase in BUN levels.",
+                     c: "An increase in GFR by approximately 50%.",
+                     d: "A decrease in renal blood flow."
+                 },
+                 correctAnswer: "c"
+             },
+             {
+                 question: "8. What is the primary nursing implication for preventing contrast-induced AKI (CI-AKI) in at-risk patients?",
+                 options: {
+                     a: "Administering diuretics immediately before the contrast.",
+                     b: "Ensuring adequate hydration (usually IV fluids) is ordered and given.",
+                     c: "Restricting fluids for 12 hours prior to the procedure.",
+                     d: "Giving high doses of N-acetylcysteine without hydration."
+                 },
+                 correctAnswer: "b"
+             },
+            {
+                question: "9. List two common cardiovascular manifestations of AKI.",
+                options: {
+                    a: "Hypotension and bradycardia",
+                    b: "Hypertension (due to fluid overload) and potential dysrhythmias (due to hyperkalemia)",
+                    c: "Normal blood pressure and decreased heart rate",
+                    d: "Increased cardiac output and vasodilation"
+                },
+                correctAnswer: "b"
+            },
+            {
+                question: "10. What is a key goal of dietary management in AKI, and what is a typical recommendation for potassium intake?",
+                options: {
+                    a: "Goal: Maximize protein intake; Potassium: Increase to >70 mEq/day.",
+                    b: "Goal: Minimize caloric intake; Potassium: No restriction needed.",
+                    c: "Goal: Provide adequate energy/nutrients while minimizing complications; Potassium: Restrict to 20-50 mEq/day.",
+                    d: "Goal: Encourage high fluid intake; Potassium: Supplement generously."
+                },
+                correctAnswer: "c"
+            }
+        ];
+
+        const quizContainer = document.getElementById('quiz-container');
+        const resultsContainer = document.getElementById('results');
+        const quizForm = document.getElementById('quiz-form');
+
+        function displayQuiz() {
+            let output = '';
+            quizData.forEach((currentQuestion, questionNumber) => {
+                let optionsOutput = '';
+                for (letter in currentQuestion.options) {
+                    optionsOutput += `
+                        <label>
+                            <input type="radio" name="question${questionNumber}" value="${letter}">
+                            ${letter.toUpperCase()}: ${currentQuestion.options[letter]}
+                        </label>
+                    `;
+                }
+                output += `
+                    <div class="quiz-question">
+                        <p>${currentQuestion.question}</p>
+                        <div class="quiz-options">
+                            ${optionsOutput}
+                        </div>
+                    </div>
+                `;
+            });
+            quizContainer.innerHTML = output;
+        }
+
+        function submitQuiz(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            let score = 0;
+            const totalQuestions = quizData.length;
+
+            quizData.forEach((currentQuestion, questionNumber) => {
+                const selector = `input[name="question${questionNumber}"]:checked`;
+                const userAnswer = (quizForm.querySelector(selector) || {}).value;
+
+                if (userAnswer === currentQuestion.correctAnswer) {
+                    score++;
+                    // Optional: Add visual feedback for correct answers immediately
+                     // quizForm.querySelector(selector).parentElement.style.backgroundColor = '#d4edda'; // green-ish
+                     // quizForm.querySelector(selector).parentElement.style.borderColor = '#c3e6cb';
+                } else if (userAnswer) {
+                     // Optional: Add visual feedback for incorrect answers immediately
+                    // quizForm.querySelector(selector).parentElement.style.backgroundColor = '#f8d7da'; // red-ish
+                    // quizForm.querySelector(selector).parentElement.style.borderColor = '#f5c6cb';
+                }
+            });
+
+            // Display the results
+            resultsContainer.innerHTML = `You scored ${score} out of ${totalQuestions}!`;
+            if (score === totalQuestions) {
+                 resultsContainer.innerHTML += " Excellent work!";
+                 resultsContainer.style.backgroundColor = '#d4edda'; // Green
+                 resultsContainer.style.color = '#155724';
+                 resultsContainer.style.border = '1px solid #c3e6cb';
+            } else if (score >= totalQuestions * 0.7) {
+                 resultsContainer.innerHTML += " Good job!";
+                 resultsContainer.style.backgroundColor = '#fff3cd'; // Yellow
+                 resultsContainer.style.color = '#856404';
+                 resultsContainer.style.border = '1px solid #ffeeba';
+            } else {
+                 resultsContainer.innerHTML += " Keep studying!";
+                 resultsContainer.style.backgroundColor = '#f8d7da'; // Red
+                 resultsContainer.style.color = '#721c24';
+                 resultsContainer.style.border = '1px solid #f5c6cb';
+            }
+             resultsContainer.style.display = 'block'; // Make results visible
+
+             // Scroll to results smoothly
+             resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', displayQuiz); // Load quiz when page is ready
+        quizForm.addEventListener('submit', submitQuiz); // Handle quiz submission
+
+    </script>
+
+</body>
+</html>
