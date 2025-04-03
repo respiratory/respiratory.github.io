@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image and Audio Display</title>
+    <style>
+        /* Basic Styling */
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+            display: flex; /* Use flexbox for centering */
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            min-height: 100vh; /* Ensure body takes full viewport height */
+        }
+
+        .container {
+            max-width: 600px;
+            width: 90%; /* Make container responsive */
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center; /* Center content inside container */
+        }
+
+        h1 {
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        /* Display Area Styling */
+        .display-area {
+            margin-top: 20px;
+        }
+
+        .image-container,
+        .audio-container {
+            margin-bottom: 25px;
+        }
+
+        #displayed-image {
+            display: block; /* Prevents extra space below */
+            max-width: 100%; /* Responsive image */
+            height: auto;
+            margin: 10px auto; /* Center image horizontally */
+            border: 1px solid #eee;
+            border-radius: 4px;
+            background-color: #e0e0e0; /* Placeholder background */
+            min-height: 150px; /* Give placeholder some size */
+        }
+
+        #audio-player {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        p {
+            font-weight: bold;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Trump message to 236</h1>
+
+        <div class="display-area">
+
+            <!-- Image Display Container -->
+            <div class="image-container">
+                <p>Image:</p>
+                <!--
+                    IMPORTANT: Replace the 'src' attribute below with the actual URL
+                    or relative path to YOUR image file.
+                    Example URL: src="https://via.placeholder.com/400x250.png?text=Replace+Me"
+                    Example local path: src="images/my_picture.jpg"
+                -->
+                <img id="displayed-image"
+                     src="https://respiratory.github.io/trump.jpg"
+                     alt="Trump">
+            </div>
+
+            <!-- Audio Display Container -->
+            <div class="audio-container">
+                <p>Audio:</p>
+                <!--
+                    IMPORTANT: Replace the 'src' attribute below with the actual URL
+                    or relative path to YOUR audio file.
+                    Example URL: src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+                    Example local path: src="audio/my_track.mp3"
+                -->
+                <audio id="audio-player" controls
+                       src="https://respiratory.github.io/trump.mp3"> <!-- Intentionally left blank - USER MUST ADD SRC -->
+                    Your browser does not support the audio element.
+                </audio>
+                 <small style="display: block; margin-top: 5px; color: #888;">Kidney and Neuro lecture</small>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- No JavaScript needed for this simple display -->
+    <!-- <script>
+        // JavaScript is not required for basic display
+        // if the src attributes are set directly in HTML.
+        // The browser's native controls handle the audio playback.
+    </script> -->
+
+</body>
+</html>
