@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>236 Kahoot Score Deluxe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Basic Reset & Page Styling */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Vibrant gradient background */
+            color: #333;
+            padding: 20px;
+            overflow-x: hidden; /* Prevent horizontal scroll from animations */
+        }
+
+        /* Main Container Styling */
+        .container {
+            background-color: rgba(255, 255, 255, 0.95); /* Slightly transparent white card */
+            padding: 35px 45px;
+            border-radius: 20px; /* More rounded corners */
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15), 0 5px 15px rgba(0,0,0,0.1); /* Softer, layered shadow */
+            text-align: center;
+            width: 90%;
+            max-width: 650px;
+            position: relative; /* For potential pseudo-elements or absolute positioned elements */
+            overflow: hidden; /* Ensures nothing spills out weirdly */
+        }
+
+        /* Title Styling */
+        h1 {
+            font-size: 2.8em;
+            font-weight: 700;
+            margin-bottom: 30px;
+            background: linear-gradient(45deg, #f953c6, #b91d73); /* Pink/Purple gradient for title */
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative; /* For potential shine effect */
+        }
+        
+        h1::after { /* Subtle shine animation for title */
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 70%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: titleShine 5s infinite ease-in-out;
+        }
+
+        @keyframes titleShine {
+            0% { left: -100%; }
+            50% { left: 130%; }
+            100% { left: -100%; }
+        }
+
+
+        /* Score Info Styling */
+        .score-info {
+            margin-bottom: 25px;
+        }
+        
+        .score-info p {
+            font-size: 1.3em;
+            margin: 10px 0;
+            color: #4A4A4A; /* Darker gray for better readability */
+        }
+
+        .score-info strong {
+            font-weight: 600;
+            color: #764ba2; /* Main purple from body gradient */
+            font-size: 1.1em;
+        }
+        
+        #currentScoreDisplay {
+             color: #f953c6; /* Pink from title gradient */
+        }
+
+        /* Progress Bar Styling */
+        .progress-bar-container {
+            width: 100%;
+            background-color: #e9ecef; /* Lighter gray for the track */
+            border-radius: 50px; /* Fully rounded ends */
+            height: 35px;
+            margin: 35px 0;
+            overflow: hidden;
+            position: relative; /* For animated stripes */
+            border: 2px solid rgba(0,0,0,0.05); /* Subtle border */
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%; /* JS will update this */
+            border-radius: 50px;
+            transition: width 0.8s cubic-bezier(0.25, 0.1, 0.25, 1), background 0.8s ease; /* Smoother, slightly slower transition */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative; /* For text and pseudo-elements */
+            overflow: hidden; /* For the stripes animation */
+            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%); /* Blue gradient for progress */
+        }
+        
+        /* Animated Stripes on Progress Bar */
+        .progress-bar-fill::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background-image: linear-gradient(
+                -45deg,
+                rgba(255, 255, 255, 0.2) 25%,
+                transparent 25%,
+                transparent 50%,
+                rgba(255, 255, 255, 0.2) 50%,
+                rgba(255, 255, 255, 0.2) 75%,
+                transparent 75%,
+                transparent
+            );
+            z-index: 1;
+            background-size: 50px 50px; /* Size of the stripes */
+            animation: moveStripes 2s linear infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes moveStripes {
+            0% { background-position: 0 0; }
+            100% { background-position: 50px 50px; }
+        }
+
+        .progress-bar-text {
+            font-size: 0.95em;
+            font-weight: 600;
+            color: #ffffff;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+            z-index: 2; /* Ensure text is above stripes */
+            position: relative;
+        }
+
+        /* Goal Reached Styling */
+        .goal-reached-message {
+            margin-top: 25px;
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #28a745; /* Bright green for success */
+            display: none; /* Hidden by default */
+            padding: 15px;
+            background-color: rgba(40, 167, 69, 0.1);
+            border-radius: 10px;
+            border: 2px dashed #28a745;
+            animation: goalPop 0.5s ease-out forwards;
+        }
+
+        @keyframes goalPop {
+            0% { transform: scale(0.8); opacity: 0; }
+            80% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .goal-reached-message .trophy {
+            font-size: 1.5em; /* Make trophy icon larger */
+            margin: 0 10px;
+            animation: trophyWiggle 1.5s ease-in-out infinite;
+        }
+
+        @keyframes trophyWiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(10deg); }
+            75% { transform: rotate(-10deg); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>236 Kahoot Score</h1>
+
+        <div class="score-info">
+            <p>Current Score: <strong id="currentScoreDisplay">0</strong></p>
+            <p>Goal: <strong id="goalScoreDisplay">1,000,000</strong></p>
+        </div>
+
+        <div class="progress-bar-container">
+            <div class="progress-bar-fill" id="progressBarFill">
+                <span class="progress-bar-text" id="progressPercentageText">0%</span>
+            </div>
+        </div>
+        
+        <p class="goal-reached-message" id="goalReachedMessage">
+            <span class="trophy">🏆</span> Congratulations! You've reached the 1,000,000 score goal! <span class="trophy">🎉</span>
+        </p>
+
+        <!-- This span is where you'll change the score in the HTML -->
+        <span id="currentScore" style="display:none;">0</span> 
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const goalScore = 1000000;
+
+            const currentScoreElement = document.getElementById('currentScore');
+            const currentScoreDisplayElement = document.getElementById('currentScoreDisplay');
+            const goalScoreDisplayElement = document.getElementById('goalScoreDisplay');
+            const progressBarFillElement = document.getElementById('progressBarFill');
+            const progressPercentageTextElement = document.getElementById('progressPercentageText');
+            const goalReachedMessageElement = document.getElementById('goalReachedMessage');
+
+            function formatNumber(num) {
+                return num.toLocaleString('en-US');
+            }
+
+            function updateProgress() {
+                let currentScoreValue = parseInt(currentScoreElement.textContent) || 0;
+                if (isNaN(currentScoreValue) || currentScoreValue < 0) {
+                    currentScoreValue = 0;
+                }
+                
+                currentScoreDisplayElement.textContent = formatNumber(currentScoreValue);
+                goalScoreDisplayElement.textContent = formatNumber(goalScore);
+
+                let percentage = (currentScoreValue / goalScore) * 100;
+                percentage = Math.min(100, Math.max(0, percentage));
+
+                progressBarFillElement.style.width = percentage + '%';
+                progressPercentageTextElement.textContent = percentage.toFixed(1) + '%';
+
+                if (currentScoreValue >= goalScore) {
+                    progressBarFillElement.style.background = 'linear-gradient(45deg, #f09819 0%, #edde5d 100%)'; /* Gold/Yellow gradient for goal reached */
+                    goalReachedMessageElement.style.display = 'block';
+                     // Ensure animation replays if score is re-evaluated
+                    goalReachedMessageElement.style.animation = 'none';
+                    goalReachedMessageElement.offsetHeight; /* trigger reflow */
+                    goalReachedMessageElement.style.animation = null; 
+                } else {
+                    // Reset to default blue gradient if score drops below goal (or for initial state)
+                    progressBarFillElement.style.background = 'linear-gradient(45deg, #4facfe 0%, #00f2fe 100%)';
+                    goalReachedMessageElement.style.display = 'none';
+                }
+            }
+
+            // Initial update
+            updateProgress();
+
+            // If you want to allow dynamic updates for testing (remove if not needed)
+            /*
+            const testControls = document.createElement('div');
+            testControls.style.marginTop = '20px';
+            testControls.innerHTML = `
+                <hr style="margin: 20px 0; border-color: rgba(0,0,0,0.1);">
+                <p style="font-size:0.9em; color: #555;"><strong>For Live Testing:</strong></p>
+                <input type="number" id="scoreInputTest" placeholder="Enter score" style="padding: 8px; border-radius:5px; border:1px solid #ddd; margin-right:5px;">
+                <button id="updateScoreButtonTest" style="padding: 8px 15px; background-color: #764ba2; color:white; border:none; border-radius:5px; cursor:pointer;">Update</button>
+            `;
+            document.querySelector('.container').appendChild(testControls);
+
+            document.getElementById('updateScoreButtonTest').addEventListener('click', function() {
+                const newScore = parseInt(document.getElementById('scoreInputTest').value);
+                if (!isNaN(newScore)) {
+                    currentScoreElement.textContent = newScore;
+                    updateProgress();
+                    document.getElementById('scoreInputTest').value = '';
+                }
+            });
+            */
+        });
+    </script>
+
+</body>
+</html>
