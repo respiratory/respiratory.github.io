@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Endocrine Explorer - Final Version</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        /* --- General Setup & Theming --- */
+        :root {
+            --primary-color: #4A5568; /* Dark Grey */
+            --secondary-color: #DD6B20; /* Orange */
+            --background-light: #F7FAFC;
+            --text-color: #2D3748;
+            --card-bg: #FFFFFF;
+            --border-color: #E2E8F0;
+            --success-color: #38A169;
+            --warning-color: #D69E2E;
+            --error-color: #E53E3E;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Nunito:wght@700;900&display=swap');
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            background-color: var(--background-light);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Nunito', sans-serif;
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* --- Navigation --- */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav .logo {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+        }
+
+        nav .logo span {
+            color: var(--secondary-color);
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 1rem;
+        }
+
+        nav button {
+            background: none;
+            border: 2px solid transparent;
+            color: white;
+            font-family: 'Roboto', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 5px;
+        }
+
+        nav button:hover, nav button.active {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+
+        /* --- Content Sections --- */
+        .content-section {
+            display: none;
+            padding: 2rem 0;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header p {
+            font-size: 1.1rem;
+            color: #718096;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* --- Card Styles --- */
+        .card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        }
+
+        /* --- Home Page --- */
+        #home .welcome-banner {
+            text-align: center;
+            padding: 4rem 1rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+        }
+        #home h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+        }
+        #home h1 span { color: var(--secondary-color); }
+        #home p { font-size: 1.25rem; }
+
+
+        /* --- Patient Ward --- */
+        #patient-ward .ward-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .patient-door {
+            text-align: center;
+            cursor: pointer;
+        }
+        .patient-door h3 { color: var(--secondary-color); }
+
+        /* --- Modal/Patient Chart --- */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+            animation: fadeIn 0.3s;
+        }
+
+        .modal-content {
+            background-color: var(--background-light);
+            margin: 5% auto;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            width: 90%;
+            max-width: 800px;
+            border-radius: 10px;
+            position: relative;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+            animation: slideIn 0.4s ease-out;
+        }
+        
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-50px); } to { opacity: 1; transform: translateY(0); } }
+
+        .modal-content .close-btn {
+            color: #aaa;
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .chart-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        
+        .chart-section { background: var(--card-bg); padding: 1rem; border-radius: 8px; }
+        .chart-section h3 { border-bottom: 2px solid var(--secondary-color); padding-bottom: 0.5rem; margin-bottom: 1rem; }
+        .chart-section ul { list-style-type: none; padding-left: 0; }
+        .chart-section li { margin-bottom: 0.5rem; padding-left: 1.5em; position: relative; }
+        .chart-section li::before {
+            content: '✓';
+            color: var(--success-color);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+        .compare-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 1rem;
+            transition: background-color 0.3s;
+        }
+        .compare-btn:hover { background-color: #2D3748; }
+
+        /* --- DKA ER --- */
+        #dka-er .er-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 2rem;
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 8px;
+        }
+
+        .interventions-panel h3, .vitals-monitor h3 {
+            text-align: center;
+        }
+
+        .intervention-btn {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            border: 2px solid var(--primary-color);
+            background-color: white;
+            color: var(--primary-color);
+            transition: all 0.3s;
+        }
+
+        .intervention-btn:hover:not(:disabled) {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .intervention-btn:disabled {
+            background-color: #ccc;
+            border-color: #ccc;
+            color: #666;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .vitals-monitor { background: #1a202c; color: #a0aec0; padding: 1.5rem; border-radius: 8px; }
+        .vitals-monitor h3 { color: white; }
+        .vital-sign { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px dashed #4A5568; font-family: monospace, 'Courier New', Courier; font-size: 1.2rem; }
+        .vital-value { font-weight: bold; color: #63B3ED; transition: color 0.5s ease; }
+        #vitals-status { 
+            margin-top: 1rem; 
+            text-align: center; 
+            font-weight: bold;
+            min-height: 40px; 
+            padding: 0.75rem; 
+            border-radius: 4px; 
+            transition: all 0.5s ease;
+            border-width: 2px;
+            border-style: solid;
+            border-color: transparent;
+        }
+        .status-good { background-color: #C6F6D5; color: #2F855A; border-color: #38A169;}
+        .status-bad { background-color: #FED7D7; color: #9B2C2C; border-color: var(--error-color);}
+        .status-info { background-color: #FEFCBF; color: #975A16; border-color: #D69E2E;}
+        
+
+        /* --- Case Study --- */
+        #case-study .case-container {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 8px;
+        }
+        .case-description { 
+            border-left: 4px solid var(--secondary-color); 
+            padding-left: 1rem; 
+            margin-bottom: 2rem; 
+            background: #FFFBEB; 
+        }
+        .question-block { margin-bottom: 1.5rem; }
+        .options-container button {
+            display: block;
+            width: 100%;
+            text-align: left;
+            margin-top: 0.5rem;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            background: white;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.2s ease;
+        }
+        .options-container button:hover:not(:disabled) {
+            border-color: var(--secondary-color);
+            background-color: #FEF3C7;
+        }
+        .options-container button:disabled {
+            cursor: not-allowed;
+        }
+        .feedback {
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 5px;
+            display: none;
+        }
+        .feedback.correct { background-color: #C6F6D5; border-left: 4px solid var(--success-color); color: #2F855A;}
+        .feedback.incorrect { background-color: #FED7D7; border-left: 4px solid var(--error-color); color: #C53030; }
+
+        /* --- Utility & Responsive --- */
+        .highlight { color: var(--secondary-color); font-weight: bold; }
+        .low-val { color: var(--error-color); }
+        .high-val { color: var(--warning-color); }
+
+        @media (max-width: 768px) {
+            nav { flex-direction: column; gap: 1rem; }
+            nav ul { flex-wrap: wrap; justify-content: center; }
+            .chart-grid, #dka-er .er-layout { grid-template-columns: 1fr; }
+            .modal-content { margin: 10% auto; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+
+    <header>
+        <nav class="container">
+            <div class="logo">Endocrine<span>Explorer</span></div>
+            <ul>
+                <li><button class="nav-btn active" data-target="home">Home</button></li>
+                <li><button class="nav-btn" data-target="patient-ward">Patient Ward</button></li>
+                <li><button class="nav-btn" data-target="dka-er">DKA ER</button></li>
+                <li><button class="nav-btn" data-target="case-study">Case Study</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <!-- Home Section -->
+        <section id="home" class="content-section active">
+             <div class="welcome-banner">
+                <h1>Welcome to the <span>Virtual Endocrine Clinic</span></h1>
+                <p>An interactive guide to assessing and managing patients with endocrine disorders. Select a department from the navigation bar above to begin your shift!</p>
+            </div>
+        </section>
+        
+        <!-- Patient Ward Section -->
+        <section id="patient-ward" class="content-section">
+            <div class="section-header">
+                <h2>The Patient Ward</h2>
+                <p>Visit our patients to learn about specific endocrine disorders. Click on a room to view the patient's chart.</p>
+            </div>
+            <div class="ward-grid">
+                <div class="card patient-door" data-disorder="cushing">
+                    <h3>Room 101: Cushing's Syndrome</h3><p>Patient presents with weight gain and skin changes.</p>
+                </div>
+                <div class="card patient-door" data-disorder="addison">
+                    <h3>Room 102: Addison's Disease</h3><p>Patient complains of fatigue, weakness, and skin darkening.</p>
+                </div>
+                <div class="card patient-door" data-disorder="siadh">
+                    <h3>Room 103: SIADH</h3><p>Patient has low urine output and confusion.</p>
+                </div>
+                <div class="card patient-door" data-disorder="di">
+                    <h3>Room 104: Diabetes Insipidus</h3><p>Patient reports extreme thirst and frequent urination.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- DKA ER Section -->
+        <section id="dka-er" class="content-section">
+            <div class="section-header">
+                <h2>DKA Emergency Room</h2>
+                <p>A patient has just been admitted in DKA. All interventions are available. Choose wisely.</p>
+            </div>
+            <div class="er-layout">
+                <div class="interventions-panel">
+                    <h3>Nursing Interventions</h3>
+                    <button class="intervention-btn" id="iv-fluids-btn">Start IV Fluids (0.9% NS)</button>
+                    <button class="intervention-btn" id="check-k-btn">Check & Replace Potassium</button>
+                    <button class="intervention-btn" id="iv-insulin-btn">Start IV Insulin Drip</button>
+                    <button class="intervention-btn" id="add-dextrose-btn">Add Dextrose to IV Fluids</button>
+                    <button class="intervention-btn" id="monitor-glucose-btn">Monitor Blood Glucose Hourly</button>
+                    <button class="intervention-btn" id="reset-sim-btn" style="background-color: var(--primary-color); color:white;">Reset Simulation</button>
+                </div>
+                <div class="vitals-monitor">
+                    <h3>Patient Vitals</h3>
+                    <div class="vital-sign"><span>Blood Glucose:</span><span id="vital-bg" class="vital-value high-val">550 mg/dL</span></div>
+                    <div class="vital-sign"><span>Blood pH:</span><span id="vital-ph" class="vital-value low-val">7.15</span></div>
+                    <div class="vital-sign"><span>Serum K+:</span><span id="vital-k" class="vital-value low-val">3.2 mEq/L</span></div>
+                    <div class="vital-sign"><span>Hydration:</span><span id="vital-hydration" class="vital-value">Severe Dehydration</span></div>
+                    <div id="vitals-status">Patient is lethargic with Kussmaul respirations.</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Case Study Section -->
+        <section id="case-study" class="content-section">
+            <div class="section-header"><h2>Case Study Challenge</h2><p>Apply your knowledge to solve a real-world clinical scenario.</p></div>
+            <div class="case-container">
+                <h3>Case: Jerry Thomas</h3>
+                <div class="case-description">
+                    <p>Jerry Thomas is a 26-year-old with type 1 diabetes, diagnosed at age 14. He presents with a 2-day history of vomiting and diarrhea. He is unable to keep fluids down.</p>
+                    <p><strong>Initial Labs:</strong><br> - Blood Glucose: <span class="highlight">425 mg/dL</span><br> - Serum Sodium: <span class="highlight">152 mEq/L</span><br> - Serum Potassium: <span class="low-val">3.0 mEq/L</span><br> - BUN: <span class="highlight">64 mg/dL</span></p>
+                </div>
+                <div class="question-block" id="q1">
+                    <h4>Question 1: Based on the presentation and labs, what is the most likely diagnosis?</h4>
+                    <div class="options-container">
+                        <button data-q="1" data-correct="true">Diabetic Ketoacidosis (DKA)</button><button data-q="1" data-correct="false">Hyperglycemic Hyperosmolar Syndrome (HHS)</button><button data-q="1" data-correct="false">SIADH</button><button data-q="1" data-correct="false">Diabetes Insipidus (DI)</button>
+                    </div><div id="feedback-1" class="feedback"></div>
+                </div>
+                <div class="question-block" id="q2" style="display:none;">
+                    <h4>Question 2: What is the absolute first priority nursing intervention for Jerry?</h4>
+                    <div class="options-container">
+                        <button data-q="2" data-correct="false">Administer IV insulin to lower his glucose.</button><button data-q="2" data-correct="true">Initiate IV fluid resuscitation with 0.9% NaCl.</button><button data-q="2" data-correct="false">Administer potassium to correct his hypokalemia.</button><button data-q="2" data-correct="false">Prepare for intubation due to vomiting.</button>
+                    </div><div id="feedback-2" class="feedback"></div>
+                </div>
+                <div class="question-block" id="q3" style="display:none;">
+                    <h4>Question 3: The provider orders an IV insulin drip. Given his potassium of 3.0, what is a critical nursing consideration?</h4>
+                    <div class="options-container">
+                        <button data-q="3" data-correct="false">Insulin has no effect on potassium levels.</button><button data-q="3" a-correct="false">Insulin will cause potassium to increase, risking hyperkalemia.</button><button data-q="3" data-correct="true">Insulin will shift potassium into the cells, worsening his hypokalemia. Potassium must be corrected first.</button><button data-q="3" data-correct="false">The potassium level is normal and requires no action.</button>
+                    </div><div id="feedback-3" class="feedback"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal -->
+    <div id="info-modal" class="modal">
+        <div class="modal-content"><span class="close-btn">×</span><div id="modal-body"></div></div>
+    </div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    // --- THREE.JS BACKGROUND ---
+    try {
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        const geometry = new THREE.IcosahedronGeometry(1, 0);
+        const material = new THREE.MeshBasicMaterial({ color: 0xDD6B20, wireframe: true, transparent: true, opacity: 0.5 });
+        const particles = [];
+        for(let i = 0; i < 100; i++){
+            const mesh = new THREE.Mesh(geometry, material);
+            mesh.position.set(Math.random() * 20 - 10, Math.random() * 20 - 10, Math.random() * 20 - 10);
+            mesh.scale.set(Math.random() * 0.2 + 0.1, Math.random() * 0.2 + 0.1, Math.random() * 0.2 + 0.1);
+            mesh.rotation.set(Math.random() * 2 * Math.PI, Math.random() * 2 * Math.PI, Math.random() * 2 * Math.PI);
+            particles.push(mesh);
+            scene.add(mesh);
+        }
+        camera.position.z = 5;
+        function animate() {
+            requestAnimationFrame(animate);
+            particles.forEach(p => { p.rotation.x += 0.001; p.rotation.y += 0.002; });
+            renderer.render(scene, camera);
+        }
+        animate();
+        window.addEventListener('resize', () => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+        });
+    } catch(e) { console.error("Three.js failed.", e); }
+    
+    // --- NAVIGATION ---
+    const navButtons = document.querySelectorAll('.nav-btn');
+    const contentSections = document.querySelectorAll('.content-section');
+    navButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetId = button.dataset.target;
+            navButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            contentSections.forEach(section => {
+                section.classList.remove('active');
+                if (section.id === targetId) { section.classList.add('active'); }
+            });
+        });
+    });
+
+    // --- MODAL LOGIC ---
+    const modal = document.getElementById('info-modal');
+    const modalBody = document.getElementById('modal-body');
+    const closeBtn = document.querySelector('.modal .close-btn');
+    closeBtn.onclick = () => { modal.style.display = 'none'; };
+    window.onclick = (event) => { if (event.target == modal) { modal.style.display = 'none'; } };
+    function showModal(content) { modalBody.innerHTML = content; modal.style.display = 'block'; }
+    
+    // --- PATIENT WARD LOGIC ---
+    const disorderData = {
+        cushing: { name: "Cushing's Syndrome", cause: 'Excessive adrenocortical activity (too much cortisol). Often caused by long-term steroid use.', signs: ['Central obesity, "moon face", "buffalo hump"', 'Thin, fragile skin, purple striae', 'Hypertension', 'Muscle wasting, weakness'], labs: ['Hyperglycemia', 'Hypernatremia (High Na+)', 'Hypokalemia (Low K+)'], compareWith: 'addison' },
+        addison: { name: "Addison's Disease", cause: 'Adrenocortical insufficiency (not enough cortisol & aldosterone).', signs: ['Muscle weakness, fatigue, anorexia', 'Bronze pigmentation of skin', 'Hypotension (postural)', 'Changes in body hair distribution'], labs: ['Hypoglycemia', 'Hyponatremia (Low Na+)', 'Hyperkalemia (High K+)'], compareWith: 'cushing' },
+        siadh: { name: "Syndrome of Inappropriate ADH (SIADH)", cause: 'Excessive secretion of Antidiuretic Hormone (ADH).', signs: ['Fluid retention (edema), weight gain', 'Low urine output (concentrated urine)', 'Neurologic changes (confusion, seizures) due to hyponatremia'], labs: ['Hyponatremia (Low Na+)', 'Low serum osmolality', 'High urine specific gravity'], compareWith: 'di' },
+        di: { name: "Diabetes Insipidus (DI)", cause: 'Deficiency of Antidiuretic Hormone (ADH).', signs: ['Extreme thirst (polydipsia)', 'Excretion of large volumes of dilute urine (polyuria)', 'Signs of dehydration (hypotension, tachycardia)'], labs: ['Hypernatremia (High Na+)', 'High serum osmolality', 'Low urine specific gravity'], compareWith: 'siadh' }
+    };
+    function createComparison(disorder1, disorder2){ const d1 = disorderData[disorder1]; const d2 = disorderData[disorder2]; const keyHormone = (d1.name.includes('Cushing') || d1.name.includes('Addison')) ? 'Cortisol' : 'ADH'; let comparisonHTML = `<h3>Comparison: ${d1.name} vs. ${d2.name}</h3> <table style="width:100%; text-align:left; border-collapse: collapse;"> <thead><tr style="background:#eee;"> <th style="padding:8px; border:1px solid #ccc;">Feature</th> <th style="padding:8px; border:1px solid #ccc;">${d1.name}</th> <th style="padding:8px; border:1px solid #ccc;">${d2.name}</th> </tr></thead> <tbody> <tr> <td style="padding:8px; border:1px solid #ccc;">Key Hormone (${keyHormone})</td> <td style="padding:8px; border:1px solid #ccc;">${(d1.name.includes('Cushing') || d1.name.includes('SIADH')) ? '<span class="high-val">Too Much</span>' : '<span class="low-val">Too Little</span>'}</td> <td style="padding:8px; border:1px solid #ccc;">${(d2.name.includes('Cushing') || d2.name.includes('SIADH')) ? '<span class="high-val">Too Much</span>' : '<span class="low-val">Too Little</span>'}</td> </tr> <tr> <td style="padding:8px; border:1px solid #ccc;">Serum Sodium (Na+)</td> <td style="padding:8px; border:1px solid #ccc;">${d1.labs.find(l => l.includes('Na')).includes('Hyper') ? '<span class="high-val">High</span>' : '<span class="low-val">Low</span>'}</td> <td style="padding:8px; border:1px solid #ccc;">${d2.labs.find(l => l.includes('Na')).includes('Hyper') ? '<span class="high-val">High</span>' : '<span class="low-val">Low</span>'}</td> </tr> <tr> <td style="padding:8px; border:1px solid #ccc;">Fluid Volume</td> <td style="padding:8px; border:1px solid #ccc;">${(d1.name.includes('Cushing') || d1.name.includes('SIADH')) ? 'Retention / Overload' : 'Deficit / Dehydration'}</td> <td style="padding:8px; border:1px solid #ccc;">${(d2.name.includes('Cushing') || d2.name.includes('SIADH')) ? 'Retention / Overload' : 'Deficit / Dehydration'}</td> </tr> </tbody> </table>`; const comparisonDiv = document.getElementById('comparison-div'); if (comparisonDiv) { comparisonDiv.innerHTML = comparisonHTML; } }
+    document.querySelectorAll('.patient-door').forEach(door => { door.addEventListener('click', () => { const disorderId = door.dataset.disorder; const data = disorderData[disorderId]; let content = `<h2>Patient Chart: ${data.name}</h2> <p><strong>Underlying Cause:</strong> ${data.cause}</p> <div class="chart-grid"> <div class="chart-section"><h3>Signs & Symptoms</h3><ul>${data.signs.map(s => `<li>${s}</li>`).join('')}</ul></div> <div class="chart-section"><h3>Key Lab Findings</h3><ul>${data.labs.map(l => `<li>${l}</li>`).join('')}</ul></div> </div> <button class="compare-btn" id="compare-trigger" data-disorder1="${disorderId}" data-disorder2="${data.compareWith}">Compare with ${disorderData[data.compareWith].name}</button> <div id="comparison-div" style="margin-top: 1rem;"></div> `; showModal(content); document.getElementById('compare-trigger').addEventListener('click', (e) => { createComparison(e.target.dataset.disorder1, e.target.dataset.disorder2); e.target.style.display = 'none'; }); }); });
+    
+    // --- CASE STUDY LOGIC ---
+    document.querySelectorAll('.question-block .options-container').forEach(container => { container.addEventListener('click', (e) => { if (e.target.tagName === 'BUTTON') { const button = e.target; const questionBlock = button.closest('.question-block'); const qNum = button.dataset.q; const isCorrect = button.dataset.correct === 'true'; const feedbackEl = document.getElementById(`feedback-${qNum}`); const allButtons = questionBlock.querySelectorAll('button'); allButtons.forEach(b => { b.disabled = true; if (b.dataset.correct !== 'true') b.style.opacity = '0.6'; }); if (isCorrect) { button.style.backgroundColor = '#C6F6D5'; button.style.borderColor = '#38A169'; feedbackEl.className = 'feedback correct'; let correctText = ''; if(qNum === '1') correctText = 'High glucose, profound dehydration (indicated by high Na and BUN), and metabolic acidosis are classic signs of DKA.'; if(qNum === '2') correctText = 'Fluid resuscitation is the number one priority to correct dehydration, improve kidney perfusion, and slowly lower blood glucose.'; if(qNum === '3') correctText = 'Excellent! Insulin drives potassium into cells. Starting insulin with a low K+ can cause fatal arrhythmias. K+ must be at least 3.3 before starting insulin.'; feedbackEl.innerHTML = `<strong>Correct!</strong> ${correctText}`; const nextQ = document.getElementById(`q${parseInt(qNum) + 1}`); if (nextQ) { setTimeout(() => { nextQ.style.display = 'block'; nextQ.scrollIntoView({behavior: "smooth", block: "center"}); }, 1200); } } else { button.style.backgroundColor = '#FED7D7'; button.style.borderColor = '#E53E3E'; feedbackEl.className = 'feedback incorrect'; feedbackEl.innerHTML = `<strong>Incorrect.</strong> The correct answer has been highlighted. Review the pathophysiology to understand why.`; questionBlock.querySelector('button[data-correct="true"]').style.backgroundColor = '#C6F6D5'; questionBlock.querySelector('button[data-correct="true"]').style.borderColor = '#38A169'; } feedbackEl.style.display = 'block'; } }); });
+
+
+    // --- DKA ER LOGIC (FINALIZED WITH WIN/LOSE CONDITIONS) ---
+    let patientState = {};
+    const dkaBtns = {
+        fluids: document.getElementById('iv-fluids-btn'),
+        insulin: document.getElementById('iv-insulin-btn'),
+        k: document.getElementById('check-k-btn'),
+        glucose: document.getElementById('monitor-glucose-btn'),
+        dextrose: document.getElementById('add-dextrose-btn'),
+        reset: document.getElementById('reset-sim-btn')
+    };
+    const vitals = {
+        bg: document.getElementById('vital-bg'),
+        ph: document.getElementById('vital-ph'),
+        k: document.getElementById('vital-k'),
+        hydration: document.getElementById('vital-hydration'),
+        status: document.getElementById('vitals-status')
+    };
+    
+    function resetSimulation() {
+        patientState = { bg: 550, ph: 7.15, k: 3.2, hydration: 1, fluidsOn: false, insulinOn: false, dextroseOn: false, patientStable: false };
+        updateVitals();
+        for (const key in dkaBtns) { dkaBtns[key].disabled = false; }
+        vitals.status.textContent = "A new patient has arrived. What is your first action?";
+        vitals.status.className = "";
+    }
+    
+    function updateVitals() {
+        vitals.bg.textContent = `${patientState.bg.toFixed(0)} mg/dL`;
+        vitals.ph.textContent = patientState.ph.toFixed(2);
+        vitals.k.textContent = `${patientState.k.toFixed(1)} mEq/L`;
+        vitals.k.className = 'vital-value';
+        if (patientState.k < 3.5) vitals.k.classList.add('low-val');
+        if (patientState.k > 5.0) vitals.k.classList.add('high-val');
+        if (patientState.hydration > 0.7) vitals.hydration.textContent = "Severe Dehydration";
+        else if (patientState.hydration > 0.4) vitals.hydration.textContent = "Moderate Dehydration";
+        else vitals.hydration.textContent = "Mild Dehydration";
+    }
+
+    function disableAllActions() {
+        for (const key in dkaBtns) {
+            if (key !== 'reset') {
+                dkaBtns[key].disabled = true;
+            }
+        }
+    }
+
+    // Event Listeners
+    dkaBtns.fluids.addEventListener('click', () => {
+        if (!patientState.fluidsOn) {
+            patientState.fluidsOn = true;
+            patientState.hydration -= 0.3; patientState.bg -= 50; patientState.ph += 0.05;
+            updateVitals();
+            vitals.status.textContent = "Correct! Fluid resuscitation is priority #1.";
+            vitals.status.className = "status-good";
+        } else {
+            vitals.status.textContent = "IV fluids are already running.";
+            vitals.status.className = "status-info";
+        }
+    });
+
+    dkaBtns.k.addEventListener('click', () => {
+        if (patientState.k < 3.3) {
+            patientState.k += 0.5;
+            updateVitals();
+            vitals.status.textContent = "Good intervention! Potassium level increased.";
+            vitals.status.className = "status-good";
+        } else {
+            vitals.status.textContent = "Potassium is already within a safe range.";
+            vitals.status.className = "status-info";
+        }
+    });
+
+    dkaBtns.insulin.addEventListener('click', () => {
+        if (patientState.insulinOn) {
+            vitals.status.textContent = "Insulin drip is already running.";
+            vitals.status.className = "status-info";
+            return;
+        }
+        if (!patientState.fluidsOn) {
+            vitals.status.textContent = "PRIORITY ERROR! Fluid resuscitation must be started before an insulin drip.";
+            vitals.status.className = "status-bad";
+        } else if (patientState.k < 3.3) {
+            vitals.status.textContent = "DANGER! Potassium is < 3.3. Giving insulin now is a FATAL error. Correct potassium first!";
+            vitals.status.className = "status-bad";
+        } else {
+            patientState.insulinOn = true;
+            vitals.status.textContent = "Insulin drip started correctly. Now begin hourly monitoring.";
+            vitals.status.className = "status-good";
+        }
+    });
+    
+    dkaBtns.dextrose.addEventListener('click', () => {
+        if (patientState.bg > 250) {
+            vitals.status.textContent = "INCORRECT! Dextrose is only added when BG < 250. This will worsen hyperglycemia.";
+            vitals.status.className = "status-bad";
+        } else if (!patientState.insulinOn) {
+            vitals.status.textContent = "Dextrose is not needed as no insulin is running to cause hypoglycemia.";
+            vitals.status.className = "status-info";
+        } else {
+            patientState.dextroseOn = true;
+            vitals.status.textContent = "Correct! Dextrose added to IV to prevent hypoglycemia.";
+            vitals.status.className = "status-good";
+            
+            // WIN CONDITION CHECK
+            if (patientState.fluidsOn && patientState.insulinOn && patientState.dextroseOn) {
+                patientState.patientStable = true;
+                vitals.status.textContent = "Patient is stable! All critical interventions performed correctly. Simulation complete.";
+                disableAllActions();
+            }
+        }
+    });
+
+    dkaBtns.glucose.addEventListener('click', () => {
+        if (!patientState.insulinOn) {
+            vitals.status.textContent = "Monitoring is important, but an insulin drip must be running to see hourly changes.";
+            vitals.status.className = "status-info";
+        } else {
+            patientState.bg -= 75;
+            patientState.ph += 0.03;
+            patientState.k -= 0.2;
+            updateVitals();
+
+            // LOSE CONDITION CHECK
+            if (patientState.bg < 50) {
+                vitals.status.textContent = "CRITICAL HYPOGLYCEMIA! Patient has died due to a BGL of " + patientState.bg.toFixed(0) + ". You must reset.";
+                vitals.status.className = "status-bad";
+                disableAllActions();
+                return;
+            }
+
+            vitals.status.textContent = "One hour has passed. Patient is responding to treatment.";
+            vitals.status.className = "status-info";
+            if (patientState.bg < 250 && !patientState.dextroseOn) {
+                 vitals.status.textContent = "BG is now < 250! You must add Dextrose to prevent hypoglycemia.";
+                 vitals.status.className = "status-good";
+            }
+        }
+    });
+
+    dkaBtns.reset.addEventListener('click', resetSimulation);
+    // Initialize
+    resetSimulation();
+
+});
+</script>
+
+</body>
+</html>
