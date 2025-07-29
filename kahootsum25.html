@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DACC Nursing Kahoot Champions!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- CSS Styling --- */
+        :root {
+            --primary-color: #4a148c; /* Kahoot Purple */
+            --secondary-color: #2c003e;
+            --accent-color: #ffc107; /* Gold */
+            --text-color: #ffffff;
+            --card-bg: rgba(255, 255, 255, 0.1);
+            --card-hover-bg: rgba(255, 255, 255, 0.2);
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --gold: #ffd700;
+            --silver: #c0c0c0;
+            --bronze: #cd7f32;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color) 70%);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        .container {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 30px 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px var(--shadow-color);
+            text-align: center;
+            max-width: 1000px;
+            width: 90%;
+        }
+
+        header h1 {
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            color: var(--accent-color);
+            text-shadow: 2px 2px 4px var(--shadow-color);
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 1.2em;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        #year {
+            display: inline-block; /* Allows transform */
+            transition: transform 0.3s ease-in-out;
+        }
+        #year:hover {
+             transform: scale(1.1);
+        }
+
+        .winners-list {
+            display: flex;
+            justify-content: center;
+            align-items: stretch; /* Make cards same height if wrapped */
+            flex-wrap: wrap;
+            gap: 30px; /* Space between cards */
+            margin-top: 30px;
+        }
+
+        .winner-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 25px;
+            width: 250px;
+            box-shadow: 0 5px 15px var(--shadow-color);
+            transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+            cursor: default; /* Indicate non-clickable, but hoverable */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0; /* Start hidden for animation */
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        /* Staggered Animation Delay */
+        .winner-card:nth-child(1) { animation-delay: 0.2s; }
+        .winner-card:nth-child(2) { animation-delay: 0.4s; }
+        .winner-card:nth-child(3) { animation-delay: 0.6s; }
+        /* Add more if you have more cards */
+
+
+        .winner-card:hover {
+            transform: scale(1.05) translateY(-10px);
+            background: var(--card-hover-bg);
+            box-shadow: 0 12px 25px var(--shadow-color);
+        }
+
+        .winner-card .medal {
+            font-size: 4em; /* Make medal bigger */
+            margin-bottom: 15px;
+            display: block;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+        }
+
+        /* Assign specific colors to medals */
+        .winner-card:nth-child(1) .medal { color: var(--gold); }
+        .winner-card:nth-child(2) .medal { color: var(--silver); }
+        .winner-card:nth-child(3) .medal { color: var(--bronze); }
+
+        .winner-card .name {
+            font-size: 1.4em;
+            font-weight: 600;
+            margin: 10px 0 5px 0;
+            color: var(--text-color);
+        }
+
+        .winner-card .score {
+            font-size: 1.1em;
+            font-weight: 400;
+            margin: 5px 0 0 0;
+            color: var(--accent-color);
+            opacity: 0.9;
+        }
+
+        /* Animation Definition */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Basic Responsiveness */
+        @media (max-width: 900px) {
+             .winner-card {
+                width: calc(50% - 40px); /* Two cards per row */
+             }
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 2.2em;
+            }
+             header p {
+                font-size: 1em;
+            }
+            .container {
+                padding: 20px;
+                width: 95%;
+            }
+            .winner-card {
+                width: 80%; /* One card per row */
+            }
+             .winners-list {
+                gap: 20px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>DACC Nursing Kahoot! Champions</h1>
+            <p>Top players of Summer 25<span id="year"></span>!</p>
+        </header>
+
+        <section class="winners-list">
+            <!-- Winner 1 -->
+            <div class="winner-card">
+                <span class="medal">🥇</span>
+                <h2 class="name">Mindy</h2>
+                <p class="score">Score: 206436</p>
+            </div>
+
+            <!-- Winner 2 -->
+            <div class="winner-card">
+                <span class="medal">🥈</span>
+                <h2 class="name">Linz</h2>
+                <p class="score">Score: 206364</p>
+            </div>
+
+            <!-- Winner 3 -->
+            <div class="winner-card">
+                <span class="medal">🥉</span>
+                <h2 class="name">Shi</h2>
+                <p class="score">Score: 200937</p>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // --- JavaScript Functionality ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get the current year
+            const currentYear = new Date().getFullYear();
+
+            // Find the span element with the id "year"
+            const yearSpan = document.getElementById('year');
+
+            // Update the text content of the span if it exists
+            if (yearSpan) {
+                yearSpan.textContent = currentYear;
+            }
+
+            // Optional: Add a small interactive element (e.g., console log on card click)
+            const cards = document.querySelectorAll('.winner-card');
+            cards.forEach(card => {
+                card.addEventListener('click', () => {
+                    // You could add more interactive features here!
+                    // Example: Show an alert, play a sound, trigger confetti...
+                    const name = card.querySelector('.name').textContent;
+                    console.log(`You clicked on ${name}'s card!`);
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
