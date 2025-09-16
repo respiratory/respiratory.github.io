@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NCLEX-RN Next Gen Musculoskeletal Questions</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+        .question-container {
+            background: #fff;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 1px solid #ddd;
+        }
+        .question-title {
+            font-size: 1.4em;
+            color: #0056b3;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .question-scenario {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #e3e3e3;
+            margin-bottom: 20px;
+        }
+        .rationale {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background: #e9f7ef;
+            border-left: 5px solid #28a745;
+            border-radius: 5px;
+        }
+        .rationale h4 {
+            margin-top: 0;
+            color: #155724;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 10px;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Bow-Tie Styles */
+        .bow-tie-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            align-items: center;
+            text-align: center;
+        }
+        .bow-tie-center {
+            grid-column: 2 / 3;
+        }
+        .bow-tie-left, .bow-tie-right {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .bow-tie-box {
+            border: 2px dashed #007bff;
+            padding: 10px;
+            min-height: 80px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            background-color: #f8f9fa;
+        }
+
+        /* Drag and Drop Styles */
+        .drag-options-container {
+            padding: 15px;
+            background: #f1f1f1;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .draggable {
+            background-color: #e9ecef;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            cursor: grab;
+            user-select: none;
+        }
+        .draggable:active {
+            cursor: grabbing;
+        }
+        .draggable.dragging {
+            opacity: 0.5;
+            background: #cce5ff;
+        }
+
+        /* Matrix Table Styles */
+        .matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        .matrix-table th, .matrix-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+        .matrix-table th {
+            background-color: #f2f2f2;
+        }
+        .matrix-table td:first-child {
+            text-align: left;
+        }
+
+        /* Cloze (Drop-Down) Styles */
+        .cloze-select {
+            padding: 6px;
+            font-size: 0.95em;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>NCLEX Next Gen: Musculoskeletal Trauma</h1>
+
+    <!-- QUESTION 1: BOW-TIE (CORRECTED) -->
+    <div class="question-container">
+        <h2 class="question-title">1. Bow-Tie: Acute Compartment Syndrome</h2>
+        <div class="question-scenario">
+            <p>A 28-year-old male sustained a crush injury to his right forearm. Four hours post-injury, he reports escalating pain that is unresponsive to morphine. The nurse assesses the right forearm and finds it to be tense and swollen. The client also reports numbness and tingling in his fingers.</p>
+        </div>
+        <p>Complete the bow-tie diagram below by dragging the appropriate items from the options list.</p>
+
+        <div class="bow-tie-grid">
+            <div class="bow-tie-left">
+                <div class="bow-tie-box drop-zone" id="action1-drop"><strong>Action 1</strong></div>
+                <div class="bow-tie-box drop-zone" id="action2-drop"><strong>Action 2</strong></div>
+            </div>
+            <div class="bow-tie-center">
+                <div class="bow-tie-box drop-zone" id="condition-drop"><strong>Potential Condition</strong></div>
+            </div>
+            <div class="bow-tie-right">
+                <div class="bow-tie-box drop-zone" id="monitor1-drop"><strong>Parameter to Monitor 1</strong></div>
+                <div class="bow-tie-box drop-zone" id="monitor2-drop"><strong>Parameter to Monitor 2</strong></div>
+            </div>
+        </div>
+
+        <div class="drag-options-container">
+            <h4>Options:</h4>
+            <div class="draggable" draggable="true" id="bt-opt1">Administer additional opioid analgesics</div>
+            <div class="draggable" draggable="true" id="bt-opt2">Notify the healthcare provider immediately</div>
+            <div class="draggable" draggable="true" id="bt-opt3">Elevate the extremity above heart level</div>
+            <div class="draggable" draggable="true" id="bt-opt4">Acute Compartment Syndrome</div>
+            <div class="draggable" draggable="true" id="bt-opt5">Osteomyelitis</div>
+            <div class="draggable" draggable="true" id="bt-opt6">Assess radial pulse and capillary refill</div>
+            <div class="draggable" draggable="true" id="bt-opt7">Prepare the client for a fasciotomy</div>
+            <div class="draggable" draggable="true" id="bt-opt8">Assess for increasing pain and paresthesia</div>
+        </div>
+        <button onclick="showRationale('rationale1')">Show Rationale</button>
+        <div class="rationale" id="rationale1">
+            <h4>Rationale</h4>
+            <p><strong>Correct Placement:</strong></p>
+            <ul>
+                <li><strong>Actions to Take:</strong> <em>Notify the healthcare provider immediately</em> and <em>Prepare the client for a fasciotomy</em>. The client's symptoms are classic for Acute Compartment Syndrome (ACS), which is a limb-threatening emergency. The nurse's first action is to notify the provider for immediate medical intervention. The definitive treatment for ACS is a fasciotomy, so the nurse must anticipate this and prepare the client. Administering more opioids is incorrect as it masks the key symptom of ischemic pain. Elevating the limb is contraindicated as it can further reduce arterial blood flow.</li>
+                <li><strong>Potential Condition:</strong> <em>Acute Compartment Syndrome</em>. This condition is caused by swelling and bleeding within a confined muscle compartment, leading to increased pressure that compromises blood flow, nerve function, and muscle viability.</li>
+                <li><strong>Parameters to Monitor:</strong> <em>Assess for increasing pain and paresthesia</em> and <em>Assess radial pulse and capillary refill</em>. Pain unrelieved by analgesia and paresthesia (numbness/tingling) are the earliest and most reliable indicators of ACS. Assessing the radial pulse and capillary refill monitors for vascular compromise; while pulselessness is a very late sign, diminished pulses and delayed refill are critical findings.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- QUESTION 2: MATRIX -->
+    <div class="question-container">
+        <h2 class="question-title">2. Matrix: Planning Care for an Above-the-Knee Amputation</h2>
+        <div class="question-scenario">
+             <p>A nurse is planning care for a 55-year-old client who is 48 hours post-operative from a traumatic above-the-knee amputation (AKA) of the left leg. For each potential nursing intervention, specify if it is indicated or contraindicated in the plan of care.</p>
+        </div>
+        <table class="matrix-table">
+            <thead>
+                <tr>
+                    <th>Nursing Intervention</th>
+                    <th>Indicated</th>
+                    <th>Contraindicated</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Place the client in a prone position for 30 minutes, 3 to 4 times a day.</td>
+                    <td><input type="radio" name="matrix1" value="indicated"></td>
+                    <td><input type="radio" name="matrix1" value="contraindicated"></td>
+                </tr>
+                <tr>
+                    <td>Keep the residual limb elevated on a pillow at all times for the first 48 hours.</td>
+                    <td><input type="radio" name="matrix2" value="indicated"></td>
+                    <td><input type="radio" name="matrix2" value="contraindicated"></td>
+                </tr>
+                <tr>
+                    <td>Administer gabapentin for reports of a "burning, cramping" sensation in the left foot.</td>
+                    <td><input type="radio" name="matrix3" value="indicated"></td>
+                    <td><input type="radio" name="matrix3" value="contraindicated"></td>
+                </tr>
+                <tr>
+                    <td>Apply a lotion-based moisturizer to the incision line daily to prevent dryness.</td>
+                    <td><input type="radio" name="matrix4" value="indicated"></td>
+                    <td><input type="radio" name="matrix4" value="contraindicated"></td>
+                </tr>
+            </tbody>
+        </table>
+        <button onclick="showRationale('rationale2')">Show Rationale</button>
+        <div class="rationale" id="rationale2">
+            <h4>Rationale</h4>
+            <ul>
+                <li><strong>Prone Positioning:</strong> Indicated. This intervention helps to prevent hip flexion contractures, a common complication after an AKA.</li>
+                <li><strong>Prolonged Elevation on a Pillow:</strong> Contraindicated. While brief elevation can help with swelling in the immediate post-op period (first 24h), prolonged elevation, especially after 24-48 hours, promotes the development of hip flexion contractures and should be avoided.</li>
+                <li><strong>Administer Gabapentin:</strong> Indicated. The client is describing phantom limb pain, which is neuropathic in nature. Gabapentin is an anticonvulsant commonly used to effectively treat this type of pain.</li>
+                <li><strong>Apply Lotion to Incision:</strong> Contraindicated. Lotions, creams, or ointments should not be applied to the incision line unless specifically prescribed, as they can trap moisture and increase the risk of infection.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- QUESTION 3: EXTENDED DRAG AND DROP -->
+    <div class="question-container">
+        <h2 class="question-title">3. Extended Drag and Drop: Osteomyelitis Management</h2>
+        <div class="question-scenario">
+            <p>A nurse is caring for a client with chronic osteomyelitis of the tibia who is being discharged with a peripherally inserted central catheter (PICC) for 6 weeks of intravenous antibiotic therapy. The nurse is creating a discharge teaching plan.</p>
+        </div>
+        <p>From the list below, drag and drop the <strong>four</strong> essential topics the nurse must include in the teaching plan.</p>
+        <div class="bow-tie-box drop-zone" id="drag-drop-zone">
+            <strong>Discharge Teaching Plan</strong>
+        </div>
+
+        <div class="drag-options-container">
+            <h4>Options:</h4>
+            <div class="draggable" draggable="true" id="dd-opt1">Strict adherence to the antibiotic schedule</div>
+            <div class="draggable" draggable="true" id="dd-opt2">Proper technique for PICC line care and flushing</div>
+            <div class="draggable" draggable="true" id="dd-opt3">Importance of a high-protein, high-vitamin C diet</div>
+            <div class="draggable" draggable="true" id="dd-opt4">Instructions to begin high-impact aerobic exercise</div>
+            <div class="draggable" draggable="true" id="dd-opt5">Signs and symptoms of antibiotic-related complications (e.g., C. diff)</div>
+            <div class="draggable" draggable="true" id="dd-opt6">Technique for daily sterile dressing changes of the wound site</div>
+        </div>
+        <button onclick="showRationale('rationale3')">Show Rationale</button>
+        <div class="rationale" id="rationale3">
+            <h4>Rationale</h4>
+            <p>The four essential teaching topics are:</p>
+            <ul>
+                <li><strong>Strict adherence to the antibiotic schedule:</strong> Completing the full, long-term course of IV antibiotics is critical to eradicate the bone infection and prevent recurrence.</li>
+                <li><strong>Proper technique for PICC line care and flushing:</strong> The client/family must be able to safely manage the PICC line at home to prevent catheter-related bloodstream infections (CRBSI) and maintain patency.</li>
+                <li><strong>Importance of a high-protein, high-vitamin C diet:</strong> Adequate nutrition is essential for wound healing and supporting the body's immune response to fight the chronic infection.</li>
+                <li><strong>Signs and symptoms of antibiotic-related complications:</strong> Long-term antibiotic use puts the client at risk for superinfections like Clostridioides difficile (C. diff) or fungal infections. The client must know to report symptoms such as persistent diarrhea immediately.</li>
+            </ul>
+            <p><strong>Incorrect Options:</strong> High-impact exercise is contraindicated as it can cause a pathologic fracture in the weakened bone. Sterile dressing changes are typically managed by a home health nurse, not independently by the client, due to the complexity and risk of contamination.</p>
+        </div>
+    </div>
+
+    <!-- QUESTION 4: CLOZE (DROP-DOWN) -->
+    <div class="question-container">
+        <h2 class="question-title">4. Cloze (Drop-Down): Fat Embolism Syndrome</h2>
+        <div class="question-scenario">
+            <p>A 22-year-old client is admitted with a closed fracture of the right femur following a skiing accident. On the second day of hospitalization, the nurse notes the client has become confused and agitated. The client's vital signs are: Temp 101.8°F, HR 120, RR 28, BP 100/60, SpO2 88% on room air.</p>
+        </div>
+        <p>The nurse recognizes that the client's change in <select class="cloze-select" id="cloze1"><option value="">...</option><option value="neurological status">neurological status</option><option value="cardiac output">cardiac output</option></select> combined with respiratory distress and the presence of a <select class="cloze-select" id="cloze2"><option value="">...</option><option value="petechial rash">petechial rash</option><option value="purpuric rash">purpuric rash</option></select> on the chest and axillae are hallmark signs of Fat Embolism Syndrome (FES). The nurse's immediate priority is to <select class="cloze-select" id="cloze3"><option value="">...</option><option value="administer oxygen">administer oxygen</option><option value="initiate seizure precautions">initiate seizure precautions</option></select> and place the client in a high-Fowler's position.</p>
+        <button onclick="showRationale('rationale4')">Show Rationale</button>
+        <div class="rationale" id="rationale4">
+            <h4>Rationale</h4>
+            <p>The correct statement is: The nurse recognizes that the client's change in <strong>neurological status</strong> combined with respiratory distress and the presence of a <strong>petechial rash</strong> on the chest and axillae are hallmark signs of Fat Embolism Syndrome (FES). The nurse's immediate priority is to <strong>administer oxygen</strong> and place the client in a high-Fowler's position.</p>
+            <ul>
+                <li><strong>Neurological Status:</strong> Early cerebral involvement in FES manifests as confusion, agitation, and decreased level of consciousness due to hypoxia and fat globules traveling to the brain.</li>
+                <li><strong>Petechial Rash:</strong> A petechial rash, caused by microvascular hemorrhage, appearing on the conjunctiva, axillae, and upper chest is a classic, though not always present, sign of FES.</li>
+                <li><strong>Administer Oxygen:</strong> The most critical aspect of FES is severe respiratory compromise (ARDS-like picture). Hypoxia is the greatest threat to life, making oxygen administration the absolute first priority to support vital organs.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- QUESTION 5: CASE STUDY -->
+    <div class="question-container">
+        <h2 class="question-title">5. Case Study: Traction Management</h2>
+        <div class="question-scenario">
+            <p><strong>Day 1, 0900:</strong> A 70-year-old female is admitted with an intracapsular fracture of the left hip. Buck's skin traction is applied preoperatively to reduce muscle spasms and immobilize the fracture. The client is alert and oriented, rating her pain at a 7/10.</p>
+            <p><strong>Day 1, 1400:</strong> The nurse is assessing the client. The client reports her pain is now 4/10 after receiving analgesia. The nurse observes that the client's left foot is cool to the touch and the client reports a "pins and needles" sensation. The dorsalis pedis pulse is +1 via Doppler. The weights for the traction are resting on the floor.</p>
+        </div>
+        <h4>Question:</h4>
+        <p>Based on the 1400 assessment findings, which <strong>two</strong> actions should the nurse take immediately?</p>
+        <form id="case-study-form">
+            <input type="checkbox" name="cs" value="1"> Document the findings and reassess in one hour.<br>
+            <input type="checkbox" name="cs" value="2"> Lift the weights to ensure they are hanging freely.<br>
+            <input type="checkbox" name="cs" value="3"> Loosen the straps of the traction boot.<br>
+            <input type="checkbox" name="cs" value="4"> Notify the healthcare provider of the neurovascular changes.<br>
+            <input type="checkbox" name="cs" value="5"> Administer an additional dose of the prescribed opioid.<br>
+        </form>
+        <button onclick="showRationale('rationale5')">Show Rationale</button>
+        <div class="rationale" id="rationale5">
+            <h4>Rationale</h4>
+            <p>The two immediate priority actions are:</p>
+            <ul>
+                <li><strong>Lift the weights to ensure they are hanging freely:</strong> For traction to be effective, the weights must hang freely and not rest on the floor or bed. This is a primary principle of traction and, if corrected, may alleviate some of the client's symptoms. This is a problem the nurse can and must fix immediately.</li>
+                <li><strong>Notify the healthcare provider of the neurovascular changes:</strong> The coolness, paresthesia ("pins and needles"), and diminished pulse are signs of neurovascular compromise. This is a serious complication that threatens the viability of the limb and requires immediate medical evaluation and potential intervention.</li>
+            </ul>
+            <p><strong>Incorrect Options:</strong> Loosening the straps might be necessary, but the provider should be notified first given the compromised circulation. Simply documenting and waiting is inappropriate when urgent action is needed. Administering more pain medication is incorrect as the issue is likely ischemic pain from compromised circulation, not just fracture pain.</p>
+        </div>
+    </div>
+
+</div> <!-- end container -->
+
+<script>
+    function showRationale(id) {
+        var rationale = document.getElementById(id);
+        if (rationale.style.display === 'none' || rationale.style.display === '') {
+            rationale.style.display = 'block';
+        } else {
+            rationale.style.display = 'none';
+        }
+    }
+
+    // Drag and Drop functionality
+    const draggables = document.querySelectorAll('.draggable');
+    const dropZones = document.querySelectorAll('.drop-zone');
+
+    draggables.forEach(draggable => {
+        draggable.addEventListener('dragstart', () => {
+            draggable.classList.add('dragging');
+        });
+
+        draggable.addEventListener('dragend', () => {
+            draggable.classList.remove('dragging');
+        });
+    });
+
+    dropZones.forEach(zone => {
+        zone.addEventListener('dragover', e => {
+            e.preventDefault(); // This is necessary to allow dropping
+            const draggable = document.querySelector('.dragging');
+            if (draggable) {
+                zone.appendChild(draggable);
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
