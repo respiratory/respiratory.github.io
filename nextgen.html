@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link Hub</title>
+    <style>
+        /* CSS for styling the page */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        h1 {
+            color: #fff;
+            margin-bottom: 40px;
+            font-size: 3em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .links {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .link {
+            display: inline-block;
+            padding: 15px 30px;
+            text-decoration: none;
+            color: #fff;
+            border: 2px solid #fff;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+
+        .link:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            transition: all 0.4s ease;
+            z-index: -1;
+        }
+
+        .link:hover:before {
+            left: 0;
+        }
+
+        .link:hover {
+            color: #333;
+        }
+
+        .shake {
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            10%, 90% {
+                transform: translate3d(-1px, 0, 0);
+            }
+            20%, 80% {
+                transform: translate3d(2px, 0, 0);
+            }
+            30%, 50%, 70% {
+                transform: translate3d(-4px, 0, 0);
+            }
+            40%, 60% {
+                transform: translate3d(4px, 0, 0);
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Link Hub</h1>
+        <div class="links">
+            <a href="#" class="link" id="musculoskeletal-link">226 Musculoskeltal Next Gen</a>
+            <a href="#" class="link coming-soon">Coming Soon</a>
+            <a href="#" class="link coming-soon">Coming Soon</a>
+            <a href="#" class="link coming-soon">Coming Soon</a>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript for dynamic effects
+        const comingSoonLinks = document.querySelectorAll('.coming-soon');
+
+        comingSoonLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                link.classList.add('shake');
+                setTimeout(() => {
+                    link.classList.remove('shake');
+                }, 500);
+            });
+        });
+    </script>
+
+</body>
+</html>
