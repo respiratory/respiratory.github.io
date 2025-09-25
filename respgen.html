@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NCLEX-RN Next Gen Respiratory Questions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .question-container {
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #004a99;
+        }
+        h2 {
+            color: #0056b3;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 5px;
+        }
+        .rationale {
+            background: #e9f5ff;
+            border-left: 5px solid #0056b3;
+            margin-top: 15px;
+            padding: 15px;
+            display: none;
+        }
+        .rationale b {
+            color: #004a99;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Bow-tie specific styles */
+        .bowtie-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            align-items: center;
+            gap: 20px;
+            margin-top: 25px;
+        }
+        .bowtie-column {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            text-align: center;
+        }
+        .bowtie-box {
+            border: 2px dashed #ccc;
+            padding: 15px;
+            min-height: 60px;
+            background-color: #fafafa;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #777;
+        }
+        .bowtie-options-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            gap: 15px;
+        }
+        .option-bank {
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #fff;
+            flex: 1;
+            min-width: 200px;
+        }
+        .option-bank h4 {
+            margin-top: 0;
+            text-align: center;
+        }
+        .draggable {
+            border: 1px solid #ccc;
+            padding: 8px;
+            margin: 5px 0;
+            cursor: grab;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+        .draggable.dragging {
+            opacity: 0.5;
+        }
+
+
+        /* Case Study specific styles */
+        .case-study-container {
+            display: flex;
+            gap: 20px;
+        }
+        .case-study-tabs {
+            display: flex;
+            flex-direction: column;
+            width: 150px;
+        }
+        .tab-button {
+            background-color: #f1f1f1;
+            border: 1px solid #ccc;
+            padding: 10px 15px;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            margin-bottom: 5px;
+        }
+        .tab-button.active {
+            background-color: #ddd;
+            border-right: 3px solid #0056b3;
+        }
+        .tab-content-container {
+            flex: 1;
+        }
+        .tab-content {
+            display: none;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+
+        /* Drag and Drop specific styles */
+        .drag-drop-container {
+            display: flex;
+            gap: 20px;
+        }
+        .drop-zone {
+            border: 2px dashed #ccc;
+            padding: 10px;
+            min-height: 150px;
+            flex: 1;
+            background-color: #fafafa;
+            border-radius: 5px;
+        }
+        #drag-options-bank {
+             width: 250px;
+        }
+
+
+        /* Matrix specific styles */
+        .matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        .matrix-table th, .matrix-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+        .matrix-table th {
+            background-color: #f2f2f2;
+        }
+        .matrix-table td:first-child {
+            text-align: left;
+        }
+
+
+        /* Cloze specific styles */
+        .cloze-select {
+            padding: 5px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>NCLEX-RN Next Gen Style Questions: Respiratory Disorders</h1>
+
+    <!-- Question 1: Bow-tie - NEW SCENARIO -->
+    <div class="question-container">
+        <h2>Question 1: Bow-tie</h2>
+        <p>A nurse is caring for a 65-year-old male client admitted 2 days ago with community-acquired pneumonia. He has been stable on 4 L/min of oxygen via nasal cannula. During morning rounds, the nurse finds the client agitated, tachypneic with a respiratory rate of 32, and with an SpO2 of 88%. The client states, "I can't catch my breath."</p>
+        
+        <div class="bowtie-container">
+            <div class="bowtie-column">
+                <h4>Actions to Take</h4>
+                <div class="bowtie-box drop-zone" data-drop-target="actions">Drop Action 1 Here</div>
+                <div class="bowtie-box drop-zone" data-drop-target="actions">Drop Action 2 Here</div>
+            </div>
+            <div class="bowtie-column">
+                <h4>Potential Condition</h4>
+                <div class="bowtie-box drop-zone" data-drop-target="condition">Drop Condition Here</div>
+            </div>
+            <div class="bowtie-column">
+                <h4>Parameters to Monitor</h4>
+                <div class="bowtie-box drop-zone" data-drop-target="parameters">Drop Parameter 1 Here</div>
+                <div class="bowtie-box drop-zone" data-drop-target="parameters">Drop Parameter 2 Here</div>
+            </div>
+        </div>
+
+        <div class="bowtie-options-container">
+            <div class="option-bank" id="bowtie-options-bank">
+                <h4>Options Bank (Drag from here)</h4>
+                <div class="draggable" draggable="true" data-source="actions">Initiate the Rapid Response Team (RRT)</div>
+                <div class="draggable" draggable="true" data-source="condition">Pulmonary Embolism</div>
+                <div class="draggable" draggable="true" data-source="parameters">Arterial Blood Gas (ABG) results</div>
+                <div class="draggable" draggable="true" data-source="actions">Administer a PRN dose of an anxiolytic</div>
+                <div class="draggable" draggable="true" data-source="parameters">Sputum color</div>
+                <div class="draggable" draggable="true" data-source="actions">Place the client in high-Fowler's position</div>
+                <div class="draggable" draggable="true" data-source="condition">Sepsis-induced organ dysfunction</div>
+                <div class="draggable" draggable="true" data-source="actions">Obtain a sputum culture</div>
+                <div class="draggable" draggable="true" data-source="parameters">Blood pressure</div>
+                 <div class="draggable" draggable="true" data-source="condition">Hospital-acquired pneumonia</div>
+            </div>
+        </div>
+        <button onclick="showRationale(1)">Show Rationale</button>
+        <div class="rationale" id="rationale1">
+            <p><b>Rationale:</b></p>
+            <p><b>Potential Condition:</b> The most likely condition is <b>Sepsis-induced organ dysfunction</b> (specifically manifesting as acute respiratory failure or early ARDS). The client's pneumonia has likely progressed to sepsis, causing systemic inflammation and leading to acute respiratory decompensation. This is a more encompassing diagnosis than simply worsening pneumonia.</p>
+            <p><b>Actions to Take:</b> The highest priorities are to <b>initiate the Rapid Response Team (RRT)</b> because the client is unstable and requires immediate escalation of care, and <b>place the client in high-Fowler's position</b> to maximize thoracic expansion and ease the work of breathing.</p>
+            <p><b>Parameters to Monitor:</b> In this acute situation, the nurse must monitor for evidence of respiratory failure and shock. Therefore, obtaining and analyzing <b>Arterial Blood Gas (ABG) results</b> is critical to assess oxygenation/ventilation, and closely monitoring <b>blood pressure</b> is essential to track hemodynamic stability and perfusion in the context of sepsis.</p>
+        </div>
+    </div>
+
+    <!-- Question 2: Case Study -->
+    <div class="question-container">
+        <h2>Question 2: Case Study</h2>
+        <div class="case-study-container">
+            <div class="case-study-tabs">
+                <button class="tab-button active" onclick="openTab(event, 'history')">History</button>
+                <button class="tab-button" onclick="openTab(event, 'vitals')">Vitals</button>
+                <button class="tab-button" onclick="openTab(event, 'labs')">ABGs</button>
+                <button class="tab-button" onclick="openTab(event, 'question')">Question</button>
+            </div>
+            <div class="tab-content-container">
+                <div id="history" class="tab-content active">
+                    <p>A 72-year-old female with a history of severe COPD and a 50-pack-year smoking history is admitted to the medical floor with increasing shortness of breath, a productive cough with greenish sputum, and wheezing. She reports feeling more tired and confused than usual over the past day.</p>
+                </div>
+                <div id="vitals" class="tab-content">
+                    <p>Temperature: 100.9°F (38.3°C)<br>
+                    Heart Rate: 118 beats/min<br>
+                    Respiratory Rate: 28 breaths/min, shallow<br>
+                    Blood Pressure: 148/88 mmHg<br>
+                    Oxygen Saturation: 86% on 2 L/min nasal cannula</p>
+                </div>
+                <div id="labs" class="tab-content">
+                    <p><b>Arterial Blood Gas (on 2L NC):</b><br>
+                    pH: 7.28<br>
+                    PaCO2: 68 mmHg<br>
+                    PaO2: 55 mmHg<br>
+                    HCO3: 29 mEq/L</p>
+                </div>
+                 <div id="question" class="tab-content">
+                    <p>The nurse has analyzed the client data. Which <strong>three</strong> actions should the nurse take immediately?</p>
+                    <form id="caseStudyForm">
+                        <div><input type="checkbox" name="case_study" value="1"> Increase oxygen to 6 L/min via nasal cannula.</div>
+                        <div><input type="checkbox" name="case_study" value="2"> Initiate BiPAP therapy as per protocol.</div>
+                        <div><input type="checkbox" name="case_study" value="3"> Administer prescribed albuterol nebulizer treatment.</div>
+                        <div><input type="checkbox" name="case_study" value="4"> Place the client in the supine position.</div>
+                        <div><input type="checkbox" name="case_study" value="5"> Notify the Rapid Response Team (RRT).</div>
+                        <div><input type="checkbox" name="case_study" value="6"> Administer a PRN sedative for anxiety.</div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <button onclick="showRationale(2)">Show Rationale</button>
+        <div class="rationale" id="rationale2">
+            <p><b>Rationale:</b> The client is in acute respiratory failure secondary to a COPD exacerbation. The ABGs show a partially compensated respiratory acidosis with significant hypercapnia and hypoxemia.
+            <br>1. <b>Initiate BiPAP therapy as per protocol:</b> Correct. BiPAP will help decrease the work of breathing, improve alveolar ventilation to blow off CO2, and improve oxygenation. It is a key intervention for hypercapnic respiratory failure in COPD.
+            <br>2. <b>Administer prescribed albuterol nebulizer treatment:</b> Correct. This will address the bronchospasm contributing to the exacerbation, helping to open the airways.
+            <br>3. <b>Notify the Rapid Response Team (RRT):</b> Correct. The client is showing signs of impending respiratory collapse (confusion, severe acidosis, hypoxemia despite O2). The RRT is needed for a higher level of care and potential intubation.
+            <br>Incorrect options: Increasing O2 significantly via nasal cannula can worsen CO2 retention in some COPD patients. The supine position will worsen breathing. A sedative is contraindicated as it will further depress the respiratory drive.
+            </p>
+        </div>
+    </div>
+
+    <!-- Question 3: Extended Drag and Drop -->
+    <div class="question-container">
+        <h2>Question 3: Extended Drag and Drop</h2>
+        <p>A nurse is preparing to care for a client with pneumonia. The provider has written several orders. The nurse must decide which interventions are necessary and categorize them based on priority.</p>
+        <div class="drag-drop-container">
+             <div id="drag-options-bank" class="option-bank">
+                <h4>Provider Orders</h4>
+                <div class="draggable" draggable="true">Obtain sputum culture</div>
+                <div class="draggable" draggable="true">Administer IV ceftriaxone</div>
+                <div class="draggable" draggable="true">Encourage use of incentive spirometer</div>
+                <div class="draggable" draggable="true">Administer acetaminophen for fever > 101°F</div>
+                <div class="draggable" draggable="true">Administer enoxaparin for VTE prophylaxis</div>
+                 <div class="draggable" draggable="true">Consult physical therapy for mobility</div>
+            </div>
+            <div class="drop-zone-container" style="flex:1;">
+                <h4>Priority Interventions</h4>
+                <div class="drop-zone" id="priority1-drop"><strong>Highest Priority (Must do first)</strong></div>
+                <div class="drop-zone" id="priority2-drop"><strong>Secondary Priority</strong></div>
+                <div class="drop-zone" id="priority3-drop"><strong>Lower Priority</strong></div>
+            </div>
+        </div>
+        <button onclick="showRationale(3)">Show Rationale</button>
+        <div class="rationale" id="rationale3">
+            <p><b>Rationale:</b></p>
+            <p>The correct prioritization is based on the principles of infection control and the ABCs (Airway, Breathing, Circulation).</p>
+            <ol>
+                <li><strong>Highest Priority:</strong> Obtain sputum culture. This must be done *before* administering the first dose of antibiotics to ensure the culture is not skewed by the medication, allowing for targeted therapy later if needed.</li>
+                <li><strong>Secondary Priority:</strong> Administer IV ceftriaxone. Starting antibiotics promptly is critical to treating the underlying infection and preventing sepsis.</li>
+                <li><strong>Lower Priority:</strong> Encourage use of incentive spirometer, administer acetaminophen, and administer enoxaparin. These are all important interventions for managing symptoms, preventing complications (like atelectasis and VTE), and promoting recovery, but they follow the critical steps of diagnostics and antimicrobial administration. The physical therapy consult can be done last.</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Question 4: Matrix -->
+    <div class="question-container">
+        <h2>Question 4: Matrix/Grid</h2>
+        <p>A nurse is caring for four clients on a respiratory unit. For each client, determine if the finding requires immediate intervention by the nurse.</p>
+        <table class="matrix-table">
+            <thead>
+                <tr>
+                    <th>Client Finding</th>
+                    <th>Requires Immediate Intervention</th>
+                    <th>Does Not Require Immediate Intervention</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>A client with asthma reports using their albuterol inhaler 3 times in the past hour with little relief.</td>
+                    <td><input type="radio" name="matrix1" value="yes"></td>
+                    <td><input type="radio" name="matrix1" value="no"></td>
+                </tr>
+                <tr>
+                    <td>A client with COPD has an SpO2 of 91% and is using their accessory muscles to breathe.</td>
+                    <td><input type="radio" name="matrix2" value="yes"></td>
+                    <td><input type="radio" name="matrix2" value="no"></td>
+                </tr>
+                <tr>
+                    <td>A client receiving mechanical ventilation for ARDS has a PEEP of 15 cm H2O and a blood pressure of 85/50 mmHg.</td>
+                    <td><input type="radio" name="matrix3" value="yes"></td>
+                    <td><input type="radio" name="matrix3" value="no"></td>
+                </tr>
+                <tr>
+                    <td>A postoperative client has fine crackles in the lung bases and a respiratory rate of 20 breaths/min.</td>
+                    <td><input type="radio" name="matrix4" value="yes"></td>
+                    <td><input type="radio" name="matrix4" value="no"></td>
+                </tr>
+            </tbody>
+        </table>
+        <button onclick="showRationale(4)">Show Rationale</button>
+        <div class="rationale" id="rationale4">
+            <p><b>Rationale:</b></p>
+            <ul>
+                <li><b>Asthma client:</b> Requires Immediate Intervention. Using a rescue inhaler frequently with little relief indicates status asthmaticus, a medical emergency.</li>
+                <li><b>COPD client:</b> Requires Immediate Intervention. While 91% SpO2 may be at baseline for this client, the use of accessory muscles signifies a significant increase in the work of breathing and respiratory distress.</li>
+                <li><b>ARDS client:</b> Requires Immediate Intervention. High levels of PEEP can decrease venous return and cause hypotension. This blood pressure is dangerously low and requires immediate action (e.g., notifying the provider, preparing to administer fluids or vasopressors).</li>
+                <li><b>Postoperative client:</b> Does Not Require Immediate Intervention. Fine crackles in the bases are a common finding post-op, representing atelectasis. While it requires intervention (e.g., coughing, deep breathing, incentive spirometry), it is not a medical emergency requiring the nurse's *immediate* action over the others.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Question 5: Cloze (Drop-down) -->
+    <div class="question-container">
+        <h2>Question 5: Cloze (Drop-down)</h2>
+        <p>
+            A nurse is caring for a client who has just been intubated for acute respiratory failure. The nurse confirms tube placement by checking for end-tidal CO2, auscultating for bilateral breath sounds, and getting a chest x-ray. The initial ventilator settings are being applied. The nurse understands that the <select class="cloze-select" id="cloze1">
+                <option value=""></option>
+                <option value="Tidal Volume (VT)">Tidal Volume (VT)</option>
+                <option value="FiO2">FiO2</option>
+                <option value="PEEP">PEEP</option>
+            </select>
+            is the amount of air delivered with each breath and is set based on the client's ideal body weight to prevent barotrauma. The <select class="cloze-select" id="cloze2">
+                <option value=""></option>
+                <option value="Respiratory Rate (RR)">Respiratory Rate (RR)</option>
+                <option value="FiO2">FiO2</option>
+                <option value="PEEP">PEEP</option>
+            </select> is the concentration of oxygen delivered, which is initially set high and then titrated down based on ABGs. Finally, a small amount of <select class="cloze-select" id="cloze3">
+                <option value=""></option>
+                <option value="PEEP">PEEP</option>
+                <option value="Pressure Support">Pressure Support</option>
+                 <option value="Tidal Volume (VT)">Tidal Volume (VT)</option>
+            </select>
+            is often used to keep the alveoli open at the end of expiration, which improves oxygenation.
+        </p>
+        <button onclick="showRationale(5)">Show Rationale</button>
+        <div class="rationale" id="rationale5">
+            <p><b>Rationale:</b></p>
+            <p>1. <b>Tidal Volume (VT):</b> This is the correct term for the volume of air delivered with each breath.</p>
+            <p>2. <b>FiO2:</b> This stands for the fraction of inspired oxygen and represents the oxygen concentration being delivered.</p>
+            <p>3. <b>PEEP (Positive End-Expiratory Pressure):</b> This is the pressure maintained in the airways at the end of exhalation to prevent alveolar collapse.</p>
+        </div>
+    </div>
+
+    <script>
+        function showRationale(questionNumber) {
+            const rationale = document.getElementById('rationale' + questionNumber);
+            if (rationale.style.display === 'none' || rationale.style.display === '') {
+                rationale.style.display = 'block';
+            } else {
+                rationale.style.display = 'none';
+            }
+        }
+
+        // Case Study Tabs
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            const container = evt.target.closest('.case-study-container');
+            tabcontent = container.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+                tabcontent[i].classList.remove("active");
+            }
+            tablinks = container.getElementsByClassName("tab-button");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            container.querySelector("#" + tabName).style.display = "block";
+            container.querySelector("#" + tabName).classList.add("active");
+            evt.currentTarget.className += " active";
+        }
+        
+        // Ensure first tab is active on load
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('.tab-button').click();
+        });
+
+
+        // Drag and Drop functionality
+        const draggables = document.querySelectorAll('.draggable');
+        const dropZones = document.querySelectorAll('.drop-zone');
+
+        draggables.forEach(draggable => {
+            draggable.addEventListener('dragstart', (e) => {
+                draggable.classList.add('dragging');
+            });
+
+            draggable.addEventListener('dragend', () => {
+                draggable.classList.remove('dragging');
+            });
+        });
+
+        dropZones.forEach(zone => {
+            zone.addEventListener('dragover', e => {
+                e.preventDefault();
+            });
+
+            zone.addEventListener('drop', e => {
+                e.preventDefault();
+                const draggable = document.querySelector('.dragging');
+                if (draggable) {
+                    // This allows for multiple items in the larger drop zones
+                    if (zone.id.startsWith('priority')) {
+                         zone.appendChild(draggable);
+                    } else { // This is for the bowtie boxes which should only hold one item
+                        if (zone.children.length === 0 || zone.children[0].innerText.startsWith('Drop')) {
+                           zone.innerHTML = ''; // Clear placeholder text
+                           zone.appendChild(draggable);
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
