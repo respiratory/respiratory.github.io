@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaplan NCLEX Decision Tree Practice</title>
+    <style>
+        :root {
+            --primary-blue: #004d99;
+            --light-blue: #e0f2f7;
+            --dark-gray: #333;
+            --medium-gray: #666;
+            --light-gray: #f4f4f4;
+            --white: #fff;
+            --green-success: #28a745;
+            --red-error: #dc3545;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background-color: var(--white);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 20px;
+        }
+
+        h1, h2, h3 {
+            color: var(--primary-blue);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            border-bottom: 2px solid var(--light-blue);
+            padding-bottom: 15px;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            margin-top: 30px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        h3 {
+            font-size: 1.4em;
+            margin-top: 20px;
+        }
+
+        section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background-color: var(--light-gray);
+            border-radius: var(--border-radius);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .button {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+            margin: 5px;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .button:hover:not(:disabled) {
+            background-color: #003a7a;
+        }
+
+        .button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        /* Decision Tree Guide */
+        #decision-tree-guide .tree-step {
+            background-color: var(--white);
+            border: 1px solid var(--light-blue);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            display: none; /* Hidden by default */
+        }
+
+        #decision-tree-guide .tree-step.active {
+            display: block;
+        }
+
+        #decision-tree-guide .tree-step h3 {
+            color: var(--primary-blue);
+            font-size: 1.3em;
+            margin-top: 0;
+        }
+
+        .ask-yourself {
+            font-style: italic;
+            text-align: center;
+            margin-top: 30px;
+            font-size: 1.1em;
+            color: var(--medium-gray);
+            padding: 15px;
+            background-color: var(--light-blue);
+            border-radius: var(--border-radius);
+            border-left: 5px solid var(--primary-blue);
+        }
+
+        /* Practice Questions */
+        #question-area {
+            background-color: var(--white);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 20px;
+        }
+
+        .question-text {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--dark-gray);
+        }
+
+        .options-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .options-list li {
+            margin-bottom: 10px;
+        }
+
+        .options-list label {
+            display: block;
+            background-color: var(--light-gray);
+            padding: 12px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .options-list label:hover {
+            background-color: #e9e9e9;
+            border-color: var(--primary-blue);
+        }
+
+        .options-list input[type="radio"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+            accent-color: var(--primary-blue);
+        }
+
+        #feedback-area {
+            text-align: center;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-top: 20px;
+            font-weight: bold;
+            display: none; /* Hidden by default */
+        }
+
+        .feedback-correct {
+            background-color: #d4edda;
+            color: var(--green-success);
+        }
+
+        .feedback-incorrect {
+            background-color: #f8d7da;
+            color: var(--red-error);
+        }
+
+        #breakdown-area {
+            background-color: var(--light-blue);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            margin-top: 20px;
+            box-shadow: var(--box-shadow);
+        }
+
+        #breakdown-area h3 {
+            color: var(--primary-blue);
+            margin-top: 0;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        #breakdown-content p {
+            margin-bottom: 10px;
+            padding-left: 10px;
+            border-left: 3px solid var(--primary-blue);
+        }
+
+        #breakdown-content strong {
+            color: var(--dark-gray);
+        }
+
+        /* NCLEX Tips */
+        .tip-section {
+            background-color: var(--white);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .tip-section h3 {
+            color: var(--dark-gray);
+            border-bottom: 1px dashed var(--light-blue);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .tip-section h4 {
+            color: var(--medium-gray);
+            margin-top: 15px;
+            margin-bottom: 8px;
+            text-align: left;
+        }
+
+        .tip-section ul {
+            list-style-type: disc;
+            margin-left: 20px;
+            padding: 0;
+        }
+
+        .tip-section li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Kaplan NCLEX Decision Tree Practice</h1>
+
+        <section id="decision-tree-guide">
+            <h2>Kaplan's RN Decision Tree Guide</h2>
+            <div id="decision-tree-intro" style="text-align: center;">
+                <p>Use this interactive guide to understand the 5 steps of Kaplan's RN Decision Tree, a critical tool for breaking down NCLEX questions.</p>
+                <button id="start-guide-btn" class="button">Start Guide</button>
+                <button id="reset-guide-btn" class="button" style="display: none;">Reset Guide</button>
+            </div>
+
+            <div id="decision-tree-steps">
+                <!-- Step 1 -->
+                <div class="tree-step" id="step-1">
+                    <h3>STEP 1: Identify the topic of the question?</h3>
+                    <p>Understanding the core subject of the question is the first step. Is it about cardiac care, neurological issues, communication, delegation, etc.? This helps you narrow down your focus.</p>
+                    <button class="button next-step-btn" data-step="1">Next Step</button>
+                </div>
+                <!-- Step 2 -->
+                <div class="tree-step" id="step-2">
+                    <h3>STEP 2: Are the answers assessment or implementation?</h3>
+                    <p>Determine if the options provided are primarily about gathering information (assessment) or taking action (implementation). For an unstable client, implementation is often prioritized over further assessment, but for a stable client with a new issue, assessment might come first.</p>
+                    <button class="button next-step-btn" data-step="2">Next Step</button>
+                </div>
+                <!-- Step 3 -->
+                <div class="tree-step" id="step-3">
+                    <h3>STEP 3: Apply Maslow: Are the answers physical or psychosocial?</h3>
+                    <p>Maslow's Hierarchy of Needs guides priorities. Physiological needs (e.g., breathing, circulation, nutrition, pain management) take precedence over safety, love/belonging, esteem, or self-actualization needs.</p>
+                    <button class="button next-step-btn" data-step="3">Next Step</button>
+                </div>
+                <!-- Step 4 -->
+                <div class="tree-step" id="step-4">
+                    <h3>STEP 4: Are the answer choices related to ABCs?</h3>
+                    <p>Airway, Breathing, and Circulation (ABCs) are always top priorities in nursing care. If any answer choice directly addresses a compromise in a client's airway, breathing, or circulation, it is likely the most critical intervention.</p>
+                    <button class="button next-step-btn" data-step="4">Next Step</button>
+                </div>
+                <!-- Step 5 -->
+                <div class="tree-step" id="step-5">
+                    <h3>STEP 5: What is the outcome of each of the remaining answers?</h3>
+                    <p>After applying the previous steps, evaluate the remaining plausible answer choices. Consider the immediate and long-term outcomes of each action. Choose the answer that provides the most beneficial and immediate outcome for the client, asking yourself: **“If I could do only one thing and then leave, what would I do?"**</p>
+                    <button class="button next-step-btn" data-step="5">End Guide</button>
+                </div>
+                <div class="tree-step" id="guide-end" style="text-align: center;">
+                    <h3>Guide Completed!</h3>
+                    <p>You've reviewed Kaplan's RN Decision Tree. Now, let's practice!</p>
+                    <button id="start-practice-btn" class="button">Start Practice Questions</button>
+                </div>
+            </div>
+            <p class="ask-yourself">ASK YOURSELF: “If I could do only one thing and then leave, what would I do?"</p>
+        </section>
+
+        <section id="practice-questions">
+            <h2>Practice Questions</h2>
+            <div id="question-area">
+                <!-- Question and options will be rendered here -->
+            </div>
+            <div id="feedback-area"></div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button id="submit-answer-btn" class="button" disabled>Submit Answer</button>
+                <button id="show-breakdown-btn" class="button" disabled>Show Breakdown</button> <!-- Will be hidden if incorrect -->
+            </div>
+            <div id="breakdown-area" style="display: none;">
+                <h3>Decision Tree Breakdown</h3>
+                <div id="breakdown-content"></div>
+            </div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button id="next-question-btn" class="button" style="display: none;">Next Question</button>
+            </div>
+        </section>
+
+        <section id="nclex-tips">
+            <h2>Additional NCLEX Tips</h2>
+            <div class="tip-section">
+                <h3>Who Do You See First? Prioritization Principles</h3>
+                <ul>
+                    <li>**Unstable vs. Stable:** Unstable clients (e.g., declining vital signs, acute distress) take priority over stable ones.</li>
+                    <li>**Unexpected vs. Expected:** Unexpected findings (e.g., sudden change in condition) are prioritized over expected post-op symptoms.</li>
+                    <li>**ABCs:** Airway, Breathing, Circulation are always the highest priority.</li>
+                    <li>**Acute vs. Chronic:** Acute problems generally take precedence over chronic, stable conditions.</li>
+                    <li>**Actual vs. Potential:** An actual problem (e.g., active bleeding) takes priority over a potential problem (e.g., risk for fall).</li>
+                </ul>
+            </div>
+            <div class="tip-section">
+                <h3>Common NCLEX Traps to Avoid</h3>
+                <ul>
+                    <li>Do not ask "Why?” (Can make clients defensive).</li>
+                    <li>Do not leave the client. (Ensure client safety and continuity of care).</li>
+                    <li>Do not persuade the client. (Respect client autonomy).</li>
+                    <li>Do not say, "Don't worry!” (False reassurance dismisses feelings).</li>
+                    <li>Do not pass the buck. (Take responsibility for your actions/assessments).</li>
+                    <li>Do not read into the question. (Answer based only on the information given).</li>
+                    <li>Do not 'do nothing.' (Always take appropriate nursing action).</li>
+                </ul>
+            </div>
+            <div class="tip-section">
+                <h3>Therapeutic Communication Tips</h3>
+                <h4>DO:</h4>
+                <ul>
+                    <li>Respond to feeling tone. (Acknowledge emotions).</li>
+                    <li>Provide information. (Educate clients as needed).</li>
+                    <li>Focus on the client. (Client-centered approach).</li>
+                    <li>Use silence. (Allows client time to process and respond).</li>
+                    <li>Use presence. (Be fully engaged and attentive).</li>
+                </ul>
+                <h4>DO NOT:</h4>
+                <ul>
+                    <li>Ask 'why' questions.</li>
+                    <li>Ask 'yes/no' questions, except in the case of possible self-harm. (Limits communication).</li>
+                    <li>Focus on the nurse. (Avoid self-disclosure that shifts focus).</li>
+                    <li>Explore. (Avoid digging unnecessarily; maintain professional boundaries).</li>
+                    <li>Do not say, “Don't worry!"</li>
+                </ul>
+            </div>
+            <div class="tip-section">
+                <h3>Rules for Delegation</h3>
+                <ul>
+                    <li>**RN Assignment:** Cannot delegate assessment, teaching, or nursing judgment.</li>
+                    <li>**LPN/LVN Assignment:** Assign stable clients with expected outcomes.</li>
+                    <li>**UAP Assignment:** Delegate standard, unchanging procedures.</li>
+                </ul>
+                <h4>Five Rights of Delegation:</h4>
+                <ol>
+                    <li>**Right Task:** (Within scope of practice, stable client).</li>
+                    <li>**Right Circumstances:** (Appropriate workload and client condition).</li>
+                    <li>**Right Person:** (Competent and within their scope of practice).</li>
+                    <li>**Right Communication:** (Clear, concise, specific task, expected results, follow-up).</li>
+                    <li>**Right Supervision:** (Monitor, evaluate, intervene if necessary).</li>
+                </ol>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // --- Kaplan Decision Tree Guide Logic ---
+        const startGuideBtn = document.getElementById('start-guide-btn');
+        const resetGuideBtn = document.getElementById('reset-guide-btn');
+        const decisionTreeIntro = document.getElementById('decision-tree-intro');
+        const decisionTreeStepsContainer = document.getElementById('decision-tree-steps');
+        const guideSteps = document.querySelectorAll('.tree-step');
+        let currentGuideStep = 0;
+
+        function showGuideStep(stepIndex) {
+            guideSteps.forEach((step, index) => {
+                step.classList.remove('active');
+                if (index === stepIndex) {
+                    step.classList.add('active');
+                }
+            });
+            // Hide "Next Step" button for the last step in the conceptual steps
+            if (stepIndex === guideSteps.length - 2) { // -2 because 'guide-end' is also a 'tree-step'
+                document.querySelector(`#step-${stepIndex + 1} .next-step-btn`).style.display = 'none';
+                document.getElementById('guide-end').classList.add('active'); // Show guide end message
+            } else {
+                guideSteps.forEach(step => {
+                    const nextBtn = step.querySelector('.next-step-btn');
+                    if (nextBtn) nextBtn.style.display = 'inline-block';
+                });
+                document.getElementById('guide-end').classList.remove('active'); // Hide guide end if not at the end
+            }
+        }
+
+        function startGuide() {
+            decisionTreeIntro.style.display = 'none';
+            resetGuideBtn.style.display = 'inline-block';
+            currentGuideStep = 0;
+            showGuideStep(currentGuideStep);
+            document.getElementById('start-practice-btn').style.display = 'none'; // Hide practice button while in guide
+        }
+
+        function resetGuide() {
+            decisionTreeIntro.style.display = 'block';
+            resetGuideBtn.style.display = 'none';
+            guideSteps.forEach(step => step.classList.remove('active'));
+            document.getElementById('guide-end').classList.remove('active'); // Hide guide end message
+            currentGuideStep = 0;
+            // Ensure next buttons are visible if guide starts over
+            guideSteps.forEach(step => {
+                const nextBtn = step.querySelector('.next-step-btn');
+                if (nextBtn) nextBtn.style.display = 'inline-block';
+            });
+            document.getElementById('start-practice-btn').style.display = 'inline-block'; // Show practice button after guide reset
+        }
+
+        startGuideBtn.addEventListener('click', startGuide);
+        resetGuideBtn.addEventListener('click', resetGuide);
+
+        decisionTreeStepsContainer.addEventListener('click', (event) => {
+            if (event.target.classList.contains('next-step-btn')) {
+                const stepNum = parseInt(event.target.dataset.step);
+                if (stepNum < guideSteps.length - 1) { // -1 because 'guide-end' is also a 'tree-step' for rendering purposes
+                    currentGuideStep++;
+                    showGuideStep(currentGuideStep);
+                } else if (stepNum === guideSteps.length - 1) { // Last actual step
+                    document.querySelector(`#step-${stepNum} .next-step-btn`).style.display = 'none';
+                    document.getElementById('guide-end').classList.add('active');
+                    document.getElementById('start-practice-btn').style.display = 'inline-block';
+                }
+            }
+        });
+
+        // --- Practice Questions Logic ---
+        const questions = [
+            {
+                questionText: "A client is admitted to the emergency department with severe abdominal pain, nausea, and vomiting. The nurse notes the client's blood pressure is 90/60 mmHg, heart rate is 120 bpm, and respiratory rate is 24 bpm. Which action should the nurse prioritize?",
+                options: [
+                    "Administer an antiemetic medication.",
+                    "Obtain a detailed pain history from the client.",
+                    "Initiate intravenous fluid resuscitation.",
+                    "Prepare the client for an abdominal CT scan."
+                ],
+                correctAnswerIndex: 2,
+                kaplanBreakdown: [
+                    "**STEP 1: Identify Topic:** The topic is a client presenting with signs of hypovolemic shock (low BP, high HR, abdominal pain, nausea, vomiting) requiring immediate intervention.",
+                    "**STEP 2: Assessment or Implementation?** The client is unstable (hypotension, tachycardia). While assessment is ongoing, the immediate priority is to stabilize the client. Therefore, implementation (fluid resuscitation) is a higher priority than further assessment (detailed pain history).",
+                    "**STEP 3: Maslow's Hierarchy:** Physiological needs are paramount. Circulatory support (addressing hypovolemia) is a basic physiological need that takes precedence over comfort (antiemetic) or diagnostic procedures (CT scan) at this immediate stage.",
+                    "**STEP 4: ABCs:** Airway, Breathing, Circulation. The client's blood pressure and heart rate indicate circulatory compromise (low BP, high HR). Restoring circulation is critical. Initiating IV fluids directly addresses the 'C' in ABCs.",
+                    "**STEP 5: Outcome of Remaining Answers:**\n    *   'Administer an antiemetic': Addresses comfort, but not the immediate life-threatening circulatory compromise.\n    *   'Obtain a detailed pain history': Important, but assessment comes after life-saving interventions for an unstable client.\n    *   'Initiate intravenous fluid resuscitation': Directly addresses hypovolemia and circulatory collapse, improving blood pressure and heart rate. This is a life-saving action.\n    *   'Prepare for CT scan': A diagnostic procedure, not an immediate stabilizing intervention for an unstable client. This would only happen after stabilization."
+                ]
+            },
+            {
+                questionText: "A nurse is caring for a client with a new colostomy. The client is withdrawn and states, 'I don't want anyone to see me like this.' What is the most appropriate nursing response?",
+                options: [
+                    "\"Don't worry, you'll get used to it over time.\"",
+                    "\"Many people live full lives with a colostomy. Let's talk about how to care for it.\"",
+                    "\"I understand this is difficult for you. What are your biggest concerns right now?\"",
+                    "\"Why are you feeling this way?\""
+                ],
+                correctAnswerIndex: 2,
+                kaplanBreakdown: [
+                    "**STEP 1: Identify Topic:** The topic is therapeutic communication with a client experiencing body image disturbance and emotional distress related to a new colostomy.",
+                    "**STEP 2: Assessment or Implementation?** The client is expressing feelings and distress. The priority is to *assess* their feelings and concerns before *implementing* teaching or reassurance. The nurse needs to understand the client's perspective first.",
+                    "**STEP 3: Maslow's Hierarchy:** After basic physiological needs are met, safety and security, and then love and belonging/esteem needs come into play. The client's statement indicates a threat to self-esteem and body image. Addressing these psychosocial needs by exploring their feelings is crucial.",
+                    "**STEP 4: ABCs:** Not directly applicable to this question as it's a psychosocial/communication scenario, not an immediate physiological emergency.",
+                    "**STEP 5: Outcome of Remaining Answers:**\n    *   '\"Don't worry, you'll get used to it over time.\"' - This is a false reassurance and dismisses the client's feelings (NCLEX Trap: Don't say 'Don't worry!').\n    *   '\"Many people live full lives... Let's talk about how to care for it.\"' - While true, it jumps to implementation/teaching without acknowledging the client's current emotional state and concerns.\n    *   '\"I understand this is difficult for you. What are your biggest concerns right now?\"' - This is therapeutic communication. It acknowledges the client's feelings and opens a dialogue to assess their specific concerns, which is essential for planning appropriate care (Therapeutic Communication Tip: Respond to feeling tone, focus on the client).\n    *   '\"Why are you feeling this way?\"' - This is a 'why' question, which is generally avoided in therapeutic communication as it can make the client feel defensive (NCLEX Trap: Do not ask 'Why?')."
+                ]
+            },
+            {
+                questionText: "A nurse is assigned to care for four clients. Which client should the nurse assess first?",
+                options: [
+                    "A client with a chronic obstructive pulmonary disease (COPD) who reports dyspnea after walking to the bathroom.",
+                    "A client with diabetes mellitus whose blood glucose is 180 mg/dL after breakfast.",
+                    "A client who underwent an appendectomy 24 hours ago and reports pain level of 6/10.",
+                    "A client with pneumonia whose oxygen saturation suddenly dropped from 94% to 88%."
+                ],
+                correctAnswerIndex: 3,
+                kaplanBreakdown: [
+                    "**STEP 1: Identify Topic:** Prioritization of care for multiple clients. This involves identifying the most unstable or critical client.",
+                    "**STEP 2: Assessment or Implementation?** All options describe situations requiring immediate assessment, but the core of prioritization is deciding *who* to *intervene* for first after initial observation. The question asks who to 'assess first', implying identifying the most critical situation for immediate action/assessment.",
+                    "**STEP 3: Maslow's Hierarchy:** All clients have physiological needs. We need to identify the most threatened physiological need.",
+                    "**STEP 4: ABCs:**\n    *   COPD client: Dyspnea after exertion is somewhat expected, though requires assessment, not an immediate ABC crisis.\n    *   Diabetes client: BG 180 is elevated but not immediately life-threatening; requires intervention but not an ABC emergency.\n    *   Appendectomy client: Pain 6/10 requires pain management, but the client is 24 hours post-op, which is not an acute ABC issue.\n    *   Pneumonia client: A sudden drop in O2 saturation from 94% to 88% indicates acute respiratory distress/compromise (Breathing priority – 'B' in ABCs). This is an immediate threat to oxygenation.",
+                    "**STEP 5: Outcome of Remaining Answers:**\n    *   COPD dyspnea: Expected to some degree, not an acute, sudden decline.\n    *   Elevated BG: Needs management but not an acute life-threatening event.\n    *   Post-op pain: Needs pain relief, but not a physiological emergency compared to severe respiratory distress.\n    *   Sudden O2 drop: This indicates an acute respiratory compromise, which is an immediate threat to life. Addressing oxygenation is the highest priority 'if I could do only one thing and then leave'."
+                ]
+            },
+            {
+                questionText: "The nurse receives a shift report. Which client should the nurse see FIRST?",
+                options: [
+                    "A client admitted yesterday with pneumonia who has a temperature of 100.8°F (38.2°C).",
+                    "A client with a newly placed nasogastric tube (NGT) who is complaining of mild abdominal discomfort.",
+                    "A client 2 hours post-cardiac catheterization with a faint pedal pulse on the affected extremity.",
+                    "A client with a urinary tract infection (UTI) who reports burning during urination."
+                ],
+                correctAnswerIndex: 2,
+                kaplanBreakdown: [
+                    "**STEP 1: Identify Topic:** Prioritization of client care. Identifying the client with the most immediate and potentially life-threatening issue.",
+                    "**STEP 2: Assessment or Implementation?** All situations require some level of assessment, but the core issue is which client requires the most urgent *intervention* after initial assessment.",
+                    "**STEP 3: Maslow's Hierarchy:** All options involve physiological needs. We need to determine which physiological need is most acutely threatened.",
+                    "**STEP 4: ABCs:**\n    *   Pneumonia with low-grade fever: Expected finding for pneumonia, not an immediate ABC issue.\n    *   NGT with mild abdominal discomfort: Discomfort is an expected finding with NGT insertion; requires further assessment but not an acute ABC issue.\n    *   Post-cardiac catheterization with faint pedal pulse: This indicates potential arterial occlusion or decreased perfusion to the extremity, which is a *circulatory* (C) issue. A faint pulse represents a significant change from expected post-procedure assessment and is an emergency.\n    *   UTI with burning: An expected symptom of UTI; requires intervention but not an immediate ABC emergency.",
+                    "**STEP 5: Outcome of Remaining Answers:**\n    *   Low-grade fever in pneumonia: Common, requires monitoring, not critical right now.\n    *   Mild NGT discomfort: Expected, requires assessment, but not immediately life-threatening.\n    *   Faint pedal pulse post-cardiac cath: This is an *unexpected* and *unstable* finding that could lead to loss of limb if not immediately addressed. Compromised circulation is a critical physiological need. If I could do only one thing, I would assess and intervene for this immediately to restore perfusion.\n    *   Burning with urination: Expected UTI symptom, requires intervention but is not an emergency."
+                ]
+            },
+            {
+                questionText: "The nurse is preparing to delegate tasks to an unlicensed assistive personnel (UAP). Which task is appropriate for the nurse to delegate?",
+                options: [
+                    "Administering a prescribed oral pain medication to a client.",
+                    "Teaching a client how to use a nebulizer.",
+                    "Assisting a client with ambulation who has a stable gait after knee surgery.",
+                    "Assessing the vital signs of a client admitted 15 minutes ago with chest pain."
+                ],
+                correctAnswerIndex: 2,
+                kaplanBreakdown: [
+                    "**STEP 1: Identify Topic:** Delegation of nursing tasks to UAP. This requires knowledge of the scope of practice for UAP.",
+                    "**STEP 2: Assessment or Implementation?** The question asks what task is *appropriate* to delegate, implying an *implementation* of the delegation rule.",
+                    "**STEP 3: Maslow's Hierarchy:** Not directly applicable to delegation rules, which are based on scope of practice and professional judgment.",
+                    "**STEP 4: ABCs:** Not directly applicable. This is a question about delegation principles.",
+                    "**STEP 5: Outcome of Remaining Answers (applying delegation rules):**\n    *   'Administering a prescribed oral pain medication': Medication administration is outside the scope of practice for UAP (requires nursing judgment).\n    *   'Teaching a client how to use a nebulizer': Teaching is a nursing responsibility and cannot be delegated to UAP.\n    *   'Assisting a client with ambulation who has a stable gait after knee surgery': Assisting with activities of daily living (ADLs) for a *stable* client with an *expected outcome* (stable gait) is within the scope of practice for a UAP. This is a 'standard, unchanging procedure' (Rules for Delegation: UAP Assignment).\n    *   'Assessing the vital signs of a client admitted 15 minutes ago with chest pain': While UAP can take vital signs, assessing an *unstable* client (chest pain) or a client with a *new admission* that requires *assessment* and *nursing judgment* is an RN responsibility (Rules for Delegation: RN cannot delegate assessment or nursing judgment)."
+                ]
+            },
+            {
+                questionText: "A client with a history of heart failure is prescribed a new diuretic. The nurse identifies the nursing diagnosis 'Risk for Fluid Volume Deficit.' Which assessment finding would best support this diagnosis?",
+                options: [
+                    "Client reports increased urine output.",
+                    "Client reports feeling thirsty.",
+                    "Client's blood pressure is 118/72 mmHg and heart rate is 88 bpm.",
+                    "Client has moist mucous membranes."
+                ],
+                correctAnswerIndex: 1,
+                kaplanBreakdown: [
+                    "**STEP 1: Identify Topic:** Nursing assessment related to 'Risk for Fluid Volume Deficit' in a client on a diuretic. The question asks for an *assessment finding*.",
+                    "**STEP 2: Assessment or Implementation?** The question specifically asks for an *assessment finding* that supports a diagnosis, so we are looking for assessment data.",
+                    "**STEP 3: Maslow's Hierarchy:** Physiological needs (fluid balance) are the focus. Symptoms directly related to fluid balance are key.",
+                    "**STEP 4: ABCs:** Not directly applicable. While fluid status can impact circulation, the question is about identifying a specific *risk* factor from assessment, not an immediate ABC crisis.",
+                    "**STEP 5: Outcome of Remaining Answers:**\n    *   'Client reports increased urine output': This is an *expected effect* of a diuretic and, while related to fluid, doesn't directly *support a risk* for deficit in a negative way; it's the diuretic doing its job.\n    *   'Client reports feeling thirsty': Thirst is the body's physiological response to dehydration and is a direct subjective indicator of a potential fluid volume deficit. This directly supports the 'risk for fluid volume deficit' diagnosis.\n    *   'Client's blood pressure is 118/72 mmHg and heart rate is 88 bpm': These vital signs are within normal limits and do not indicate a fluid volume deficit (which would typically show hypotension and tachycardia).\n    *   'Client has moist mucous membranes': Moist mucous membranes indicate adequate hydration, which would *refute* a fluid volume deficit, not support the *risk* for one."
+                ]
+            },
+            {
+                questionText: "A nurse observes a new UAP taking a client's blood pressure using an incorrect cuff size. The client's blood pressure reading is significantly elevated. What is the nurse's *initial* action?",
+                options: [
+                    "Inform the UAP about the incorrect cuff size and explain the proper procedure.",
+                    "Report the UAP's error to the nursing supervisor immediately.",
+                    "Re-take the client's blood pressure with an appropriately sized cuff.",
+                    "Document the elevated blood pressure reading in the client's chart."
+                ],
+                correctAnswerIndex: 2,
+                kaplanBreakdown: [
+                    "**STEP 1: Identify Topic:** Prioritization of actions when a UAP makes an error affecting client data, and the safety implications. It involves both client safety and staff education.",
+                    "**STEP 2: Assessment or Implementation?** The client has an *elevated* BP reading which might be inaccurate due to the cuff. The priority is to ensure accurate *assessment* of the client's actual physiological status before any other actions.",
+                    "**STEP 3: Maslow's Hierarchy:** Physiological needs are paramount. An accurate blood pressure is essential for understanding the client's circulatory status and safety.",
+                    "**STEP 4: ABCs:** Although not a direct ABC crisis, an inaccurate vital sign reading impacts the 'C' (Circulation) assessment. Ensuring accurate data about circulation is a priority for client safety.",
+                    "**STEP 5: Outcome of Remaining Answers:**\n    *   'Inform the UAP...': This is an important step for education, but not the *initial* action when client data might be compromised.\n    *   'Report the UAP's error...': This is also important for accountability and ongoing training, but not the *immediate* priority for the client's current safety.\n    *   'Re-take the client's blood pressure with an appropriately sized cuff.': This is the *initial* and most crucial action. It directly addresses the potential inaccuracy of the vital sign, ensuring the client's actual circulatory status is correctly assessed. This prioritizes client safety by obtaining accurate data.\n    *   'Document the elevated blood pressure...': Documenting an potentially inaccurate reading could lead to inappropriate interventions or missed issues. The nurse must verify accuracy first."
+                ]
+            },
+            {
+                questionText: "A client is scheduled for a surgical procedure. The nurse enters the room and the client states, 'I'm so scared about the surgery. What if I don't wake up?' What is the most therapeutic response by the nurse?",
+                options: [
+                    "\"Don't worry, our surgeons are highly skilled.\"",
+                    "\"You'll be fine, everyone gets nervous before surgery.\"",
+                    "\"It's normal to feel scared. Can you tell me more about what specifically worries you?\"",
+                    "\"I'm sure you've discussed these fears with the doctor, haven't you?\""
+                ],
+                correctAnswerIndex: 2,
+                kaplanBreakdown: [
+                    "**STEP 1: Identify Topic:** Therapeutic communication with a client experiencing anxiety related to impending surgery.",
+                    "**STEP 2: Assessment or Implementation?** The client is expressing fear, which is an emotional state. The most appropriate initial action is to *assess* the client's specific concerns and feelings (Therapeutic Communication Tip: Respond to feeling tone, focus on the client) rather than immediately trying to reassure or provide information.",
+                    "**STEP 3: Maslow's Hierarchy:** The client's safety/security needs are threatened psychologically. Addressing these emotional needs by allowing them to express their fears is important for psychological comfort.",
+                    "**STEP 4: ABCs:** Not directly applicable; this is a psychosocial and communication scenario.",
+                    "**STEP 5: Outcome of Remaining Answers:**\n    *   '\"Don't worry, our surgeons are highly skilled.\"': This is false reassurance and dismisses the client's feelings (NCLEX Trap: Do not say 'Don't worry!').\n    *   '\"You'll be fine, everyone gets nervous before surgery.\"': This is also false reassurance and minimizes the client's individual experience.\n    *   '\"It's normal to feel scared. Can you tell me more about what specifically worries you?\"': This response validates the client's feelings, acknowledges their fear as normal, and then opens the door for further *assessment* of their specific anxieties. This is highly therapeutic and client-centered.\n    *   '\"I'm sure you've discussed these fears with the doctor, haven't you?\"': This is a 'yes/no' question which closes communication, and it shifts responsibility away from the nurse (Therapeutic Communication Tip: Do not ask 'yes/no' questions; Do not pass the buck)."
+                ]
+            }
+            // Add more questions here
+        ];
+
+        let currentQuestionIndex = 0;
+        let selectedAnswer = null;
+
+        const questionArea = document.getElementById('question-area');
+        const feedbackArea = document.getElementById('feedback-area');
+        const submitAnswerBtn = document.getElementById('submit-answer-btn');
+        const showBreakdownBtn = document.getElementById('show-breakdown-btn');
+        const breakdownArea = document.getElementById('breakdown-area');
+        const breakdownContent = document.getElementById('breakdown-content');
+        const nextQuestionBtn = document.getElementById('next-question-btn');
+        const startPracticeBtn = document.getElementById('start-practice-btn');
+
+        function renderQuestion(index) {
+            const q = questions[index];
+            questionArea.innerHTML = `
+                <p class="question-text">${index + 1}. ${q.questionText}</p>
+                <ul class="options-list">
+                    ${q.options.map((option, i) => `
+                        <li>
+                            <label>
+                                <input type="radio" name="answer" value="${i}" ${selectedAnswer === i ? 'checked' : ''}>
+                                ${option}
+                            </label>
+                        </li>
+                    `).join('')}
+                </ul>
+            `;
+            feedbackArea.style.display = 'none';
+            feedbackArea.className = '';
+            breakdownArea.style.display = 'none';
+            submitAnswerBtn.disabled = true;
+            showBreakdownBtn.style.display = 'none'; // Hide breakdown button initially
+            nextQuestionBtn.style.display = 'none';
+            selectedAnswer = null; // Reset selected answer for new question
+
+            // Enable all radio buttons for new question
+            document.querySelectorAll('input[name="answer"]').forEach(radio => {
+                radio.disabled = false;
+                radio.addEventListener('change', () => {
+                    selectedAnswer = parseInt(radio.value);
+                    submitAnswerBtn.disabled = false;
+                });
+            });
+            submitAnswerBtn.style.display = 'inline-block';
+        }
+
+        function showBreakdown() {
+            const q = questions[currentQuestionIndex];
+            breakdownContent.innerHTML = q.kaplanBreakdown.map(step => `<p>${step}</p>`).join('');
+            breakdownArea.style.display = 'block';
+        }
+
+        function checkAnswer() {
+            if (selectedAnswer === null) {
+                alert('Please select an answer.');
+                return;
+            }
+
+            const q = questions[currentQuestionIndex];
+            feedbackArea.style.display = 'block';
+            submitAnswerBtn.disabled = true;
+            nextQuestionBtn.style.display = 'inline-block';
+
+            if (selectedAnswer === q.correctAnswerIndex) {
+                feedbackArea.textContent = 'Correct! Great job!';
+                feedbackArea.classList.remove('feedback-incorrect');
+                feedbackArea.classList.add('feedback-correct');
+                showBreakdownBtn.style.display = 'inline-block'; // Only show if correct, so user can review
+            } else {
+                feedbackArea.textContent = `Incorrect. The correct answer was: "${q.options[q.correctAnswerIndex]}".`;
+                feedbackArea.classList.remove('feedback-correct');
+                feedbackArea.classList.add('feedback-incorrect');
+                showBreakdown(); // Automatically show breakdown if incorrect
+                showBreakdownBtn.style.display = 'none'; // Hide button as breakdown is already shown
+            }
+            // Disable all radio buttons after submission
+            document.querySelectorAll('input[name="answer"]').forEach(radio => {
+                radio.disabled = true;
+            });
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                renderQuestion(currentQuestionIndex);
+            } else {
+                questionArea.innerHTML = "<p class='question-text' style='text-align: center;'>You have completed all practice questions for now! Well done!</p>";
+                submitAnswerBtn.style.display = 'none';
+                showBreakdownBtn.style.display = 'none';
+                nextQuestionBtn.style.display = 'none';
+                feedbackArea.style.display = 'none';
+                breakdownArea.style.display = 'none';
+            }
+        }
+
+        submitAnswerBtn.addEventListener('click', checkAnswer);
+        showBreakdownBtn.addEventListener('click', showBreakdown);
+        nextQuestionBtn.addEventListener('click', nextQuestion);
+        startPracticeBtn.addEventListener('click', () => {
+            document.getElementById('practice-questions').scrollIntoView({ behavior: 'smooth' });
+            renderQuestion(currentQuestionIndex);
+            document.getElementById('start-practice-btn').style.display = 'none';
+            document.getElementById('practice-questions').style.display = 'block'; // Ensure practice section is visible
+        });
+
+        // Initial state on page load
+        document.getElementById('practice-questions').style.display = 'block';
+        questionArea.innerHTML = "<p class='question-text' style='text-align: center;'>Start the guide above to learn about the Decision Tree, or click 'Start Practice Questions' below the guide to jump straight to practice!</p>";
+        submitAnswerBtn.style.display = 'none';
+        showBreakdownBtn.style.display = 'none';
+        nextQuestionBtn.style.display = 'none';
+        feedbackArea.style.display = 'none';
+        breakdownArea.style.display = 'none';
+        document.getElementById('start-practice-btn').style.display = 'inline-block';
+        document.getElementById('guide-end').style.display = 'block';
+    </script>
+</body>
+</html>
