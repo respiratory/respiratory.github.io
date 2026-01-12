@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedCheck Pro: Clinical Logic</title>
+    <style>
+        :root {
+            --bg: #f4f7f6;
+            --panel-bg: #ffffff;
+            --primary: #2c3e50;
+            --accent: #3498db;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --text: #34495e;
+            --border: #dcdde1;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #game-wrapper {
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--primary);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .stats-group { display: flex; gap: 30px; font-weight: bold; }
+        .stat-item { font-size: 1.1rem; }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 320px;
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--panel-bg);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            border-top: 5px solid var(--accent);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            font-size: 1rem;
+            text-transform: uppercase;
+            color: var(--accent);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .info-row {
+            margin-bottom: 12px;
+            padding: 8px;
+            border-radius: 6px;
+            background: #f9f9f9;
+        }
+
+        .info-label {
+            font-size: 0.75rem;
+            color: #7f8c8d;
+            font-weight: bold;
+            display: block;
+        }
+
+        .info-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* Verification Panel */
+        .verif-panel {
+            background: #f8f9fa;
+            border-left: 5px solid #95a5a6;
+        }
+
+        .verif-item {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .verif-label { font-weight: bold; font-size: 0.85rem; margin-bottom: 8px; }
+
+        .toggle-group {
+            display: flex;
+            gap: 5px;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid var(--border);
+            background: #eee;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.8rem;
+            border-radius: 4px;
+            transition: 0.2s;
+        }
+
+        .toggle-btn.active-match { background: var(--success); color: white; border-color: var(--success); }
+        .toggle-btn.active-error { background: var(--danger); color: white; border-color: var(--danger); }
+
+        /* Master Controls */
+        .controls {
+            grid-column: span 3;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .main-btn {
+            padding: 18px 50px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-admin { background: var(--success); color: white; }
+        .btn-flag { background: var(--danger); color: white; }
+        .main-btn:hover { transform: translateY(-3px); filter: brightness(1.1); }
+
+        /* Overlay */
+        #feedback-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        #explanation { margin: 20px 0; line-height: 1.6; color: #666; }
+
+        @media (max-width: 900px) {
+            .game-grid { grid-template-columns: 1fr; }
+            .controls { grid-column: span 1; flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="game-wrapper">
+        <header>
+            <div>
+                <h1 style="margin:0; font-size: 1.4rem;">MEDCHECK PRO 2.0</h1>
+                <small>Advanced Medication Administration Sim</small>
+            </div>
+            <div class="stats-group">
+                <div class="stat-item">Points: <span id="score">0</span></div>
+                <div class="stat-item">Streak: <span id="streak">0</span> 🔥</div>
+                <div class="stat-item">Lives: <span id="lives">❤️❤️❤️</span></div>
+            </div>
+        </header>
+
+        <div class="game-grid">
+            <!-- Order Panel -->
+            <div class="card">
+                <h2>📋 Electronic Health Record</h2>
+                <div class="info-row">
+                    <span class="info-label">PATIENT NAME & DOB</span>
+                    <span class="info-value" id="ord-pt">---</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">MEDICATION</span>
+                    <span class="info-value" id="ord-drug" style="color: #2980b9;">---</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">DOSAGE</span>
+                    <span class="info-value" id="ord-dose">---</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">ROUTE</span>
+                    <span class="info-value" id="ord-route">---</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">SCHEDULED TIME</span>
+                    <span class="info-value" id="ord-time">---</span>
+                </div>
+            </div>
+
+            <!-- Scanning Panel -->
+            <div class="card">
+                <h2>🏷️ Bedside Scan Result</h2>
+                <div class="info-row">
+                    <span class="info-label">WRISTBAND ID</span>
+                    <span class="info-value" id="lab-pt">---</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">SCANNED MEDICATION</span>
+                    <span class="info-value" id="lab-drug" style="color: #c0392b;">---</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">STRENGTH / VOLUME</span>
+                    <span class="info-value" id="lab-dose">---</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">FORM</span>
+                    <span class="info-value" id="lab-route">---</span>
+                </div>
+                <div class="info-row" style="background: #fff3e0; border: 1px solid #ffe0b2;">
+                    <span class="info-label" style="color: #e67e22;">CURRENT SYSTEM TIME</span>
+                    <span class="info-value" id="sys-time">---</span>
+                </div>
+            </div>
+
+            <!-- Logic Verification -->
+            <div class="card verif-panel">
+                <h2>✅ Verification</h2>
+                
+                <div class="verif-item" data-right="patient">
+                    <span class="verif-label">1. Right Patient?</span>
+                    <div class="toggle-group">
+                        <button class="toggle-btn" onclick="setRight('patient', true)">MATCH</button>
+                        <button class="toggle-btn" onclick="setRight('patient', false)">ERROR</button>
+                    </div>
+                </div>
+
+                <div class="verif-item" data-right="drug">
+                    <span class="verif-label">2. Right Drug?</span>
+                    <div class="toggle-group">
+                        <button class="toggle-btn" onclick="setRight('drug', true)">MATCH</button>
+                        <button class="toggle-btn" onclick="setRight('drug', false)">ERROR</button>
+                    </div>
+                </div>
+
+                <div class="verif-item" data-right="dose">
+                    <span class="verif-label">3. Right Dose?</span>
+                    <div class="toggle-group">
+                        <button class="toggle-btn" onclick="setRight('dose', true)">MATCH</button>
+                        <button class="toggle-btn" onclick="setRight('dose', false)">ERROR</button>
+                    </div>
+                </div>
+
+                <div class="verif-item" data-right="route">
+                    <span class="verif-label">4. Right Route?</span>
+                    <div class="toggle-group">
+                        <button class="toggle-btn" onclick="setRight('route', true)">MATCH</button>
+                        <button class="toggle-btn" onclick="setRight('route', false)">ERROR</button>
+                    </div>
+                </div>
+
+                <div class="verif-item" data-right="time">
+                    <span class="verif-label">5. Right Time?</span>
+                    <div class="toggle-group">
+                        <button class="toggle-btn" onclick="setRight('time', true)">MATCH</button>
+                        <button class="toggle-btn" onclick="setRight('time', false)">ERROR</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="main-btn btn-flag" onclick="submitDecision('flag')">REPORT ERROR</button>
+                <button class="main-btn btn-admin" onclick="submitDecision('admin')">ADMINISTER MED</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="feedback-overlay">
+        <div class="modal">
+            <h1 id="result-title">Title</h1>
+            <p id="explanation">Explanation goes here.</p>
+            <button class="main-btn btn-admin" onclick="startNewRound()">NEXT CASE</button>
+        </div>
+    </div>
+
+    <script>
+        // Game Constants & Data
+        const DRUGS = [
+            { name: "Hydralazine", lasa: "Hydroxyzine" },
+            { name: "Metoprolol Succinate", lasa: "Metoprolol Tartrate" },
+            { name: "Prednisone", lasa: "Prednisolone" },
+            { name: "Humalog", lasa: "Novolog" },
+            { name: "Zyrtec", lasa: "Xanax" },
+            { name: "Amlodipine", lasa: "Nimodipine" }
+        ];
+
+        const PATIENTS = [
+            { name: "Jameson, Robert", dob: "04/12/1955" },
+            { name: "James, Roberta", dob: "04/12/1955" },
+            { name: "Garcia, Maria", dob: "11/30/1982" },
+            { name: "Garnier, Maria", dob: "11/30/1982" },
+            { name: "Smith, John D.", dob: "01/01/1970" }
+        ];
+
+        const ROUTES = ["PO (Oral)", "IV Push", "Subcutaneous", "IM (Intramuscular)", "SL (Sublingual)"];
+
+        // Game State
+        let score = 0;
+        let streak = 0;
+        let lives = 3;
+        let currentAnswers = { patient: null, drug: null, dose: null, route: null, time: null };
+        let scenarioTruth = {};
+
+        function generateScenario() {
+            // Pick a base patient and drug
+            const basePt = PATIENTS[Math.floor(Math.random() * PATIENTS.length)];
+            const baseDrug = DRUGS[Math.floor(Math.random() * DRUGS.length)];
+            const baseRoute = ROUTES[Math.floor(Math.random() * ROUTES.length)];
+            const baseHour = Math.floor(Math.random() * 12) + 8; // 0800 to 2000
+            
+            // Randomly decide which (if any) rights will be wrong
+            // 40% chance of a perfect match, 60% chance of 1-2 errors
+            const errorRights = [];
+            const rights = ['patient', 'drug', 'dose', 'route', 'time'];
+            
+            if (Math.random() > 0.4) {
+                const numErrors = Math.random() > 0.85 ? 2 : 1;
+                for(let i=0; i<numErrors; i++) {
+                    const errorChoice = rights[Math.floor(Math.random() * rights.length)];
+                    if(!errorRights.includes(errorChoice)) errorRights.push(errorChoice);
+                }
+            }
+
+            // Construct Order
+            const order = {
+                pt: `${basePt.name} (DOB: ${basePt.dob})`,
+                drug: baseDrug.name,
+                dose: "10 mg",
+                route: baseRoute,
+                time: `${baseHour.toString().padStart(2, '0')}:00`
+            };
+
+            // Construct Label based on errors
+            const label = { ...order };
+            label.sysTime = order.time; // default match
+
+            if (errorRights.includes('patient')) {
+                const altPt = PATIENTS.find(p => p.name !== basePt.name);
+                label.pt = `${altPt.name} (DOB: ${altPt.dob})`;
+            }
+            if (errorRights.includes('drug')) {
+                label.drug = baseDrug.lasa;
+            }
+            if (errorRights.includes('dose')) {
+                label.dose = "100 mg"; // Decimal error danger!
+            }
+            if (errorRights.includes('route')) {
+                label.route = baseRoute === "PO (Oral)" ? "IV Push" : "PO (Oral)";
+            }
+            if (errorRights.includes('time')) {
+                const offTime = parseInt(baseHour) + 2;
+                label.sysTime = `${offTime.toString().padStart(2, '0')}:15`;
+            }
+
+            // Special Case: Correct Unit Conversion (not an error!)
+            // Sometimes we show 1g in order and 1000mg on label. 
+            // If dose is NOT in errorRights, 20% chance to show a conversion match.
+            if (!errorRights.includes('dose') && Math.random() > 0.8) {
+                order.dose = "1 g";
+                label.dose = "1000 mg";
+            }
+
+            scenarioTruth = {
+                patient: !errorRights.includes('patient'),
+                drug: !errorRights.includes('drug'),
+                dose: !errorRights.includes('dose'),
+                route: !errorRights.includes('route'),
+                time: !errorRights.includes('time'),
+                hasAnyError: errorRights.length > 0,
+                errorDetails: errorRights
+            };
+
+            updateUI(order, label);
+        }
+
+        function updateUI(order, label) {
+            document.getElementById('ord-pt').innerText = order.pt;
+            document.getElementById('ord-drug').innerText = order.drug;
+            document.getElementById('ord-dose').innerText = order.dose;
+            document.getElementById('ord-route').innerText = order.route;
+            document.getElementById('ord-time').innerText = order.time;
+
+            document.getElementById('lab-pt').innerText = label.pt;
+            document.getElementById('lab-drug').innerText = label.drug;
+            document.getElementById('lab-dose').innerText = label.dose;
+            document.getElementById('lab-route').innerText = label.route;
+            document.getElementById('sys-time').innerText = label.sysTime;
+
+            // Reset verifications
+            currentAnswers = { patient: null, drug: null, dose: null, route: null, time: null };
+            document.querySelectorAll('.toggle-btn').forEach(b => {
+                b.classList.remove('active-match', 'active-error');
+            });
+        }
+
+        function setRight(right, isMatch) {
+            currentAnswers[right] = isMatch;
+            const container = document.querySelector(`[data-right="${right}"]`);
+            const btns = container.querySelectorAll('.toggle-btn');
+            
+            btns[0].classList.toggle('active-match', isMatch);
+            btns[0].classList.toggle('active-error', false);
+            btns[1].classList.toggle('active-match', false);
+            btns[1].classList.toggle('active-error', !isMatch);
+        }
+
+        function submitDecision(action) {
+            // Check if all assessments are made
+            if (Object.values(currentAnswers).includes(null)) {
+                alert("You must assess all 5 Rights before taking action!");
+                return;
+            }
+
+            // 1. Check if their individual right/wrong assessments are correct
+            let assessmentCorrect = true;
+            for (let key in currentAnswers) {
+                if (currentAnswers[key] !== scenarioTruth[key]) {
+                    assessmentCorrect = false;
+                }
+            }
+
+            // 2. Check if their final action (Administer vs Flag) is correct
+            const actionCorrect = (action === 'admin' && !scenarioTruth.hasAnyError) || 
+                                  (action === 'flag' && scenarioTruth.hasAnyError);
+
+            if (assessmentCorrect && actionCorrect) {
+                const pointsEarned = 100 + (streak * 20);
+                score += pointsEarned;
+                streak++;
+                showFeedback("CORRECT ASSESSMENT", `You identified all rights correctly. +${pointsEarned} points.`, true);
+            } else {
+                lives--;
+                streak = 0;
+                let msg = "Clinical Error: ";
+                if (!assessmentCorrect) msg += "Your verification of the 5 rights was incorrect. ";
+                if (!actionCorrect) msg += action === 'admin' ? "You administered a med with an error!" : "You flagged a perfectly safe medication.";
+                
+                showFeedback("ERROR COMMITTED", msg, false);
+            }
+            
+            updateStats();
+        }
+
+        function showFeedback(title, text, success) {
+            const overlay = document.getElementById('feedback-overlay');
+            const t = document.getElementById('result-title');
+            t.innerText = title;
+            t.style.color = success ? 'var(--success)' : 'var(--danger)';
+            document.getElementById('explanation').innerText = text;
+            overlay.style.display = 'flex';
+        }
+
+        function updateStats() {
+            document.getElementById('score').innerText = score;
+            document.getElementById('streak').innerText = streak;
+            document.getElementById('lives').innerText = "❤️".repeat(lives) + "🖤".repeat(3-lives);
+            
+            if (lives <= 0) {
+                alert("Game Over! Your medical license has been suspended. Final Score: " + score);
+                location.reload();
+            }
+        }
+
+        function startNewRound() {
+            document.getElementById('feedback-overlay').style.display = 'none';
+            generateScenario();
+        }
+
+        // Initialize
+        generateScenario();
+    </script>
+</body>
+</html>
