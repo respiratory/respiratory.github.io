@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nursing Mastery: Antibacterials</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --medical-blue: #0ea5e9;
+            --patho-purple: #8b5cf6;
+            --danger: #ef4444;
+            --success: #10b981;
+            --dark: #0f172a;
+            --light: #f8fafc;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: #f1f5f9;
+            color: var(--dark);
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, #075985 0%, #0c4a6e 100%);
+            color: white;
+            padding: 3rem 1rem;
+            text-align: center;
+            border-bottom: 5px solid var(--medical-blue);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: -2rem auto 2rem;
+            padding: 0 1rem;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .tab-btn {
+            background: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            cursor: pointer;
+            font-weight: 700;
+            color: #475569;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tab-btn i { font-size: 1.5rem; color: var(--medical-blue); }
+
+        .tab-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        .tab-btn.active { background: var(--medical-blue); color: white; }
+        .tab-btn.active i { color: white; }
+
+        .content-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+            display: none;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        .content-card.active { display: block; }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Patho Section */
+        .patho-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .patho-box {
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 2px solid #e2e8f0;
+        }
+
+        .gram-pos { border-top: 8px solid var(--patho-purple); }
+        .gram-neg { border-top: 8px solid var(--danger); }
+
+        /* Med Cards */
+        .med-browser {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .med-item {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .med-item h3 { margin-top: 0; color: #0369a1; border-bottom: 2px solid #f0f9ff; padding-bottom: 0.5rem; }
+
+        .red-flag {
+            background: #fef2f2;
+            color: #991b1b;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            border-left: 4px solid var(--danger);
+        }
+
+        /* Quiz UI */
+        #quiz-box {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .option {
+            background: var(--light);
+            border: 2px solid #e2e8f0;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .option:hover { border-color: var(--medical-blue); background: #f0f9ff; }
+        .correct { background: #dcfce7 !important; border-color: var(--success) !important; }
+        .wrong { background: #fee2e2 !important; border-color: var(--danger) !important; }
+
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .summary-table th { background: #f1f5f9; padding: 12px; text-align: left; }
+        .summary-table td { padding: 12px; border-bottom: 1px solid #e2e8f0; }
+
+        @media (max-width: 768px) {
+            .patho-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1><i class="fas fa-microscope"></i> Antibacterial Mastery</h1>
+    <p>Clinical Judgment & Nursing Considerations Study Guide</p>
+</header>
+
+<div class="container">
+    <div class="nav-grid">
+        <button class="tab-btn active" onclick="showTab('intro')"><i class="fas fa-bacteria"></i> Pathophysiology</button>
+        <button class="tab-btn" onclick="showTab('meds')"><i class="fas fa-pills"></i> Drug Classes</button>
+        <button class="tab-btn" onclick="showTab('cheat')"><i class="fas fa-clipboard-list"></i> Summary Table</button>
+        <button class="tab-btn" onclick="showTab('quiz')"><i class="fas fa-user-nurse"></i> Med-Surg Quiz</button>
+    </div>
+
+    <!-- Section 1: Intro/Patho -->
+    <div id="intro" class="content-card active">
+        <h2>Pathophysiology: The Battleground</h2>
+        <div class="patho-grid">
+            <div class="patho-box gram-pos">
+                <h3><i class="fas fa-circle-nodes"></i> Gram-Positive</h3>
+                <ul>
+                    <li><b>Cell Wall:</b> Thick peptidoglycan layer.</li>
+                    <li><b>Shape:</b> Cocci (circles) or Bacilli (rods).</li>
+                    <li><b>Pathogen Example:</b> <i>Staph aureus</i>.</li>
+                    <li><b>Risks:</b> Toxic Shock Syndrome (TSS).</li>
+                </ul>
+            </div>
+            <div class="patho-box gram-neg">
+                <h3><i class="fas fa-shield-virus"></i> Gram-Negative</h3>
+                <ul>
+                    <li><b>Cell Wall:</b> Double membrane with Lipopolysaccharides (LPS).</li>
+                    <li><b>Behavior:</b> Triggers strong immune responses.</li>
+                    <li><b>Complexity:</b> Often forms biofilms and antibiotic resistance.</li>
+                    <li><b>Risks:</b> Sepsis, SIRS, and Endotoxic Shock.</li>
+                </ul>
+            </div>
+        </div>
+        <div style="background: #fffbeb; padding: 1rem; border-radius: 12px; margin-top: 1rem; border-left: 5px solid #f59e0b;">
+            <p><strong><i class="fas fa-radiation"></i> Sepsis Alert:</strong> Both types trigger inflammatory responses that can progress to Sepsis/SIRS if the body can't contain the infection.</p>
+        </div>
+    </div>
+
+    <!-- Section 2: Drug Classes -->
+    <div id="meds" class="content-card">
+        <h2>Pharmacology Spotlight</h2>
+        <div class="med-browser">
+            <!-- Tetracyclines -->
+            <div class="med-item">
+                <h3>Tetracyclines</h3>
+                <p><small>Ex: Doxycycline, Minocycline</small></p>
+                <p>Blocks 30S ribosome. Treats acne, STIs, malaria prophylaxis.</p>
+                <div class="red-flag">
+                    <strong>NURSING RED FLAGS:</strong><br>
+                    Avoid milk/antacids. No pregnancy. Causes photosensitivity. <b>Teeth staining</b> in children < 8 yrs.
+                </div>
+            </div>
+
+            <!-- Aminoglycosides -->
+            <div class="med-item">
+                <h3>Aminoglycosides</h3>
+                <p><small>Ex: Gentamicin</small></p>
+                <p>Broad Gram-neg. post-antibiotic effect. Treats sepsis and UTIs.</p>
+                <div class="red-flag" style="border-left-color: var(--patho-purple);">
+                    <strong>NURSING RED FLAGS:</strong><br>
+                    Ototoxicity (Hearing) and Nephrotoxicity (Kidney). Requires <b>Peaks & Troughs</b>.
+                </div>
+            </div>
+
+            <!-- Beta-Lactams -->
+            <div class="med-item">
+                <h3>Beta-Lactams</h3>
+                <p><small>Ex: Penicillins, Cephalosporins, Carbapenems</small></p>
+                <p>Inhibits cell wall synthesis. Broad utility.</p>
+                <div class="red-flag">
+                    <strong>NURSING RED FLAGS:</strong><br>
+                    High <b>Allergy/Anaphylaxis</b> risk. Cross-sensitivity between Penicillin/Ceph. Carbapenems may cause <b>Seizures</b>.
+                </div>
+            </div>
+
+            <!-- Fluoroquinolones -->
+            <div class="med-item">
+                <h3>Fluoroquinolones</h3>
+                <p><small>Ex: Ciprofloxacin</small></p>
+                <p>Targets DNA replication. Excellent lung/prostate penetration.</p>
+                <div class="red-flag">
+                    <strong>NURSING RED FLAGS:</strong><br>
+                    Boxed Warning: <b>Tendon Rupture</b> and Tendinitis. Prolongs <b>QT interval</b>. Avoid in children.
+                </div>
+            </div>
+
+            <!-- Glycopeptides -->
+            <div class="med-item">
+                <h3>Glycopeptides</h3>
+                <p><small>Ex: Vancomycin</small></p>
+                <p>The "MRSA Drug." Inhibits cell wall synthesis.</p>
+                <div class="red-flag">
+                    <strong>NURSING RED FLAGS:</strong><br>
+                    <b>"Red Man Syndrome"</b> if infused too fast (hypotension). Ototoxic and Nephrotoxic.
+                </div>
+            </div>
+
+            <!-- Nitroimidazoles -->
+            <div class="med-item">
+                <h3>Nitroimidazoles</h3>
+                <p><small>Ex: Metronidazole (Flagyl)</small></p>
+                <p>Treats anaerobic bacteria and protozoa (Giardia, C-diff).</p>
+                <div class="red-flag">
+                    <strong>NURSING RED FLAGS:</strong><br>
+                    <b>NO ALCOHOL</b> (Disulfiram-like reaction). Metallic taste is common. Increases Warfarin effect (INR).
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 3: Summary Table -->
+    <div id="cheat" class="content-card">
+        <h2>Class Review Cheat Sheet</h2>
+        <table class="summary-table">
+            <thead>
+                <tr>
+                    <th>Class</th>
+                    <th>Mechanism</th>
+                    <th>Major Nursing Red Flags</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                <!-- Row template from PDF summary slide 52 -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Section 4: Quiz -->
+    <div id="quiz" class="content-card">
+        <div id="quiz-box">
+            <h2><i class="fas fa-question-circle"></i> Clinical Scenario Quiz</h2>
+            <div id="question-area">
+                <p id="q-text">Which instruction should the nurse provide to a patient prescribed Metronidazole?</p>
+                <div id="options-area"></div>
+            </div>
+            <div id="quiz-footer" style="margin-top: 1rem; text-align: right; display: none;">
+                <button class="tab-btn" style="display:inline-block;" onclick="nextQuestion()">Next Question <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showTab(tabId) {
+        document.querySelectorAll('.content-card').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        event.currentTarget.classList.add('active');
+        if(tabId === 'quiz') initQuiz();
+    }
+
+    const tableData = [
+        { class: "Nitroimidazoles", mech: "Damage bacterial DNA", flag: "No alcohol; metallic taste; ↑ INR" },
+        { class: "Glycopeptides", mech: "Block cell wall synthesis", flag: "Trough levels; nephrotoxicity; red man syndrome" },
+        { class: "Fluoroquinolones", mech: "Block DNA replication", flag: "Tendon rupture; QT prolongation" },
+        { class: "Beta-lactams", mech: "Inhibit cell wall synthesis", flag: "Allergy & anaphylaxis risk; seizures" },
+        { class: "Aminoglycosides", mech: "Block 30S ribosome", flag: "Nephro/ototoxic; peaks & troughs" },
+        { class: "Tetracyclines", mech: "Block 30S ribosome", flag: "No milk; photosensitivity; teeth staining" },
+        { class: "Macrolides", mech: "Block 50S ribosome", flag: "QT prolongation; drug interactions" },
+        { class: "Sulfonamides", mech: "Block folic acid synthesis", flag: "Sulfa allergy; SJS Rash" }
+    ];
+
+    const tableBody = document.getElementById('table-body');
+    tableData.forEach(row => {
+        tableBody.innerHTML += `<tr><td><strong>${row.class}</strong></td><td>${row.mech}</td><td>${row.flag}</td></tr>`;
+    });
+
+    const quizData = [
+        {
+            q: "A nurse is preparing to infuse Vancomycin. The patient begins flushing and their BP drops to 90/54. What is the priority action?",
+            opts: ["Stop the infusion and notify provider", "Speed up infusion to get it over with", "Slow the infusion rate and reassess", "Switch to oral form"],
+            ans: 2
+        },
+        {
+            q: "Which medication requires the nurse to monitor the patient for tendon pain?",
+            opts: ["Gentamicin", "Ciprofloxacin", "Doxycycline", "Penicillin"],
+            ans: 1
+        },
+        {
+            q: "A patient prescribed Tetracycline for acne should receive which instruction?",
+            opts: ["Take with a glass of milk", "Take with meals to prevent esophagitis", "Avoid sunlight and use high-SPF sunscreen", "This med is safe during your third trimester"],
+            ans: 2
+        },
+        {
+            q: "Which assessment finding is a hallmark adverse effect of Gentamicin?",
+            opts: ["Red man syndrome", "Tinnitus (hearing loss)", "Yellowing of teeth", "Metallic taste in mouth"],
+            ans: 1
+        }
+    ];
+
+    let currentQ = 0;
+
+    function initQuiz() {
+        currentQ = 0;
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        const qArea = document.getElementById('options-area');
+        const qText = document.getElementById('q-text');
+        const footer = document.getElementById('quiz-footer');
+        
+        if (currentQ >= quizData.length) {
+            qText.innerText = "Challenge Complete! You are a Pharm Expert.";
+            qArea.innerHTML = "";
+            footer.style.display = "none";
+            return;
+        }
+
+        const data = quizData[currentQ];
+        qText.innerText = data.q;
+        qArea.innerHTML = "";
+        footer.style.display = "none";
+
+        data.opts.forEach((opt, idx) => {
+            const div = document.createElement('div');
+            div.className = "option";
+            div.innerText = opt;
+            div.onclick = () => selectOption(div, idx, data.ans);
+            qArea.appendChild(div);
+        });
+    }
+
+    function selectOption(el, selectedIdx, correctIdx) {
+        const options = document.querySelectorAll('.option');
+        options.forEach(o => o.style.pointerEvents = "none");
+
+        if(selectedIdx === correctIdx) {
+            el.classList.add('correct');
+        } else {
+            el.classList.add('wrong');
+            options[correctIdx].classList.add('correct');
+        }
+        document.getElementById('quiz-footer').style.display = "block";
+    }
+
+    function nextQuestion() {
+        currentQ++;
+        loadQuestion();
+    }
+</script>
+
+</body>
+</html>
