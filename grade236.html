@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exam Grade Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f5f0e8;
+    --card: #ffffff;
+    --card-dark: #1a1a2e;
+    --ink: #1a1a2e;
+    --ink-mid: #6b6b7b;
+    --ink-light: #b0afc0;
+    --red: #c84b31;
+    --red-bg: #fdf0ed;
+    --amber: #c47a0a;
+    --amber-bg: #fdf5e6;
+    --green: #2a7a4b;
+    --green-bg: #eaf5f0;
+    --border: #e2ddd5;
+    --r: 16px;
+  }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 52px 20px 80px;
+    background-image:
+      radial-gradient(ellipse 50% 40% at 10% 90%, rgba(200,75,49,0.07) 0%, transparent 55%),
+      radial-gradient(ellipse 40% 50% at 90% 10%, rgba(26,26,46,0.04) 0%, transparent 55%);
+  }
+
+  /* ── Header ── */
+  header {
+    text-align: center;
+    margin-bottom: 40px;
+    animation: up .5s ease both;
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 14px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(34px, 6vw, 56px);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -.01em;
+  }
+
+  h1 em { font-style: italic; color: var(--red); }
+
+  .sub {
+    margin-top: 12px;
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--ink-mid);
+    line-height: 1.6;
+  }
+
+  /* ── How-to ── */
+  .howto {
+    width: 100%;
+    max-width: 640px;
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: var(--r);
+    padding: 18px 22px;
+    margin-bottom: 24px;
+    display: flex;
+    gap: 14px;
+    animation: up .5s .05s ease both;
+  }
+
+  .howto-icon { font-size: 20px; flex-shrink: 0; line-height: 1.5; }
+
+  .howto p {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--ink-mid);
+    line-height: 1.65;
+  }
+
+  .howto strong { font-weight: 600; color: var(--ink); }
+
+  /* ── Cards ── */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    width: 100%;
+    max-width: 640px;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 460px) { .grid { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: var(--r);
+    padding: 22px 22px 18px;
+    transition: background .25s, border-color .25s, box-shadow .25s;
+    animation: up .5s ease both;
+  }
+
+  .card:nth-child(1) { animation-delay: .1s; }
+  .card:nth-child(2) { animation-delay: .15s; }
+  .card:nth-child(3) { animation-delay: .2s; }
+  .card:nth-child(4) { animation-delay: .25s; }
+
+  /* States */
+  .card.s-locked  { background: var(--card-dark); border-color: var(--card-dark); box-shadow: 0 8px 28px rgba(26,26,46,.2); }
+  .card.s-warn    { background: var(--amber-bg);  border-color: #e4c080; }
+  .card.s-danger  { background: var(--red-bg);    border-color: #e4a090; }
+  .card.s-good    { background: var(--green-bg);  border-color: #7ac4a0; }
+
+  /* Card head */
+  .card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .card-name {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--ink-mid);
+    transition: color .25s;
+  }
+
+  .card.s-locked .card-name  { color: rgba(255,255,255,.4); }
+  .card.s-warn   .card-name  { color: var(--amber); }
+  .card.s-danger .card-name  { color: var(--red); }
+  .card.s-good   .card-name  { color: var(--green); }
+
+  .badge {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 100px;
+  }
+
+  .b-open   { background: #eeecf5; color: var(--ink-mid); }
+  .b-locked { background: rgba(255,255,255,.12); color: rgba(255,255,255,.7); }
+  .b-warn   { background: rgba(196,122,10,.14); color: var(--amber); }
+  .b-danger { background: rgba(200,75,49,.14);  color: var(--red); }
+  .b-good   { background: rgba(42,122,75,.14);  color: var(--green); }
+
+  /* Score */
+  .score-row { display: flex; align-items: baseline; gap: 3px; }
+
+  .score-inp {
+    font-family: 'Playfair Display', serif;
+    font-size: 54px;
+    font-weight: 700;
+    line-height: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--ink);
+    -moz-appearance: textfield;
+    width: 100%;
+    padding: 0;
+    transition: color .25s;
+    cursor: text;
+  }
+
+  .score-inp::-webkit-outer-spin-button,
+  .score-inp::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+  .card.s-locked .score-inp { color: #fff; pointer-events: none; }
+  .card.s-warn   .score-inp { color: var(--amber); }
+  .card.s-danger .score-inp { color: var(--red); }
+  .card.s-good   .score-inp { color: var(--green); }
+
+  .pct {
+    font-size: 20px;
+    font-weight: 300;
+    color: var(--ink-light);
+    padding-bottom: 7px;
+    flex-shrink: 0;
+    transition: color .25s;
+  }
+
+  .card.s-locked .pct { color: rgba(255,255,255,.25); }
+  .card.s-warn   .pct { color: rgba(196,122,10,.35); }
+  .card.s-danger .pct { color: rgba(200,75,49,.35); }
+  .card.s-good   .pct { color: rgba(42,122,75,.35); }
+
+  /* Note */
+  .card-note {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--ink-light);
+    margin-top: 4px;
+    min-height: 17px;
+    transition: color .25s;
+  }
+
+  .card.s-locked .card-note { color: rgba(255,255,255,.35); }
+  .card.s-warn   .card-note { color: var(--amber); opacity: .8; }
+  .card.s-danger .card-note { color: var(--red);   opacity: .8; }
+  .card.s-good   .card-note { color: var(--green); opacity: .8; }
+
+  /* Button */
+  .lock-btn {
+    margin-top: 16px;
+    width: 100%;
+    padding: 9px;
+    border-radius: 10px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    color: var(--ink-mid);
+    transition: all .18s;
+  }
+
+  .lock-btn:hover { border-color: var(--ink); color: var(--ink); background: rgba(26,26,46,.04); }
+
+  .card.s-locked .lock-btn {
+    border-color: rgba(255,255,255,.18);
+    color: rgba(255,255,255,.6);
+    background: rgba(255,255,255,.07);
+  }
+
+  .card.s-locked .lock-btn:hover { background: rgba(255,255,255,.14); color: #fff; border-color: rgba(255,255,255,.35); }
+
+  /* ── Summary ── */
+  .summary {
+    width: 100%;
+    max-width: 640px;
+    background: var(--card-dark);
+    border-radius: var(--r);
+    padding: 26px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    animation: up .5s .3s ease both;
+  }
+
+  .sum-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.35);
+    margin-bottom: 4px;
+  }
+
+  .sum-avg {
+    font-family: 'Playfair Display', serif;
+    font-size: 50px;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    transition: color .3s;
+  }
+
+  .sum-avg.g  { color: #6de4a0; }
+  .sum-avg.w  { color: #f5c46a; }
+  .sum-avg.d  { color: #f07060; }
+
+  .sum-right { text-align: right; }
+
+  .sum-target {
+    font-size: 12px;
+    font-weight: 300;
+    color: rgba(255,255,255,.38);
+    margin-bottom: 6px;
+  }
+
+  .sum-status {
+    font-size: 15px;
+    font-weight: 600;
+    color: rgba(255,255,255,.85);
+    transition: color .3s;
+  }
+
+  .sum-status.g { color: #6de4a0; }
+  .sum-status.w { color: #f5c46a; }
+  .sum-status.d { color: #f07060; }
+
+  @keyframes up {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Grade Planner</div>
+  <h1>What do I need<br>to <em>pass?</em></h1>
+  <p class="sub">Enter your scores as you receive them.<br>Remaining exams update automatically.</p>
+</header>
+
+<div class="howto">
+  <div class="howto-icon">💡</div>
+  <p>Type your <strong>score achieved</strong> into an exam box, then click <strong>Mark as Taken</strong> to lock it in. The remaining boxes will show the minimum score needed on each exam to reach an <strong>80% average</strong>.</p>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<div class="summary">
+  <div>
+    <div class="sum-label">Current Average</div>
+    <div class="sum-avg" id="sumAvg">80.00</div>
+  </div>
+  <div class="sum-right">
+    <div class="sum-target">Passing target: 80%</div>
+    <div class="sum-status" id="sumStatus">Enter your scores above</div>
+  </div>
+</div>
+
+<script>
+  const TOTAL = 4;
+  const PASS  = 80;
+
+  const locked = [null, null, null, null]; // null = open, number = locked score
+  const inputs = [];
+
+  function build() {
+    const grid = document.getElementById('grid');
+    for (let i = 0; i < TOTAL; i++) {
+      const card = el('div', 'card', 'card-' + i);
+
+      const head = el('div', 'card-head');
+      const name = el('div', 'card-name'); name.textContent = 'Exam ' + (i + 1);
+      const badge = el('span', 'badge b-open', 'badge-' + i); badge.textContent = 'Needed';
+      head.append(name, badge);
+
+      const row = el('div', 'score-row');
+      const inp = document.createElement('input');
+      inp.type = 'number'; inp.min = '0'; inp.max = '100'; inp.step = '0.01';
+      inp.value = '80.00'; inp.className = 'score-inp'; inp.id = 'inp-' + i;
+      inp.setAttribute('aria-label', 'Exam ' + (i+1) + ' score');
+
+      inp.addEventListener('focus',  () => { if (locked[i] === null) inp.select(); });
+      inp.addEventListener('input',  () => recalc());
+      inp.addEventListener('blur',   () => {
+        if (locked[i] !== null) {
+          const v = clamp(parseFloat(inp.value));
+          locked[i] = v;
+          inp.value = v.toFixed(2);
+          recalc();
+        }
+      });
+
+      const pct = el('span', 'pct'); pct.textContent = '%';
+      row.append(inp, pct);
+
+      const note = el('div', 'card-note', 'note-' + i);
+      note.textContent = 'Needed to reach 80%';
+
+      const btn = el('button', 'lock-btn', 'btn-' + i);
+      btn.textContent = 'Mark as Taken';
+      btn.addEventListener('click', () => toggle(i));
+
+      card.append(head, row, note, btn);
+      grid.appendChild(card);
+      inputs.push(inp);
+    }
+    recalc();
+  }
+
+  function toggle(i) {
+    if (locked[i] === null) {
+      locked[i] = clamp(parseFloat(inputs[i].value) || 0);
+      inputs[i].value = locked[i].toFixed(2);
+      inputs[i].readOnly = true;
+    } else {
+      locked[i] = null;
+      inputs[i].readOnly = false;
+    }
+    recalc();
+  }
+
+  function recalc() {
+    const takenIdx = locked.map((v,i) => v !== null ? i : -1).filter(x => x >= 0);
+    const openIdx  = locked.map((v,i) => v === null  ? i : -1).filter(x => x >= 0);
+
+    const takenSum   = takenIdx.reduce((s, i) => s + locked[i], 0);
+    const neededSum  = PASS * TOTAL - takenSum;
+    const neededEach = openIdx.length > 0 ? neededSum / openIdx.length : null;
+
+    // Auto-fill open cards (skip focused card so user can type freely)
+    if (neededEach !== null) {
+      openIdx.forEach(i => {
+        if (document.activeElement !== inputs[i]) {
+          inputs[i].value = clamp(neededEach).toFixed(2);
+        }
+      });
+    }
+
+    // Style each card
+    for (let i = 0; i < TOTAL; i++) {
+      const card  = document.getElementById('card-' + i);
+      const badge = document.getElementById('badge-' + i);
+      const note  = document.getElementById('note-' + i);
+      const btn   = document.getElementById('btn-' + i);
+
+      if (locked[i] !== null) {
+        setCard(card, badge, 's-locked', 'b-locked', 'Taken', btn, 'Edit Score', note, 'Score recorded');
+      } else if (neededEach === null) {
+        setCard(card, badge, '', 'b-open', 'Needed', btn, 'Mark as Taken', note, '');
+      } else if (neededEach > 100) {
+        setCard(card, badge, 's-danger', 'b-danger', 'Impossible', btn, 'Mark as Taken', note, '80% average is out of reach');
+      } else if (neededEach >= 90) {
+        setCard(card, badge, 's-warn', 'b-warn', 'High score needed', btn, 'Mark as Taken', note, 'Need ' + neededEach.toFixed(2) + '% or higher');
+      } else if (neededEach <= 0) {
+        setCard(card, badge, 's-good', 'b-good', 'Already passing', btn, 'Mark as Taken', note, 'Any score maintains 80%+');
+        if (document.activeElement !== inputs[i]) inputs[i].value = (0).toFixed(2);
+      } else {
+        setCard(card, badge, '', 'b-open', 'Needed', btn, 'Mark as Taken', note, 'Need ' + neededEach.toFixed(2) + '% or higher');
+      }
+    }
+
+    // Summary: average = locked scores + current open input values
+    let total = takenSum;
+    openIdx.forEach(i => {
+      const v = parseFloat(inputs[i].value);
+      total += isNaN(v) ? 0 : clamp(v);
+    });
+    const avg = total / TOTAL;
+
+    const avgEl  = document.getElementById('sumAvg');
+    const statEl = document.getElementById('sumStatus');
+    avgEl.textContent = avg.toFixed(2);
+
+    if (takenIdx.length === 0) {
+      avgEl.className  = 'sum-avg';
+      statEl.className = 'sum-status';
+      statEl.textContent = 'Enter your scores above';
+    } else if (takenIdx.length === TOTAL) {
+      if (avg >= PASS) {
+        avgEl.className = 'sum-avg g'; statEl.className = 'sum-status g';
+        statEl.textContent = 'Course passed! 🎉';
+      } else {
+        avgEl.className = 'sum-avg d'; statEl.className = 'sum-status d';
+        statEl.textContent = 'Below passing average';
+      }
+    } else if (neededEach !== null && neededEach > 100) {
+      avgEl.className = 'sum-avg d'; statEl.className = 'sum-status d';
+      statEl.textContent = '80% average is out of reach';
+    } else if (avg >= PASS) {
+      avgEl.className = 'sum-avg g'; statEl.className = 'sum-status g';
+      statEl.textContent = 'On track to pass ✓';
+    } else {
+      avgEl.className = 'sum-avg w'; statEl.className = 'sum-status w';
+      statEl.textContent = 'Higher scores needed';
+    }
+  }
+
+  // ── Helpers ──
+  function el(tag, cls, id) {
+    const e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (id)  e.id = id;
+    return e;
+  }
+
+  function clamp(v) {
+    if (isNaN(v)) return 0;
+    return Math.round(Math.min(100, Math.max(0, v)) * 100) / 100;
+  }
+
+  function setCard(card, badge, cardState, badgeClass, badgeText, btn, btnText, note, noteText) {
+    card.className  = 'card' + (cardState ? ' ' + cardState : '');
+    badge.className = 'badge ' + badgeClass;
+    badge.textContent = badgeText;
+    btn.textContent   = btnText;
+    note.textContent  = noteText;
+  }
+
+  build();
+</script>
+</body>
+</html>
